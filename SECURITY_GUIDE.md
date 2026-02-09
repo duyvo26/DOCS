@@ -72,11 +72,32 @@ if not is_owner and not current_user["is_admin"]:
 ## 4. Bảo mật API Admin
 
 - Các API tại `/api/v1/admin/*` được bảo vệ nghiêm ngặt bởi `get_current_admin`.
-- Thông tin cấu hình nhạy cảm (như `OPENAI_API_KEY`, `GOOGLE_API_KEY`) được lưu trữ trong bảng `admin_config` của cơ sở dữ liệu và chỉ được trả về/cập nhật thông qua giao diện Admin đã xác thực.
+- **Quản lý cấu hình**: Các thông số như `rate_per_1000`, `logo_url`, `site_title`, `seo_author` được quản lý tập trung và đồng bộ hóa an toàn với file vật lý `index.html`.
+- **Cơ chế ghi file**: Backend sử dụng Regex an toàn để chỉ thay đổi nội dung bên trong các thẻ HTML được chỉ định, tránh làm hỏng cấu trúc mã nguồn.
 
----
+## 5. Các đoạn mã bảo mật
 
-## 5. Hướng dẫn cho Developer/LLM
+### Bảo mật Admin Route
+```python
+@router.post("/settings")
+async def update_settings(
+    data: SettingsUpdate, 
+    admin: dict = Depends(get_current_admin) # Chỉ Admin mới vào được
+):
+    # Logic update...
+```
+
+### Chống Path Traversal (Upload Logo)
+```python
+@router.post("/upload-logo")
+async def upload_logo(file: UploadFile = File(...)):
+    # os.path.basename đảm bảo tên file không chứa đường dẫn nguy hiểm
+    filename = f"logo_{uuid.uuid4().hex}{os.path.splitext(file.filename)[1]}"
+    safe_name = os.path.basename(filename) 
+    # Lưu vào thư mục download cố định...
+```
+
+## 6. Hướng dẫn cho Developer/LLM
 
 ### Thực hiện các API call từ Client
 Mọi yêu cầu (trừ login/callback) đều phải đính kèm header:
