@@ -1,96 +1,74 @@
-# Hướng dẫn Hệ thống Thanh toán (Payment System Guide)
+# Kỹ thuật chuyên sâu: Hệ thống Thanh toán (Polling & Sync)
 
-Tài liệu này cung cấp cái nhìn chi tiết về cấu trúc và logic triển khai hệ thống thanh toán tự động thông qua **SePay** cho ứng dụng.
+Tài liệu này giải thích chi tiết cách thức hoạt động của luồng nạp tiền tự động không qua Webhook.
 
-## 1. Tổng quan kiến trúc
-Hệ thống thanh toán hoạt động theo mô hình: **Giao dịch -> Quét Giao dịch ngân hàng -> Đối soát -> Cộng Token**.
+## 1. Luồng xử lý (Payment Flow Sequence)
 
-- **Provider**: SePay (Hỗ trợ quét lịch sử giao dịch ngân hàng Việt Nam qua API).
-- **Cơ chế**: Dựa vào nội dung chuyển khoản để xác định người dùng và đơn hàng.
-- **Workflow**:
-    1. Người dùng chọn gói nạp.
-    2. Hệ thống tạo hóa đơn ở trạng thái `pending`.
-    3. Tạo nội dung chuyển khoản duy nhất (Payment Note).
-    4. Người dùng chuyển khoản.
-    5. Hệ thống quét API SePay để tìm giao dịch khớp mã.
-    6. Tự động cộng token và chuyển trạng thái hóa đơn thành `completed`.
+1. **Khởi tạo**: Frontend gọi `POST /api/v1/payment/create` với `package_id`.
+2. **Backend**: 
+   - Tạo record trong bảng `payments` (status: `pending`).
+   - Trả về `HEX_ID` (ID hóa đơn đã XOR bảo mật).
+3. **Frontend**: Hiển thị QR Code ngân hàng kèm nội dung chuyển khoản: `{NAME_WEB}NAPTOKEN{HEX_ID}`.
+4. **Polling (Vòng lặp)**:
+   - Frontend gọi `GET /api/v1/payment/status/{id}` mỗi 5-10 giây.
+   - Backend nhận request -> Gọi SePay API lấy lịch sử giao dịch.
+   - Backend quét (Iterate) từng giao dịch SePay trả về.
+   - **SO KHỚP**: Nếu tìm thấy giao dịch có `content` chứa mã nạp và `amount` khớp -> XỬ LÝ THÀNH CÔNG.
 
----
+## 2. Logic So khớp (Reconciliation Logic)
+Backend sử dụng Regex để bóc tách mã nạp từ nội dung tin nhắn ngân hàng (thường rất lộn xộn).
 
-## 2. Mã nội dung chuyển khoản (Payment Code)
-Để đảm bảo tính chính xác và không bị nhầm lẫn giữa hàng nghìn giao dịch, mã chuyển khoản được thiết kế như sau:
-
-**Format**: `<NAMENAME>NAPTOKEN<HEX_ID>`
-- **NAMENAME**: Tên website được cấu hình trong `.env` (`NAME_WEB`).
-- **NAPTOKEN**: Từ khóa cố định.
-- **HEX_ID**: Mã hóa đơn được chuyển sang hệ cơ số 16 và XOR để bảo mật nhẹ.
-
-**Ví dụ**: `BLOOMNAPTOKEN1A2B`
-
----
-
-## 3. Thời gian hết hạn (Expiry Time)
-Hóa đơn có hiệu lực trong vòng **60 phút** kể từ khi khởi tạo.
-- Sau 60 phút, nếu chưa nhận được tiền, hóa đơn sẽ tự động chuyển sang trạng thái `failed`.
-- Hệ thống vẫn hỗ trợ xử lý các hóa đơn đã `failed` nếu tiền về sau đó (thông qua cơ chế đối soát thông minh).
-
----
-
-## 4. Tích hợp SePay API
-Hệ thống kết nối với SePay thông qua API Token (`SEPAY_API_KEY`).
-
-- **Dữ liệu đối soát**: 
-    - `amount_in` (Số tiền thực nhận): Phải khớp chính xác 100% với giá gói nạp (`amount_vnd`).
-    - `transaction_content`: Phải chứa mã `NAPTOKEN` hợp lệ.
-
----
-
-## 5. Metadata & Reporting
-Hệ thống lưu trữ lịch sử giao dịch chi tiết bao gồm:
-- Mã giao dịch ngân hàng (`sepay_id`).
-- Thời gian giao dịch thực tế.
-- Nội dung gốc của thông báo chuyển khoản.
-
----
-
-## 6. Báo cáo vấn đề thanh toán (Payment Report)
-Nếu người dùng đã chuyển khoản thành công nhưng không nhận được token (do ngân hàng chậm, lỗi mạng, v.v.), hệ thống cung cấp tính năng **Báo cáo sự cố**:
-
-1. **Người dùng**: Nhấn nút "Báo cáo sự cố" trên hóa đơn bị lỗi.
-2. **Admin**: Xem danh sách báo cáo tại tab **"Báo cáo TT"** trong trang Admin.
-3. **Xử lý**: Admin có thể kiểm tra thực tế giao dịch ngân hàng và cộng token thủ công cho người dùng.
-
-## 7. Các đoạn mã kỹ thuật
-
-### Mã hóa đơn hàng (Obfuscated Hex)
 ```python
-def encode_payment_id(payment_id: int) -> str:
-    secret = 0x5EAFB
-    return hex(payment_id ^ secret)[2:].upper()
+# app/routers/payment.py
+import re
 
-# Format: {NAME_WEB}NAPTOKEN{HEX_ID}
-note = f"{settings.NAME_WEB}NAPTOKEN{encode_payment_id(payment_id)}"
+# 1. Regex bóc tách mã Hex từ nội dung chuyển khoản
+prefix = settings.NAME_WEB + "NAPTOKEN"
+pattern = rf"{prefix}([A-Fa-f0-9]+)"
+
+def check_sepay_transactions(payment_record):
+    target_hex = encode_payment_id(payment_record['id'])
+    
+    # Gọi SePay API
+    history = sepay_api.get_last_20_transactions()
+    
+    for tx in history:
+        content = tx.get('content', '')
+        amount = float(tx.get('amount_in', 0))
+        
+        # Kiểm tra nội dung chứa mã nạp
+        match = re.search(pattern, content, re.IGNORECASE)
+        if match:
+            found_hex = match.group(1).upper()
+            if found_hex == target_hex and amount >= payment_record['amount_vnd']:
+                return True, tx.get('id') # Trùng khớp!
+    return False, None
 ```
 
-### Route Báo cáo sự cố
+## 3. Quản lý trạng thái (State Machine)
+- **`pending`**: Đang chờ tiền về.
+- **`completed`**: Đã nhận đủ tiền, đã nạp token cho user.
+- **`failed`**: Hóa đơn hết hạn (thường sau 60p) hoặc bị hủy.
+
+**Lưu ý kỹ thuật**: Ngay cả khi hóa đơn ở trạng thái `failed`, nếu hệ thống quét thấy tiền về sau đó, nó vẫn có thể tự động chuyển sang `completed` và nạp tiền cho user (logic linh hoạt).
+
+## 4. Bảo mật Token nạp (XOR Obfuscation)
+Chúng tôi không dùng ID thuần (1, 2, 3...) để tránh việc người dùng đoán được ID của người khác.
 ```python
-@router.post("/report")
-def create_payment_report(payment_id: int = Form(...), description: str = Form(...)):
-    # ... verify payment ownership ...
-    db.create_payment_report(user_id, payment_id, description)
+SECRET_XOR_KEY = 0x5EAFB # Thay đổi key này cho mỗi dự án
+
+def encode_payment_id(p_id: int) -> str:
+    return hex(p_id ^ SECRET_XOR_KEY)[2:].upper()
+
+def decode_payment_id(hex_str: str) -> int:
+    return int(hex_str, 16) ^ SECRET_XOR_KEY
 ```
 
-### Tự động xử lý tiền về (SePay Sync)
-```python
-# Logic bóc tách mã nạp từ nội dung giao dịch
-match = re.search(rf"{settings.NAME_WEB}NAPTOKEN([A-Fa-f0-9]+)", content)
-if match:
-    hex_id = match.group(1)
-    payment_id = decode_payment_id(hex_id)
-    # Cộng token và mark completed...
-```
+## 5. Cấu hình SePay Dashboard
+Để hệ thống hoạt động, bạn cần cấu hình tại [SePay.vn](https://sepay.vn):
+1. Thêm ngân hàng (MB, Vietcombank...).
+2. Cài App ngân hàng trên điện thoại (để SePay quét được thông báo biến động số dư).
+3. Lấy API Key điền vào file `.env`.
 
-## 8. Hướng dẫn dành cho Admin
-- **Quản lý gói nạp**: Có thể thêm/xóa/sửa các gói nạp trực tiếp trong trang Admin.
-- **Kiểm soát dòng tiền**: Theo dõi lịch sử nạp toàn hệ thống tại tab **"Hóa Đơn"**.
-- **Xử lý báo cáo**: Luôn ưu tiên kiểm tra các hóa đơn có báo cáo từ người dùng.
+---
+*Ghi chú: Luồng Polling giúp hệ thống hoạt động tốt trên cả VPS localhost mà không cần mở Port/NAT/Domain (Webhook).*

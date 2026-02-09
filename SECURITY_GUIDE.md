@@ -1,118 +1,105 @@
-# Hướng dẫn Hệ thống Bảo mật (Security & Auth Guide)
+# Kỹ thuật chuyên sâu: Bảo mật & Xác thực toàn diện
 
-Tài liệu này mô tả các biện pháp bảo mật, xác thực và phân quyền được áp dụng trong dự án Bloom.
+Tài liệu này đi sâu vào các lớp bảo mật (Security Layers) bảo vệ tài nguyên hệ thống.
 
-## 1. Xác thực người dùng (Authentication)
+## 1. Cơ chế JWT (JSON Web Token)
+Chúng tôi sử dụng JWT để xác thực không lưu trạng thái (Stateless). Token được tạo tại Backend và lưu dưới dạng `Bearer` token ở Frontend.
 
-Ứng dụng sử dụng **Google OAuth 2.0** làm phương thức đăng nhập duy nhất để đảm bảo an toàn và tiện lợi. Xem chi tiết cách cấu hình tại [Hướng dẫn cấu hình Google Login](./GOOGLE_LOGIN_GUIDE.md).
+### Cấu trúc Payload:
+```json
+{
+  "id": 1,
+  "username": "admin",
+  "email": "admin@example.com",
+  "is_admin": true,
+  "exp": 1700000000
+}
+```
 
-### Quy trình (Flow):
-1. **Frontend**: Yêu cầu link login từ `/api/v1/auth/google/login`.
-2. **Google**: Người dùng xác nhận danh tính qua Google Consent Screen.
-3. **Backend Callback**: 
-    - Nhận `code` từ Google.
-    - Trao đổi lấy `access_token` và thông tin người dùng (email, name, picture).
-    - Tạo người dùng mới (nếu chưa có) và cấp 1 lượng Token miễn phí.
-    - Tạo **JWT (JSON Web Token)** từ phía server để duy trì phiên làm việc.
+### Logic Kiểm tra Token (FastAPI Dependency):
+```python
+# app/security/security.py
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        # Giải mã và kiểm tra chữ ký
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        email = payload.get("email")
+        
+        # Luôn truy vấn lại DB để đảm bảo user chưa bị xóa hoặc đổi quyền
+        db = UserDB()
+        user = db.get_by_email(email)
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
+        return user
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+```
 
-### Cấu trúc JWT:
-- **Thuật toán**: HS256.
-- **Payload**: `{ "user_id": int, "email": string, "exp": timestamp }`.
-- **Secret**: Được lưu trong biến môi trường `JWT_SECRET_KEY`.
+## 2. Hệ thống Avatar 3 lớp (Fallback Mechanism)
+Để tránh tình trạng "vỡ" giao diện khi ảnh lỗi, chúng tôi triển khai logic fallback cực kỳ bền bỉ.
+
+### Lớp 1: Gravatar (Backend)
+Nếu người dùng không có ảnh, hệ thống tự sinh mã MD5 từ email để gọi Gravatar.
+```python
+# app/models/base_db.py
+import hashlib
+
+def get_gravatar_url(email: str):
+    email_hash = hashlib.md5(email.strip().lower().encode('utf-8')).hexdigest()
+    return f"https://www.gravatar.com/avatar/{email_hash}?d=identicon"
+```
+
+### Lớp 2: Fallback UI (Frontend)
+Sử dụng sự kiện `onError` của thẻ `<img>` để chuyển đổi sang dạng placeholder bằng tên.
+```tsx
+// frontend/components/AvatarImage.tsx
+const AvatarImage = ({ src, name }) => {
+  const [error, setError] = useState(false);
+
+  if (error || !src) {
+    return <div className="avatar-placeholder">{name[0]}</div>;
+  }
+
+  return <img src={src} onError={() => setError(true)} />;
+}
+```
+
+## 3. Bảo vệ Admin API (RBAC)
+Phân quyền dựa trên vai trò (Role-Based Access Control) được thực hiện qua các Dependency lồng nhau.
+```python
+def get_current_admin(current_user: dict = Depends(get_current_user)):
+    if not current_user.get("is_admin"):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return current_user
+
+# Route này chỉ dành cho Admin
+@router.get("/admin/users")
+async def list_users(admin: dict = Depends(get_current_admin)):
+    return db.get_all_users()
+```
+
+## 4. Chống Path Traversal (An toàn file)
+Khi xử lý các tham số file từ người dùng, luôn sử dụng `os.path.basename` để triệt tiêu các ký tự điều hướng thư mục nguy hiểm (`../`).
+```python
+def safe_file_access(user_provided_path: str):
+    # Dù user truyền vào "../../etc/passwd"
+    filename = os.path.basename(user_provided_path)
+    # filename sẽ chỉ còn "passwd"
+    return os.path.join(SAFE_STORAGE_DIR, filename)
+```
+
+## 5. Security Checklist
+- **Rate Limiting**: AI API cần giới hạn số lượt gọi/phút để tránh spam tốn tiền LLM.
+- **CORS Configuration**:
+  ```python
+  app.add_middleware(
+      CORSMiddleware,
+      allow_origins=["http://localhost:5173"], # Không nên để "*" ở production
+      allow_methods=["*"],
+      allow_headers=["*"],
+  )
+  ```
+- **Environment Isolation**: File `.env` phải được đưa vào `.gitignore` để tránh rò rỉ Key lên Git.
 
 ---
-
-## 2. Phân quyền (Authorization)
-
-Hệ thống sử dụng cơ chế **Dependency Injection** của FastAPI để kiểm soát truy cập.
-
-- **`get_current_user`**: Yêu cầu token hợp lệ trong header `Authorization: Bearer <token>`.
-- **`get_current_admin`**: Kiểm tra thêm thuộc tính `is_admin` của người dùng.
-- **`require_tokens(amount)`**: Một decorator/dependency đặc biệt dùng để kiểm tra số dư Token của người dùng trước khi thực hiện các tác vụ nặng (như chạy pipeline Bloom).
-
-```python
-@router.post("/run")
-async def run_task(
-    payload: BloomTaskRequest,
-    current_user: dict = Depends(require_tokens(10)) # Yêu cầu 10 tokens
-):
-    # Logic...
-```
-
----
-
-## 3. Bảo mật File và Dữ liệu (File & Data Security)
-
-### Chống Path Traversal
-Tất cả các endpoint liên quan đến file (upload/download/view) đều được xử lý để ngăn chặn việc truy cập trái phép vào các thư mục hệ thống qua các chuỗi như `../`.
-
-```python
-# app/routers/file_upload.py
-safe_filename = os.path.basename(filename) # Xóa bỏ mọi đường dẫn, chỉ lấy tên file
-file_path = os.path.join(settings.DIR_ROOT, "utils", "download", safe_filename)
-```
-
-### Kiểm tra quyền sở hữu File (Ownership)
-Đối với các file kết quả (kết quả chạy AI), hệ thống kiểm tra xem người yêu cầu có phải là người đã tạo ra tác vụ đó hay không bằng cách truy vấn DB.
-
-```python
-# Chỉ cho phép tải nếu là chủ sở hữu hoặc admin
-is_owner = False
-for task in user_history:
-    if f"/bloom/{safe_uid}/" in task["result_url"]:
-        is_owner = True
-        break
-
-if not is_owner and not current_user["is_admin"]:
-    raise HTTPException(status_code=403, detail="Access denied")
-```
-
----
-
-## 4. Bảo mật API Admin
-
-- Các API tại `/api/v1/admin/*` được bảo vệ nghiêm ngặt bởi `get_current_admin`.
-- **Quản lý cấu hình**: Các thông số như `rate_per_1000`, `logo_url`, `site_title`, `seo_author` được quản lý tập trung và đồng bộ hóa an toàn với file vật lý `index.html`.
-- **Cơ chế ghi file**: Backend sử dụng Regex an toàn để chỉ thay đổi nội dung bên trong các thẻ HTML được chỉ định, tránh làm hỏng cấu trúc mã nguồn.
-
-## 5. Các đoạn mã bảo mật
-
-### Bảo mật Admin Route
-```python
-@router.post("/settings")
-async def update_settings(
-    data: SettingsUpdate, 
-    admin: dict = Depends(get_current_admin) # Chỉ Admin mới vào được
-):
-    # Logic update...
-```
-
-### Chống Path Traversal (Upload Logo)
-```python
-@router.post("/upload-logo")
-async def upload_logo(file: UploadFile = File(...)):
-    # os.path.basename đảm bảo tên file không chứa đường dẫn nguy hiểm
-    filename = f"logo_{uuid.uuid4().hex}{os.path.splitext(file.filename)[1]}"
-    safe_name = os.path.basename(filename) 
-    # Lưu vào thư mục download cố định...
-```
-
-## 6. Hướng dẫn cho Developer/LLM
-
-### Thực hiện các API call từ Client
-Mọi yêu cầu (trừ login/callback) đều phải đính kèm header:
-`Authorization: Bearer <JWT_TOKEN>`
-
-### Thêm một route mới cần bảo mật
-Sử dụng `Depends(get_current_user)` làm tham số của function:
-```python
-@router.get("/protected-route")
-async def secret_data(user: dict = Depends(get_current_user)):
-    return {"data": "Only for logged in users"}
-```
-
-### Nguyên tắc vàng:
-1. **Không bao giờ** trả về thông tin nhạy cảm của người dùng khác.
-2. **Luôn sử dụng** `os.path.basename()` khi làm việc với file paths từ người dùng.
-3. **Luôn kiểm tra** `token_balance` trước khi chạy các tác vụ tiêu tốn tài nguyên.
-4. **Không cứng mã** (Hardcode) các secret key vào mã nguồn.
+*Ghi chú: Mọi thay đổi về logic bảo mật cần phải được review chéo bởi các thành viên khác trong team.*

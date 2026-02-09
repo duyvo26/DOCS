@@ -1,71 +1,71 @@
-# Hướng dẫn Cấu hình SEO & Website
+# Kỹ thuật chuyên sâu: Quản lý SEO & Website Sync
 
-Tài liệu này hướng dẫn cách sử dụng tính năng quản lý SEO và cấu hình Website trực tiếp từ trang quản trị Admin.
+Dự án này sử dụng một cơ chế đặc biệt để quản lý SEO: **Dynamic HTML Modification**. Thay vì chỉ render meta tags bằng Javascript (vốn không tốt cho SEO Bot của Facebook/Zalo), hệ thống thực hiện ghi trực tiếp vào file vật lý `index.html`.
 
-## 1. Các thành phần quản lý
-Hệ thống cho phép bạn điều chỉnh các thông số quan trọng của website mà không cần can thiệp trực tiếp vào mã nguồn:
+## 1. Cơ chế Đồng bộ Hai chiều (Two-way Synchronization)
 
-- **Tiêu đề Website (SEO Title)**: Tương ứng với thẻ `<title>`.
-- **Mô tả Website (SEO Description)**: Tương ứng với thẻ meta `description`.
-- **Từ khóa SEO (Keywords)**: Tương ứng với thẻ meta `keywords`.
-- **Tác giả (SEO Author)**: Tương ứng với thẻ meta `author`.
-- **Logo Website**: Ảnh đại diện chính, đồng thời là ảnh chia sẻ (OG Image).
-- **Favicon**: Biểu tượng trên tab trình duyệt.
+### A. Từ Database xuống File HTML (Push)
+Khi Admin nhấn lưu, hệ thống thực hiện 2 việc:
+1. Lưu vào bảng `settings` trong DB để lưu giữ cấu hình.
+2. Dùng Regex để "phẫu thuật" file `frontend/index.html` và thay thế các giá trị cũ bằng giá trị mới.
 
-## 2. Cơ chế đồng bộ hóa (Two-way Sync)
-Hệ thống sử dụng cơ chế đồng bộ hai chiều giữa **Cơ sở dữ liệu (Database)** và **File vật lý (`frontend/index.html`)**:
-
-### Từ Admin xuống File (Lưu cấu hình)
-Khi bạn nhấn **"Lưu Thay Đổi Cấu Hình"**:
-1. Dữ liệu được lưu vào bảng `settings` trong Database.
-2. Backend tự động quét file `frontend/index.html`.
-3. Sử dụng Regex thông minh để ghi đè các thẻ HTML tương ứng.
-4. Cập nhật đồng bộ các thẻ mạng xã hội như `og:title`, `og:description`, `og:image`, `twitter:title`,...
-
-### Từ File lên Admin (Sync từ HTML)
-Tính năng **"Sync từ HTML"** cho phép:
-1. Đọc nội dung thực tế đang có trong file `index.html`.
-2. Điền tự động vào các ô nhập liệu trong Admin GUI.
-3. Hữu ích khi bạn vừa cập nhật file thủ công hoặc muốn khôi phục dữ liệu từ mã nguồn.
-
-## 3. Lưu ý quan trọng
-- **Định dạng ảnh**: Nên sử dụng ảnh định dạng `.png` hoặc `.svg` cho Logo và Favicon để có độ sắc nét tốt nhất.
-- **Dung lượng ảnh**: Ảnh Logo nên có kích thước vuông (ví dụ 512x512) để hiển thị đẹp khi chia sẻ lên Zalo/Facebook.
-- **SEO Keywords**: Các từ khóa nên ngăn cách nhau bằng dấu phẩy (,).
-
-## 4. Kỹ thuật (Dành cho Developer)
-Các hàm xử lý chính nằm tại:
-- **Backend**: `app/routers/admin.py` -> `update_index_html_seo` và `extract_seo_from_index_html`.
-- **Frontend**: `frontend/components/AdminView.tsx` -> Tab `settings`.
-
-Cơ chế cập nhật file sử dụng `re.sub` với flag `re.IGNORECASE | re.DOTALL` để đảm bảo nhận diện chính xác kể cả khi thẻ HTML nằm trên nhiều dòng.
-
-## 5. Các đoạn mã quan trọng
-
-### Cập nhật SEO (Backend)
+**Mã nguồn xử lý (Backend):**
 ```python
+# app/routers/admin.py
+import re
+
 def update_index_html_seo(site_title, description, keywords, author, favicon_url, logo_url):
-    # Regex thông minh xử lý mọi định dạng meta tag
-    def update_meta(html_content, key, value, is_property=False):
-        attr_name = "property" if is_property else "name"
-        pattern = fr'<meta\s+[^>]*?{attr_name}=["\']{re.escape(key)}["\'][^>]*?>'
-        new_tag = f'<meta {attr_name}="{key}" content="{value}">'
-        # Logic replace hoặc insert...
+    path = "frontend/index.html"
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # 1. Thay đổi thẻ Title
+    content = re.sub(r'<title>.*?</title>', f'<title>{site_title}</title>', content)
+
+    # 2. Thay đổi các thẻ Meta (Name & Property)
+    meta_maps = {
+        "description": description,
+        "keywords": keywords,
+        "author": author,
+        "og:title": site_title,
+        "og:description": description,
+        "twitter:title": site_title,
+        "twitter:description": description
+    }
+
+    for key, value in meta_maps.items():
+        # Regex tìm kiếm thẻ meta có name hoặc property tương ứng
+        pattern = fr'<(meta\s+[^>]*?(?:name|property)=["\']{re.escape(key)}["\'][^>]*?content=)["\'].*?["\']([^>]*?)>'
+        replacement = fr'<\1"{value}"\2>'
+        content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+
+    # 3. Thay đổi Favicon & Logo (Link tags)
+    content = re.sub(r'<link\s+rel=["\']icon["\'][^>]*?href=["\'].*?["\']', f'<link rel="icon" href="{favicon_url}"', content)
+
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
 ```
 
-### Sync từ mã nguồn (Frontend)
-```tsx
-const handleSyncFromFile = async () => {
-    const res = await api.adminSyncFromHtml();
-    setData((prev) => ({ ...prev, ...res }));
-    toast.success('Đã tải SEO từ file HTML vào giao diện.');
-};
-```
-
-### Route API Admin
+### B. Từ File HTML lên UI (Pull/Sync)
+Nếu lập trình viên sửa `index.html` thủ công, Admin có thể nhấn nút **"Sync từ HTML"** để đưa các giá trị đó vào Database.
 ```python
-@router.get("/sync-from-html")
-async def sync_from_html(admin: dict = Depends(get_current_admin)):
-    html_seo = extract_seo_from_index_html()
-    return html_seo
+def extract_seo_from_index_html():
+    # Sử dụng Regex để trích xuất content từ meta tags
+    # Trả về một dictionary để Frontend hiển thị lên Form
+    title = re.search(r'<title>(.*?)</title>', content).group(1)
+    # ... logic tương tự cho các meta tags ...
 ```
+
+## 2. Quản lý Tài nguyên (Static Files)
+Khi tải lên Logo hoặc Favicon, hệ thống thực hiện:
+1. **Sanitize Filename**: Sử dụng `uuid.uuid4()` để tránh trùng tên và `os.path.basename()` để chống Path Traversal.
+2. **Storage**: Lưu vào thư mục `utils/download/`.
+3. **URL Mapping**: Trả về URL dạng `/api/v1/download/{filename}` để Frontend hiển thị.
+
+## 3. SEO Checklist cho Lập trình viên
+- **Thẻ Canonical**: Đảm bảo thẻ `<link rel="canonical" href="..." />` được cập nhật đúng domain production.
+- **Thẻ Robot**: Kiểm tra thẻ `<meta name="robots" content="index, follow" />` không bị vô tình config thành `noindex`.
+- **Dung lượng Logo**: Backend không nén ảnh, vì vậy hãy nhắc người dùng upload ảnh Logo < 500KB để tốc độ load trang và chia sẻ link nhanh nhất.
+
+---
+*Ghi chú: Luồng xử lý này giúp Website đạt điểm SEO tối ưu vì thông tin meta đã nằm sẵn trong HTML khi Server trả về, không phụ thuộc vào việc thực thi Javascript của Bot.*

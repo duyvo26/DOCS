@@ -1,184 +1,77 @@
-# Hướng dẫn cấu hình Google Login (OAuth 2.0)
+# Kỹ thuật chuyên sâu: Google OAuth 2.0 (Redirect Flow)
 
-Tài liệu này hướng dẫn cách thiết lập Google OAuth 2.0 để tích hợp tính năng đăng nhập bằng Google vào ứng dụng Bloom.
+Tài liệu này hướng dẫn chi tiết cách triển khai luồng Đăng nhập Google mượt mà, tránh lỗi hiển thị JSON thô trên trình duyệt.
 
-## 1. Tạo dự án trên Google Cloud Console
+## 1. Sơ đồ luồng xử lý (Detailed Sequence)
 
-1. Truy cập [Google Cloud Console](https://console.cloud.google.com/).
-2. Đăng nhập bằng tài khoản Google của bạn.
-3. Chọn project hiện có hoặc tạo project mới:
-   - Click vào menu chọn project ở góc trên bên trái.
-   - Nhấn **"New Project"**.
-   - Nhập tên project (ví dụ: `Bloom-App`) và nhấn **"Create"**.
-
-## 2. Cấu hình OAuth Consent Screen (Màn hình xác thực)
-
-Trước khi tạo credentials, bạn cần cấu hình màn hình mà người dùng sẽ thấy khi đăng nhập.
-
-1. Vào menu **APIs & Services** > **OAuth consent screen**.
-2. Chọn **User Type**:
-   - **External**: Nếu bạn muốn bất kỳ ai có tài khoản Google cũng có thể dùng.
-   - Nhấn **Create**.
-3. Điền các thông tin bắt buộc:
-   - **App name**: Bloom (hoặc tên ứng dụng của bạn).
-   - **User support email**: Chọn email của bạn.
-   - **Developer contact information**: Nhập email của bạn.
-4. Nhấn **Save and Continue** cho các bước tiếp theo (Scopes, Test Users).
-5. Ở bước cuối, nhấn **Back to Dashboard**.
-6. **Lưu ý quan trọng**: Khi ứng dụng đang ở chế độ "Testing", chỉ những email được thêm trong danh sách "Test users" mới có thể đăng nhập. Để cho phép mọi người dùng, bạn cần nhấn **"Publish App"**.
-
-## 3. Tạo OAuth 2.0 Credentials
-
-1. Vào menu **APIs & Services** > **Credentials**.
-2. Nhấn **Create Credentials** > **OAuth client ID**.
-3. Chọn **Application type**: **Web application**.
-4. Nhập tên (ví dụ: `Bloom Web Client`).
-5. Cấu hình URIs:
-   - **Authorized JavaScript origins**:
-     - `http://localhost:5173` (Dành cho môi trường phát triển Vite)
-     - `https://yourdomain.com` (Dành cho môi trường production)
-   - **Authorized redirect URIs**: Đây là URL mà Google sẽ gửi mã xác thực về backend.
-     - `http://localhost:8000/api/v1/auth/google/callback` (Backend local)
-     - `https://api.yourdomain.com/api/v1/auth/google/callback` (Backend production)
-6. Nhấn **Create**.
-7. Một hộp thoại hiện ra chứa **Client ID** và **Client Secret**. Hãy lưu chúng lại.
-
-## 4. Cấu hình biến môi trường (Environment Variables)
-
-### Cho Backend (.env file)
-
-Cập nhật file `.env` ở thư mục gốc của backend (hoặc cấu hình trong Admin Dashboard nếu hệ thống có hỗ trợ):
-
-```env
-GOOGLE_CLIENT_ID=vừa_copy_ở_bước_trên.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=vừa_copy_ở_bước_trên
-GOOGLE_REDIRECT_URI=http://localhost:8000/api/v1/auth/google/callback
-JWT_SECRET_KEY=một_chuỗi_ký_tự_ngẫu_nhiên_dài_để_bảo_mật
+```text
+[Browser] ────── 1. Click Login ─────→ [Backend: /google/login]
+    ↑                                         ↓
+    └─────────── 2. Redirect 302 ──────── [Google Auth Screen]
+                                              ↓
+[Backend: /callback] ←── 3. Redirect w/ Code ──┘
+    ↓
+    ├─ 4. Đổi Code lấy User Info từ Google
+    ├─ 5. Tạo JWT Token của hệ thống
+    └─ 6. Redirect 302 kèm Token ──────→ [Frontend: /?token=...]
+                                              ↓
+[Frontend: App.tsx] ←─── 7. Lưu Token ────────┘
 ```
 
-### Cho Frontend (.env file)
+## 2. Mã triển khai Backend (FastAPI)
 
-Nếu frontend cần gọi trực tiếp URL login của Google hoặc cần Client ID:
-
-```env
-VITE_GOOGLE_CLIENT_ID=vừa_copy_ở_bước_trên.apps.googleusercontent.com
-```
-
-## 5. Kiểm tra luồng đăng nhập
-
-1. Khởi động Backend và Frontend.
-2. Truy cập trang đăng nhập.
-3. Nhấn nút "Login with Google".
-4. Nếu thành công, bạn sẽ được chuyển hướng đến màn hình Google, sau đó quay lại ứng dụng và đã được đăng nhập.
-
-## 6. Các lỗi thường gặp
-
-- **Error: redirect_uri_mismatch**: Kiểm tra xem URL trong `GOOGLE_REDIRECT_URI` của backend có khớp 100% với URL đã cấu hình trong Google Cloud Console hay không.
-- **Error: 403 access_denied**: Do ứng dụng đang ở chế độ Testing và email bạn dùng chưa được thêm vào "Test users".
-- **Token không hợp lệ**: Đảm bảo `JWT_SECRET_KEY` ở backend khớp với key dùng để giải mã (nếu có bên thứ 3).
-
-## 7. Code Mẫu Thực Tế
-
-### 7.1 Backend (FastAPI)
-Backend xử lý việc tạo URL đăng nhập và trao đổi code lấy Token.
+Điểm then chốt là sử dụng `RedirectResponse` ở bước cuối cùng.
 
 ```python
 # app/routers/auth.py
-from fastapi import APIRouter, Depends
-from app.config import settings
-
-router = APIRouter()
-
-@router.get("/google/login")
-async def google_login():
-    params = {
-        "client_id": settings.GOOGLE_CLIENT_ID,
-        "redirect_uri": settings.GOOGLE_REDIRECT_URI,
-        "response_type": "code",
-        "scope": "openid email profile",
-        "access_type": "offline",
-        "prompt": "consent"
-    }
-    query_string = "&".join([f"{k}={v}" for k, v in params.items()])
-    return {"auth_url": f"https://accounts.google.com/o/oauth2/v2/auth?{query_string}"}
+from fastapi.responses import RedirectResponse
 
 @router.get("/google/callback")
 async def google_callback(code: str):
-    # 1. Trao đổi code lấy access_token từ Google
-    # 2. Lấy thông tin user (email, name) từ Google
-    # 3. Lưu user vào Database nếu chưa có
-    # 4. Tạo JWT token của riêng hệ thống và trả về cho Frontend
-    return {"access_token": "JWT_TOKEN_HERE", "user": {...}}
+    # ... logic lấy email, name từ Google API ...
+    
+    # Tạo JWT token
+    token = create_access_token({"id": user["id"], "email": user["email"]})
+    
+    # REDIRECT người dùng quay lại giao diện React
+    # settings.FRONTEND_URL thường là http://localhost:5173
+    return RedirectResponse(url=f"{settings.FRONTEND_URL}/?token={token}")
 ```
 
-### 7.2 Frontend (React/TypeScript)
-Frontend gọi API backend để lấy URL và xử lý sau khi Google redirect về.
+## 3. Mã triển khai Frontend (React)
 
-```typescript
-// services/auth.ts
-export const authService = {
-  getGoogleLoginUrl: async () => {
-    const res = await fetch("/api/v1/auth/google/login");
-    const data = await res.json();
-    window.location.href = data.auth_url; // Chuyển hướng sang Google
-  },
-  
-  handleCallback: async (code: string) => {
-    const res = await fetch(`/api/v1/auth/google/callback?code=${code}`);
-    return res.json(); // Nhận JWT token và thông tin user
-  }
-};
+Tại component gốc (`App.tsx`), chúng ta cần một `useEffect` chạy ngay khi app khởi động để "hứng" token từ URL.
 
-// Component xử lý callback (OAuthCallback.tsx)
+```tsx
+// frontend/App.tsx
 useEffect(() => {
-  const code = new URLSearchParams(window.location.search).get("code");
-  if (code) {
-    authService.handleCallback(code).then(data => {
-      // Lưu token vào localStorage và redirect về trang chủ
-      localStorage.setItem("token", data.access_token);
-      window.location.href = "/";
-    });
+  // 1. Phân tích URL để tìm params 'token'
+  const params = new URLSearchParams(window.location.search);
+  const tokenFromUrl = params.get('token');
+  
+  if (tokenFromUrl) {
+    // 2. Lưu vào máy để dùng cho các request sau
+    localStorage.setItem('access_token', tokenFromUrl);
+    
+    // 3. CLEAN UP: Xóa token khỏi URL để link trông gọn gàng và an toàn
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // 4. Load thông tin profile user
+    fetchUserInfor();
   }
 }, []);
 ```
 
-## 8. Luồng hoạt động chi tiết (Flow Sequence)
+## 4. Tại sao dùng Redirect Flow thay vì AJAX?
+- **An toàn**: Tránh được các lỗi CORS phức tạp khi Google redirect về backend.
+- **Trải nghiệm**: Người dùng không nhìn thấy các trang JSON thô.
+- **Mượt mà**: Cảm giác như đang dùng một ứng dụng Native, quá trình chuyển đổi giữa Google -> Backend -> Frontend diễn ra tự động.
 
-Hệ thống sử dụng luồng Authorization Code Flow kết hợp giữa Chuyển hướng trình duyệt và AJAX để tối ưu trải nghiệm.
-
-### 8.1 Sơ đồ tuần tự (Sequence Diagram)
-
-```mermaid
-sequenceDiagram
-    participant User as Người dùng
-    participant Frontend as Frontend (React)
-    participant Backend as Backend (FastAPI)
-    participant Google as Google OAuth Server
-
-    User->>Frontend: Click "Login with Google"
-    Frontend->>Backend: GET /auth/google/login
-    Backend-->>Frontend: Trả về Auth URL
-    Frontend->>User: Chuyển hướng sang Google Login
-
-    User->>Google: Đăng nhập & Xác nhận quyền
-    Google-->>Backend: Redirect qua trình duyệt kèm ?code=...
-    Backend-->>Frontend: Redirect về trang callback kèm ?code=...
-
-    Frontend->>Backend: AJAX gửi code tới /auth/google/callback?code=...
-    Backend->>Google: Trao đổi code lấy Token & User Info
-    Google-->>Backend: Trả về thông tin người dùng
-    Backend->>Backend: Tạo/Cập nhật User & Sinh JWT Token
-    Backend-->>Frontend: Trả về JWT Token & Thông tin User
-    Frontend->>User: Thông báo thành công & Vào trang chính
-```
-
-### 8.2 Giải thích các bước
-
-1.  **Khởi tạo**: Người dùng nhấn đăng nhập, Frontend không tự tạo URL mà gọi Backend để lấy URL chuẩn (chứa Client ID và Scopes).
-2.  **Xác thực tại Google**: Người dùng thao tác trực tiếp với Google, đảm bảo an toàn mật khẩu.
-3.  **Hứng Code (Callback Phase 1)**: Google gửi mã `code` về Backend. Tại đây, backend thực hiện một lệnh redirect (302) để đưa người dùng quay trở lại giao diện Frontend (kèm theo mã code trên URL).
-4.  **Xác thực với hệ thống (Callback Phase 2)**: Frontend lấy mã `code` từ URL và gọi API callback của Backend bằng AJAX.
-5.  **Hoàn tất**: Backend dùng `code` đó để nói chuyện với Google ("Tôi là server của dự án này, hãy cho tôi thông tin của người vừa đăng nhập"). Sau đó Backend tạo phiên làm việc (JWT) gửi về cho Frontend lưu trữ.
+## 5. Cấu hình Scopes
+Để lấy được đầy đủ thông tin Avatar và Email, bạn phải đảm bảo đã yêu cầu 3 scopes:
+- `openid`
+- `email`
+- `profile`
 
 ---
-*Tài liệu này giúp đảm bảo quá trình tích hợp Google Auth diễn ra mượt mà và bảo mật.*
+*Ghi chú: Luôn đảm bảo `GOOGLE_REDIRECT_URI` trong file .env phải khớp 100% với cấu hình trong [Google Cloud Console](https://console.cloud.google.com/apis/credentials).*
