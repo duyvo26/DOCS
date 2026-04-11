@@ -1,177 +1,124 @@
-# Hướng dẫn Tích hợp Web App vào Mobile App (Hybrid App)
+# Quy trình Đăng nhập Hybrid App (Kỹ thuật Cloud-Sync Polling)
 
-Tài liệu này hướng dẫn chi tiết cách biến một ứng dụng Web (React, Vue, HTML...) thành một ứng dụng Native App (Flutter) thông qua WebView, với cơ chế đăng nhập Google Native và đồng bộ Token hai chiều.
-
-## 1. Tổng quan Kiến trúc (Hybrid Flow)
-1. **Mobile App**: Đóng vai trò là "vỏ" (Shell), chứa WebView để hiển thị trang web.
-2. **Native OAuth**: App xử lý đăng nhập Google bằng trình duyệt hệ thống để đảm bảo bảo mật và không bị Google chặn.
-3. **Bridge Communication**: Web và App giao tiếp với nhau qua `JavascriptChannel`.
-4. **Token Handover**: Sau khi App lấy được Token, nó sẽ đồng bộ vào Web thông qua URL hoặc `localStorage`.
+Tài liệu này mô tả luồng đăng nhập Google OAuth 2.0 an toàn, ổn định tuyệt đối trên Android & iOS bằng cách đồng bộ trạng thái qua Database, thay thế cho cơ chế Deep Link hay bị trình duyệt chặn.
 
 ---
 
-## 2. Luồng Kết nối & Lưu trữ Dữ liệu
+## 1. Sơ đồ Hoạt động (Step-by-Step)
 
-Ứng dụng sử dụng cơ chế **Lưu trữ Song song** để đảm bảo trải nghiệm người dùng mượt mà nhất.
-
-### A. Kết nối (Connection)
-- **Khởi động:** Khi App mở lên, nó sẽ đọc `access_token` từ bộ nhớ máy (`SharedPreferences`).
-- **WebView:** App khởi tạo và tải trang Web (URL cấu hình trong `config.dart`). Nếu đã có token, App sẽ tự động gửi token này sang cho Web ngay khi trang web tải xong (`onPageFinished`).
-
-### B. Lưu trữ (Storage)
-Dữ liệu đăng nhập được lưu ở 2 tầng:
-1. **Tầng Native (Flutter):** Sử dụng `SharedPreferences`. Token lưu tại đây giúp người dùng không phải đăng nhập lại mỗi khi mở App (xử lý ở hàm `main()` của Flutter).
-2. **Tầng Web (WebView):** Sử dụng `localStorage`. Web cần token này để gọi các API lấy dữ liệu hay lịch sử người dùng.
-
-### C. Cơ chế đồng bộ (Synchronization)
-- **Từ App sang Web:** Khi `Native OAuth` thành công, App lưu token vào `SharedPreferences` và ra lệnh cho WebView: `controller.loadRequest(webUrl + "/?token=" + token)`.
-- **Từ Web sang App:** Khi người dùng bấm "Đăng xuất" trên giao diện Web, Web xóa `localStorage` và gửi lệnh `LOGOUT` qua Bridge. App nhận lệnh này và xóa nốt token trong `SharedPreferences`.
+1. **[Web]** Người dùng bấm "Đăng nhập Google".
+2. **[Web]** Frontend tạo `sessionId` ngẫu nhiên.
+3. **[Web]** Frontend gọi API `POST /auth/login-session` để đăng ký phiên chờ.
+4. **[Web]** Frontend bắt đầu vòng lặp (Polling) gọi `GET /auth/login-session/{id}` mỗi 2 giây.
+5. **[Web]** Frontend gửi thông điệp `GOOGLE_LOGIN:sessionId` cho Flutter qua Bridge.
+6. **[App]** Flutter nhận thông điệp và mở Chrome Custom Tab (CCT) dẫn đến trang Backend.
+7. **[Server]** Người dùng đăng nhập Google thành công, Server tạo JWT Token.
+8. **[Server]** Server cập nhật Token vào bảng `login_sessions` trong DB ứng với `sessionId`.
+9. **[Server]** Server trả về trang HTML "Thành công", yêu cầu người dùng đóng Tab.
+10. **[Web]** Ở lần Polling tiếp theo, Frontend nhận được Token -> Tự động đăng nhập và vào màn hình chính.
 
 ---
 
-## 2. Triển khai Backend (Ví dụ với FastAPI)
+## 2. Chi tiết Triển khai Mã nguồn
 
-Để hỗ trợ Mobile App, Backend cần cung cấp 2 Endpoint: Một để bắt đầu đăng nhập và một để xử lý Callback từ Google.
+### A. Backend: Quản lý Phiên (FastAPI + SQLite)
 
-### A. Các bước cấu hình Google Cloud Console:
-1. Truy cập [Google Cloud Console](https://console.cloud.google.com/).
-2. Tạo **OAuth 2.0 Client ID** loại **Web Application**.
-3. **Authorized Redirect URIs**: Bạn cần thêm **CẢ HAI** URL sau:
-   - Web: `https://domain.com/api/v1/auth/google/callback`
-   - Mobile: `https://domain.com/api/v1/auth/google/callback/flutter`
+**Cấu trúc bảng Database (`base_db.py`):**
+```sql
+CREATE TABLE login_sessions (
+    session_id TEXT PRIMARY KEY,
+    token TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
-### B. Endpoint bắt đầu đăng nhập (Flutter)
-App gọi đến Link: `https://domain.com/api/v1/auth/google/login/flutter?callback_scheme=your_scheme`
-
-### C. Endpoint xử lý Callback cho Flutter (`/callback/flutter`)
-Đây là route chuyên biệt để xử lý việc quay trở lại App Mobile. Backend sẽ tạo JWT Token và trả về trang HTML gọi Deep Link.
-
+**Logic xử lý Callback (`auth.py`):**
+Sau khi Google trả về thông tin người dùng, Server sẽ cập nhật Token vào DB:
 ```python
-@router.get("/auth/google/callback/flutter")
+@router.get("/google/callback/flutter")
 async def google_callback_flutter(code: str, state: str):
-    # 1. Lấy Token từ Google
-    # 2. Tạo access_token hệ thống
-    token = "EYJ..." 
+    session_id = state  # state chứa sessionId được truyền từ App
+    # ... xác thực Google và tạo JWT Token ...
     
-    # 3. Trả về HTML chứa Deep Link (state chính là callback_scheme)
-    deep_link = f"{state}://callback?token={token}"
-    
-    content = f"""
-    <html>
-    <body onload="window.location.href='{deep_link}'; setTimeout(()=>window.close(), 1000);">
-        <h2>Đăng nhập thành công</h2>
-        <a href="{deep_link}">Nhấn vào đây để quay lại App</a>
-    </body>
-    </html>
-    """
-    return HTMLResponse(content=content)
+    user_db = UserDB()
+    user_db.update_login_session(session_id, token) # Lưu Token vào DB
+    user_db.close()
+
+    return HTMLResponse(content="<h2>Đăng nhập thành công! Hãy đóng Tab này.</h2>")
 ```
 
----
+### B. Frontend: Cơ chế Polling (`AuthView.tsx`)
 
-## 3. Cơ chế Bắc cầu (Bridge Communication)
-
-### A. Phía Web (React/Frontend)
-Web gửi thông điệp cho App thông qua đối tượng `window.FlutterBridge`.
-
-**1. Yêu cầu App đăng nhập:**
+Frontend chịu trách nhiệm theo dõi trạng thái đăng nhập:
 ```typescript
-const handleGoogleLogin = () => {
-  if ((window as any).FlutterBridge) {
-    (window as any).FlutterBridge.postMessage('GOOGLE_LOGIN');
-  }
+const handleGoogleLogin = async () => {
+    const sessionId = crypto.randomUUID(); // Tạo ID bảo mật
+    
+    // 1. Khởi tạo phiên trên Server
+    const formData = new FormData();
+    formData.append('session_id', sessionId);
+    await fetch(`${BASE_URL}/auth/login-session`, { method: 'POST', body: formData });
+
+    // 2. Lắng nghe trạng thái
+    const pollInterval = setInterval(async () => {
+        const res = await fetch(`${BASE_URL}/auth/login-session/${sessionId}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        if (data.status === 'completed' && data.token) {
+            clearInterval(pollInterval);
+            onSuccess(data.user, data.token); // Đăng nhập thành công!
+        }
+    }, 2000);
+
+    // 3. Gọi App mở trình duyệt login
+    window.FlutterBridge.postMessage(`GOOGLE_LOGIN:${sessionId}`);
 };
 ```
 
-**2. Thông báo App đăng xuất:**
-```typescript
-const handleLogout = () => {
-  localStorage.removeItem('access_token');
-  if ((window as any).FlutterBridge) {
-    (window as any).FlutterBridge.postMessage('LOGOUT');
-  }
-};
-```
+### C. Mobile App: Trụ cầu kết nối (`main.dart`)
 
-### B. Phía App (Flutter/Mobile)
+App đóng vai trò trung gian mở Tab đăng nhập:
 ```dart
-JavascriptChannel(
-  name: 'FlutterBridge',
-  onMessageReceived: (JavascriptMessage message) {
-    if (message.message == 'GOOGLE_LOGIN') _triggerNativeGoogleLogin();
-    if (message.message == 'LOGOUT') _handleAppLogout();
-  },
-)
-```
-
----
-
-## 4. Quy trình Bàn giao Token (Token Handover)
-
-Sau khi Flutter lấy được Token từ Deep Link, nó thực hiện:
-1. **Lưu Token:** `prefs.setString('access_token', token)`.
-2. **Đồng bộ sang Web:** `controller.loadRequest(Uri.parse("weburl.com/?token=" + token))`.
-
-**Web xử lý nhận Token:**
-```typescript
-useEffect(() => {
-  const token = new URLSearchParams(window.location.search).get('token');
-  if (token) {
-    localStorage.setItem('access_token', token);
-    window.history.replaceState({}, '', window.location.pathname);
-    fetchUser();
+void _handleWebMessage(JavaScriptMessage message) {
+  final data = message.message;
+  if (data.startsWith('GOOGLE_LOGIN:')) {
+    final sessionId = data.split(':')[1];
+    _triggerNativeGoogleLogin(sessionId);
   }
-}, []);
+}
+
+Future<void> _triggerNativeGoogleLogin(String sessionId) async {
+  final url = "${AppConfig.apiBaseUrl}/auth/google/login/flutter?session_id=$sessionId";
+  
+  // App chỉ mở Tab. Người dùng đóng xong app vẫn ở lại trang WebView.
+  await FlutterWebAuth2.authenticate(
+    url: url,
+    callbackUrlScheme: 'none', // Không cần bắt deep link
+  );
+}
 ```
 
 ---
 
-## 5. Cấu hình Mobile App (Flutter)
+## 3. Các quy tắc Bảo mật (Security Rules)
 
-1. **Deep Link (Android):** Mở `AndroidManifest.xml`, sửa `scheme` thành scheme của bạn.
-2. **App ID:** Mở `build.gradle.kts`, sửa `applicationId` (Không dùng dấu `-`).
-3. **Build:** 
-   - `flutter clean`
-   - `flutter build apk --release`
+Hệ thống được thiết kế với các lớp bảo mật nghiêm ngặt:
 
----
-
-## 6. Giải quyết sự cố & Lưu ý quan trọng
-
-Dưới đây là các lưu ý "xương máu" để tránh lỗi khi triển khai thực tế:
-
-### 1. Cấu hình CORS (Backend)
-Nếu App không load được dữ liệu từ API, hãy kiểm tra file `app/main.py`. Bạn phải cho phép tên miền của Web App được truy cập API. 
-
-**Lưu ý bảo mật:** Ở bản phát hành (Production), hãy thay đổi `ALLOW_ORIGINS` trong file `.env` từ `*` thành domain thật của bạn (Vd: `ALLOW_ORIGINS=https://yourdomain.com`) để ngăn chặn các trang web lạ tấn công API.
-```python
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://yourdomain.com"], # Cấu hình đúng domain tại đây
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
-
-### 2. HTTPS là bắt buộc
-Google OAuth **không cho phép** Redirect URI sử dụng `http` (trừ localhost). Vì vậy, cả Web App và API của bạn bắt buộc phải có chứng chỉ SSL (HTTPS) để đăng nhập Google hoạt động ổn định.
-
-### 3. Namespace Android
-Khi đổi tên Package trong `build.gradle.kts` (applicationId), **TUYỆT ĐỐI KHÔNG** dùng dấu gạch ngang `-` (Vd: `com.my-app`). Android chỉ chấp nhận dấu gạch dưới `_`. Nếu dùng dấu `-`, App sẽ bị crash ngay lập tức khi khởi chạy.
-
-### 4. Lỗi dư dấu chấm trong URL
-Hãy kiểm tra file `config.dart` trong Flutter. Đảm bảo URL không bị dư dấu chấm ở cuối (Vd: `https://api.domain.com./` là sai). Điều này sẽ khiến WebView không thể so khớp scheme thành công.
-
-### 5. Xử lý lỗi từ Deep Link
-Nếu đăng nhập thất bại, Backend có thể trả về: `your_scheme://callback?error=failed`. Bạn nên viết thêm code trong Flutter để bắt tham số `error` này và hiển thị thông báo (Alert) cho người dùng.
-
-### 6. Xóa cache khi Build lại
-Nếu bạn thay đổi cấu hình Deep Link trong `AndroidManifest.xml`, hãy chạy lệnh sau để đảm bảo thay đổi được áp dụng:
-```bash
-flutter clean
-flutter pub get
-```
+1. **One-time Use (Dùng một lần):** Ngay khi API trả về Token cho Frontend qua Polling, Server sẽ **XÓA NGAY** session đó khỏi Database. Không ai có thể dùng lại ID đó để lấy token lần thứ hai.
+2. **Thời gian sống (TTL):** Session chỉ có hiệu lực trong **10 phút**. Sau 10 phút, session tự động bị coi là hết hạn và bị xóa bỏ.
+3. **Dọn dẹp tự động:** Backend thực hiện quét và xóa các session cũ mỗi khi có một phiên đăng nhập mới được khởi tạo (`user_db.cleanup_old_sessions()`).
+4. **ID Bảo mật:** Sử dụng `UUID` hoặc ID ngẫu nhiên độ dài lớn để chống tấn công đoán mã (Brute-force).
 
 ---
-*Tài liệu hướm dẫn Hybrid App chuyên sâu - Antigravity AI.*
+
+## 4. Hướng dẫn Vận hành
+
+1. **Backend:** Đảm bảo đã chạy lệnh migrate/tạo bảng `login_sessions`.
+2. **Frontend:** Cấu hình đúng `BASE_URL` trỏ về API Server.
+3. **App:** Đảm bảo `JavascriptChannel` tên là `FlutterBridge` được cấu hình đúng trong WebView.
+4. **Google Cloud:** Cài đặt Redirect URI của bản Flutter là: `https://yourdomain.com/api/v1/auth/google/callback/flutter`.
+
+---
+*Tài liệu hướng dẫn Quy trình Đăng nhập Hybrid Cloud-Sync - Antigravity AI.*
