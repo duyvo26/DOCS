@@ -28,19 +28,36 @@ project_root/
 │   ├── retriever.py            # Logic tìm kiếm FAISS
 │   └── vector_data_builder.py  # Xây dựng và cập nhật Vector Database
 ├── scoring/                    # [EVALUATION] (Tùy chọn) Framework chấm điểm AI và RAG
-├── frontend/                   # [FRONTEND] Giao diện người dùng (React/Vite hoặc HTML/Vanilla)
-│   ├── App.tsx                 # Main Component quản lý Route & Auth State
-│   ├── api.ts                  # Service Layer gọi API Backend
-│   └── components/             # Thư mục UI Components chia theo chức năng
-├── utils/                      # [STORAGE] Thư mục lưu trữ tạm thời
+├── frontend/                   # [FRONTEND] Giao diện người dùng (React/Vite/TypeScript)
+│   └── src/
+│       ├── main.tsx            # Entry point — chỉ mount App + Providers
+│       ├── App.tsx             # Root: bọc Providers, gắn RootRouter
+│       ├── router/
+│       │   └── index.tsx       # RootRouter: gom tất cả domain routers
+│       ├── contexts/
+│       │   └── AuthContext.tsx # Global Auth State (JWT, user info)
+│       ├── services/
+│       │   └── api.ts          # Axios instance + tất cả API functions
+│       ├── hooks/              # Custom hooks (useAsyncAction...)
+│       ├── components/         # Shared UI (ProtectedRoute, AdminRoute, Layout)
+│       ├── domains/            # Mỗi thư mục = 1 domain nghiệp vụ độc lập
+│       │   ├── auth/           # Domain xác thực: router, pages, components
+│       │   ├── chat/           # Domain chatbot AI
+│       │   ├── payment/        # Domain thanh toán
+│       │   └── admin/          # Domain quản trị
+│       └── types/
+│           └── index.ts        # Shared TypeScript types
+├── utils/                      # [STORAGE] Thu muc luu tru tap trung
 │   ├── download/               # File export, logo, favicon...
-│   ├── upload_temp/            # File tải lên đang chờ xử lý
-│   └── data_vector/            # Nơi lưu trữ FAISS Index thực tế
-├── test/                       # Unit tests
-├── .env                        # Biến môi trường (KHÔNG push lên Git)
-├── .env.example                # File mẫu biến môi trường (PUSH lên Git)
-├── .gitignore                  # Quy tắc bỏ qua file nhạy cảm
-└── requirements.txt            # Danh sách thư viện Python
+│   ├── upload_temp/            # File tai len dang cho xu ly
+│   ├── data_vector/            # Noi luu tru FAISS Index thuc te
+│   └── logs/                   # File log ung dung (xem skill_logging_monitoring.md)
+├── test/                       # Unit tests (pytest, vitest)
+├── deploy/                     # Cau hinh deploy (nginx.conf, systemd service)
+├── .env                        # Bien moi truong (KHONG push len Git)
+├── .env.example                # File mau bien moi truong (push len Git)
+├── .gitignore                  # Quy tac bo qua file nhay cam (xem skill_env_configuration.md)
+└── requirements.txt            # Danh sach thu vien Python
 ```
 
 ---
@@ -53,34 +70,40 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 *   [**Kỹ thuật AI RAG Workflow (Standard)**](./skill_ai_rag_workflow.md): Cấu trúc luồng đồ thị LangGraph, định tuyến câu hỏi, bộ lọc tài liệu và quản lý chi phí token.
 *   [**Kỹ thuật Parser (DOCX to MD)**](./skill_docx_to_md_parser.md): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
 
-### Nhóm Xác thực, Môi trường & Bảo mật
-*   [**Cấu hình Môi trường (.env & .gitignore)**](./skill_env_configuration.md): Chuẩn file `.env`, cách sử dụng `.env.example` và quy tắc cấu hình Gitignore bảo mật mã nguồn.
-*   [**Viết Mã SQL Đa nền tảng (MySQL & SQLite)**](./skill_sql_compatibility.md): Kỹ thuật dùng Raw SQL tương thích đa driver, chống SQL Injection bằng Parameter Binding.
-*   [**Quản lý Thư viện (Dependencies)**](./skill_dependencies_management.md): Danh sách các package (FastAPI, LangGraph, JWT, MarkItDown...) cần cài đặt để chạy các Skill.
-*   [**Xác thực và Bảo mật Toàn diện**](./skill_security_authentication.md): Cơ chế kiểm tra JWT Stateless, quản lý Fallback Avatar 3 lớp và chống Path Traversal.
-*   [**Đăng nhập Google OAuth (Redirect Flow)**](./skill_google_oauth_redirect.md): Luồng đăng nhập mượt mà qua Backend Redirect, không làm lộ JSON thô.
-*   [**Đăng nhập Hybrid App (Cloud-Sync Polling)**](./skill_hybrid_app_login.md): Giải pháp đăng nhập cho App Mobile (Flutter/React Native) sử dụng WebView kết hợp Polling DB thay thế Deep Link.
+### Nhom Xac thuc, Moi truong & Bao mat
+*   [**Cau hinh Moi truong (.env & .gitignore)**](./skill_env_configuration.md): Chuan file `.env`, day du mau `.gitignore`, quy tac `.env.example` va Pydantic Settings.
+*   [**Viet Ma SQL Da nen tang (MySQL & SQLite)**](./skill_sql_compatibility.md): Ky thuat dung Raw SQL tuong thich da driver, chong SQL Injection bang Parameter Binding.
+*   [**Quan ly Thu vien (Dependencies)**](./skill_dependencies_management.md): Danh sach package (FastAPI, LangGraph, JWT, zustand, zod...) can cai dat de chay cac Skill.
+*   [**Xac thuc va Bao mat Toan dien**](./skill_security_authentication.md): JWT Stateless, bcrypt hash mat khau, RBAC Admin, chong Path Traversal, va Frontend Security checklist.
+*   [**Dang nhap Google OAuth (Redirect Flow)**](./skill_google_oauth_redirect.md): Luong dang nhap muot ma qua Backend Redirect, khong lam lo JSON tho.
+*   [**Dang nhap Hybrid App (Cloud-Sync Polling)**](./skill_hybrid_app_login.md): Giai phap dang nhap cho App Mobile (Flutter/React Native) su dung WebView ket hop Polling DB.
 
-### Nhóm Tác vụ & Thanh toán
-*   [**Tác vụ Bất đồng bộ & Polling**](./skill_async_task_polling.md): Cơ chế sử dụng Background Tasks của FastAPI kết hợp Polling phía Frontend để xử lý các tác vụ AI mất nhiều thời gian.
-*   [**Hệ thống Thanh toán Tự động (Polling & Sync)**](./skill_payment_polling_sync.md): Thuật toán đối soát giao dịch ngân hàng qua SePay tự động không cần Webhook.
+### Nhom Tac vu & Thanh toan
+*   [**Tac vu Bat dong bo & Polling**](./skill_async_task_polling.md): Co che Background Tasks cua FastAPI ket hop Polling phia Frontend de xu ly tac vu AI nang.
+*   [**He thong Thanh toan Tu dong (Polling & Sync)**](./skill_payment_polling_sync.md): Thuat toan doi soat giao dich ngan hang qua SePay tu dong khong can Webhook.
 
-### Nhóm Tối ưu Frontend & Giao diện
-*   [**Kiến trúc Frontend & API Setup**](./skill_frontend_architecture.md): Quy chuẩn quản lý gọi API tập trung (`api.ts`), định tuyến `/api/v1` với Axios, và tích hợp Tailwind CSS.
-*   [**Quản lý SEO Dong (Dynamic SEO)**](./skill_dynamic_seo_manager.md): Kỹ thuật thay thế trực tiếp Meta Tag trong file tĩnh `index.html` của React giúp chia sẻ link hiệu quả.
+### Nhom Toi uu Frontend & Giao dien
+*   [**Kien truc Frontend & API Setup**](./skill_frontend_architecture.md): Quan ly API tap trung (`api.ts`), JWT Interceptor, button loading state, va bao mat JWT phia Frontend.
+*   [**Chia nho Components, Pages & Domain Routing**](./skill_frontend_routing_components.md): Kien truc domain-based voi React Router v6, lazy loading, ProtectedRoute/AdminRoute, nguyen tac tach component.
+*   [**Quan ly SEO Dong (Dynamic SEO)**](./skill_dynamic_seo_manager.md): Ky thuat thay the truc tiep Meta Tag trong file tinh `index.html` cua React giup chia se link hieu qua.
 
-### Nhóm Quy tắc Viết Code
-*   [**Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)**](./skill_coding_conventions.md): Quy định cách đặt tên, Type Hinting, Docstring, quy tắc comment giải thích code và quản lý lỗi.
+### Nhom Quy tac Viet Code & Tai lieu
+*   [**Tieu chuan Viet Code & Dat ten (Coding Conventions)**](./skill_coding_conventions.md): Dat ten, Type Hinting, Docstring, cam emoji, va Git Workflow (Conventional Commits, branching strategy).
+*   [**Huong dan Viet README.md Chuan**](./skill_readme_writing.md): Cau truc 7 phan bat buoc, mau README day du, quy tac `.env.example`, checklist truoc khi commit.
+*   [**Logging & Monitoring Chuan**](./skill_logging_monitoring.md): Cau hinh Python logging co cau truc, RotatingFileHandler, quy tac log level, cam dung `print()` trong production.
+*   [**Chuan API Response (Standard Response Format)**](./skill_api_response_standard.md): JSON thong nhat cho moi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
 
 ---
 
 ## 3. Nguyên tắc phát triển cốt lõi (Core Principles)
 
-1. **Tuân thủ Cấu trúc Modular**: Tuyệt đối không code logic AI (LangChain/LangGraph) vào trong các file `router` của FastAPI. Backend API (`app/`) chỉ nhận request và gọi các hàm xử lý bên trong module `chatbot/` hoặc `ingestion/`.
-2. **Khôi phục trạng thái (Resilience)**: Mọi tác vụ nặng phải có cơ chế Polling. Người dùng F5 (tải lại trang) không được làm gián đoạn tiến trình. (Xem `skill_async_task_polling.md`).
-3. **An toàn Bi mật (Secrets)**: Các API Key (OpenAI, Gemini, SePay) và Secret Key (JWT, XOR) luôn đặt ở `.env` Backend. Dùng `.env.example` để commit mẫu lên Git.
-4. **Phản hồi Ro ràng**: Mọi Endpoint giao tiếp với Frontend phải trả về JSON định dạng chuẩn có bẫy lỗi (`HTTPException`) minh bạch.
-5. **Comment giải thích**: Mọi hàm phức tạp phải có Docstring (Python) hoặc JSDoc (TypeScript). Comment phải trả lời "Tại sao viết thế này?" chứ không phải "Code này làm gì?". (Xem `skill_coding_conventions.md`).
+1. **Tuan thu Cau truc Modular**: Tuyet doi khong code logic AI (LangChain/LangGraph) vao trong cac file `router` cua FastAPI. Backend API (`app/`) chi nhan request va goi cac ham xu ly ben trong module `chatbot/` hoac `ingestion/`.
+2. **Kho phuc trang thai (Resilience)**: Moi tac vu nang phai co co che Polling. Nguoi dung F5 (tai lai trang) khong duoc lam gian doan tien trinh. (Xem `skill_async_task_polling.md`).
+3. **An toan Bi mat (Secrets)**: Cac API Key (OpenAI, Gemini, SePay) va Secret Key (JWT) luon dat o `.env` Backend. Dung `.env.example` de commit mau len Git. KHONG bao gio commit file `.env` thuc. (Xem `skill_env_configuration.md`).
+4. **Phan hoi Ro rang**: Moi Endpoint giao tiep voi Frontend phai tra ve JSON dinh dang chuan `ApiSuccess` / `ApiError`. (Xem `skill_api_response_standard.md`).
+5. **Logging thay vi Print**: Moi file module phai khai bao `logger = get_logger(__name__)`. Cam tuyet doi dung `print()` trong code production. (Xem `skill_logging_monitoring.md`).
+6. **Comment giai thich**: Moi ham phuc tap phai co Docstring (Python) hoac JSDoc (TypeScript). Comment phai tra loi "Tai sao viet the nay?" chu khong phai "Code nay lam gi?". (Xem `skill_coding_conventions.md`).
+7. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md` Muc 7).
 
 ---
 

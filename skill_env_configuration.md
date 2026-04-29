@@ -9,32 +9,53 @@ File `.env` đóng vai trò là "bộ não" điều khiển toàn bộ cấu hì
 ```env
 # === 1. CAU HINH HE THONG (FastAPI) ===
 SECRET_KEY=your_super_secret_jwt_key_here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
 API_KEY=your_api_key_for_internal_auth
 ALLOW_ORIGINS=["http://localhost:5173", "https://yourdomain.com"]
-TITLE_APP=Tên Ứng Dụng Của Bạn
+TITLE_APP=Ten Ung Dung Cua Ban
 VERSION_APP=v1
+ENV=development
+# ENV: 'development' (bat DEBUG log) hoac 'production'
 
 # === 2. CAU HINH AI ENGINE ===
-LLM_NAME=openai # Hỗ trợ: openai, google, grok
+LLM_NAME=openai
+# Ho tro: openai, google, grok
 OPENAI_LLM_MODEL_NAME=gpt-4o-mini
 KEY_API_OPENAI=sk-proj-xxxxxxxxxxxxxxxxxxxxxx
+GEMINI_API_KEY=AIzaSy-xxxxxxxxxxxxxxxxxxxxxx
+GEMINI_MODEL=gemini-2.0-flash
 
 EMBEDDING_MODEL_NAME=openai
-NUMDOCS=5 # Số lượng tài liệu RAG lấy ra mỗi lần truy vấn
-MAX_RETRIES_RAG=2 # Số lần tự động thử lại nếu RAG không tìm thấy kết quả
-NUM_VOTES_VALIDATOR=3 # Số lượng phiếu biểu quyết (Voting) chống ảo giác
+NUMDOCS=5
+# So luong tai lieu RAG lay ra moi lan truy van
+MAX_RETRIES_RAG=2
+# So lan tu dong thu lai neu RAG khong tim thay ket qua
+NUM_VOTES_VALIDATOR=3
+# So luong phieu bieu quyet (Voting) chong ao giac
 
-# === 3. CAU HINH THANH TOAN SEPAY ===
-NAME_WEB=MYAPP # Tiền tố nạp tiền (VD: MYAPPNAPTOKEN123)
+# === 3. CAU HINH DATABASE ===
+DB_TYPE=sqlite
+# sqlite (mac dinh phat trien) hoac mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=myapp_db
+
+# === 4. CAU HINH THANH TOAN SEPAY ===
+NAME_WEB=MYAPP
+# Tien to nap tien (VD: MYAPPNAPTOKEN123)
 SEPAY_API_KEY=xxxxxxxxxxxxxxxxxxxxx
 SEPAY_ACCOUNT_NUMBER=123456789
 SEPAY_BANK_BRAND=MBBank
 
-# === 4. CAU HINH GOOGLE OAUTH 2.0 ===
+# === 5. CAU HINH GOOGLE OAUTH 2.0 ===
 GOOGLE_CLIENT_ID=xxx-xxx.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=GOCSPX-xxxxxx
 GOOGLE_REDIRECT_URI=http://localhost:2643/api/v1/auth/google/callback
 FRONTEND_URL=http://localhost:5173
+VITE_API_URL=http://localhost:2643
 ```
 
 ---
@@ -43,26 +64,77 @@ FRONTEND_URL=http://localhost:5173
 
 Trong thực tế, bạn không bao giờ được phép đẩy file `.env` lên Github/Gitlab vì nó chứa API Key thật và Mật khẩu Database.
 
-### A. Cấu hình `.gitignore`
-Bạn phải tạo một file **`.gitignore`** ở thư mục ngoài cùng của dự án và khai báo block các file môi trường:
+### A. Mau .gitignore Day du (Full Template)
 
-```text
-# Bỏ qua mọi file môi trường có chứa biến thật
+Tao file `.gitignore` tai thu muc goc voi noi dung sau. Day la mau chuan cho du an FastAPI + React:
+
+```gitignore
+# ============================================================
+# BIEN MOI TRUONG — Tuyet doi khong push len Git
+# ============================================================
 .env
 .env.*
 !.env.example
 
-# Bỏ qua môi trường ảo Python
+# ============================================================
+# MOI TRUONG AO PYTHON
+# ============================================================
 .venv/
 venv/
-__pycache__/
+env/
 
-# Bỏ qua thư mục Database/Files (tránh đầy Git)
+# ============================================================
+# PYTHON CACHE
+# ============================================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# ============================================================
+# DATABASE
+# ============================================================
+*.db
+*.sqlite3
+*.sqlite
+
+# ============================================================
+# STORAGE (Du lieu lon, khong push len Git)
+# ============================================================
 utils/data_vector/
 utils/download/
 utils/upload_temp/
-*.sqlite3
-*.db
+utils/logs/
+*.log
+
+# ============================================================
+# FRONTEND BUILD OUTPUT
+# ============================================================
+node_modules/
+frontend/dist/
+frontend/.next/
+frontend/build/
+
+# ============================================================
+# IDE & HE DIEU HANH
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# CERT & KEY
+# ============================================================
+*.pem
+*.key
+*.crt
 ```
 
 ### B. Vai trò của `.env.example`

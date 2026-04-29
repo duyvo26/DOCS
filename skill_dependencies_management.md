@@ -65,23 +65,26 @@ pip install markitdown pandas openpyxl
 ## 5. Nhóm Frontend (React/Vite)
 Sử dụng cho `skill_frontend_architecture.md`. Cài đặt qua `npm` hoặc `yarn`.
 
-- **axios**: Gọi API chuyên nghiệp (hỗ trợ Interceptor gán JWT tự động).
-- **tailwindcss**: Framework CSS tiện lợi.
-- **react-router-dom**: Quản lý điều hướng trang (Routing).
-- **lucide-react**: Thư viện Icon chuẩn xác và siêu nhẹ.
+- **axios**: Goi API chuyen nghiep (ho tro Interceptor gan JWT tu dong).
+- **tailwindcss**: Framework CSS tien loi.
+- **react-router-dom**: Quan ly dieu huong trang (Routing).
+- **lucide-react**: Thu vien Icon chuan xac va sieu nhe.
+- **zustand**: Quan ly state nhe, don gian — dung khi AuthContext khong du.
+- **zod**: Validate du lieu phia Frontend (form, API response schema).
+- **react-hook-form**: Quan ly form phuc tap, ket hop voi zod de validate.
 
-**Lệnh cài đặt:**
+**Lenh cai dat:**
 ```bash
-npm install axios react-router-dom lucide-react
+npm install axios react-router-dom lucide-react zustand zod react-hook-form
 npm install -D tailwindcss postcss autoprefixer
 ```
 
 ---
 
-## 6. Lời khuyên cho Lập trình viên
-Thay vì gõ từng lệnh trên, bạn nên gom tất cả các thư viện Python vào một file `requirements.txt` và cài đặt một lần qua lệnh:
+## 6. Loi khuyen cho Lap trinh vien
+Thay vi go tung lenh tren, ban nen gom tat ca cac thu vien Python vao mot file `requirements.txt` va cai dat mot lan qua lenh:
 ```bash
 pip install -r requirements.txt
 ```
 
-> 💡 **Quan trọng**: Hãy luôn nhớ kích hoạt môi trường ảo (`.venv`) trước khi chạy lệnh `pip install` để tránh làm bẩn môi trường Python của hệ thống.
+**Luu y quan trong**: Hay luon nho kich hoat moi truong ao (`.venv`) truoc khi chay lenh `pip install` de tranh lam ban moi truong Python cua he thong.

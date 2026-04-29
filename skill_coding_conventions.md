@@ -201,3 +201,115 @@ Ngoài Docstring và JSDoc (comment khối), lập trình viên cần biết **k
 *   **Component**: Dùng `PascalCase.tsx`. Ví dụ: `ChatView.tsx`, `SidebarMenu.tsx`, `AuthView.tsx`.
 *   **Utility/Service**: Dùng `camelCase.ts`. Ví dụ: `api.ts`, `helpers.ts`.
 *   **Thư mục**: Dùng `lowercase` hoặc `kebab-case`. Ví dụ: `components/`, `pages/`, `hooks/`.
+
+---
+
+## 7. Quy tac Cam Emoji (No-Emoji Rule)
+
+**Cam tuyet doi** su dung emoji trong tat ca file cua du an, bao gom:
+
+- File code (`*.py`, `*.ts`, `*.tsx`, `*.js`)
+- File tai lieu (`*.md`)
+- File cau hinh (`*.yaml`, `*.json`, `*.env.example`)
+- Comment trong code
+
+### Ly do:
+
+| Van de | Mo ta |
+|--------|-------|
+| Encoding loi | Emoji co the bi render sai tren he dieu hanh khac nhau (Windows / Linux / macOS) |
+| Terminal bi loi | Mot so terminal khong hien thi duoc Unicode emoji, lam mat thong tin log |
+| Khong chuyen nghiep | Trong tai lieu ky thuat, emoji la nhieu, gay mat tap trung |
+| Khach hang / Doi tac | Mot so he thong doc tai lieu tu dong bi loi khi gap emoji |
+| AI Agent | Mot so AI pipeline xu ly text bi out-of-sync khi gap ky tu dac biet |
+
+### Cach thay the emoji bang van ban:
+
+| Thay vi dung | Dung thay the |
+|---|---|
+| `✅ Dung` | `[Dung]` hoac chu thuong |
+| `❌ Sai` | `[Sai]` hoac `KHONG:` |
+| `⚠️ Luu y` | `**Luu y:**` hoac `CANH BAO:` |
+| `📁 Thu muc` | Chi can ten thu muc |
+| `🔑 Bao mat` | `Bao mat:` |
+| `💡 Meo` | `Goi y:` hoac `Meo:` |
+
+### Vi du ap dung:
+
+```python
+# SAI:
+# ✅ Da kiem tra xong
+# ⚠️ Can xu ly loi nay
+
+# DUNG:
+# [OK] Da kiem tra xong
+# CANH BAO: Can xu ly loi nay
+```
+
+```markdown
+<!-- SAI trong file .md: -->
+> ⚠️ **Vấn đề cốt lõi**: ...
+
+<!-- DUNG trong file .md: -->
+> **Luu y - Van de cot loi**: ...
+```
+
+---
+
+## 8. Quy tac Git Workflow & Commit Convention
+
+### 8.1. Chuan Commit Message (Conventional Commits)
+
+Format bat buoc: `<type>(<scope>): <mo ta ngan gon>`
+
+| Type | Khi nao dung | Vi du |
+|---|---|---|
+| `feat` | Them tinh nang moi | `feat(auth): them dang nhap Google OAuth` |
+| `fix` | Sua loi | `fix(payment): sua loi tinh tong tien sai` |
+| `refactor` | Doi cau truc, khong them/xoa tinh nang | `refactor(chat): tach ChatInput thanh component rieng` |
+| `docs` | Chi sua tai lieu, README, comment | `docs(readme): cap nhat buoc cai dat` |
+| `chore` | Viec lam khong anh huong logic (cap nhat dep, config) | `chore: them tailwind config` |
+| `test` | Them hoac sua test | `test(auth): them unit test cho ham verify_password` |
+| `style` | Sua format, khong thay doi logic | `style(frontend): chuan hoa khoang trang` |
+
+**Quy tac them:**
+- Mo ta o dang dong tu nguyen mau, tieng Anh: `add`, `fix`, `update`, `remove` — khong phai `added`, `fixing`.
+- Ngan gon toi da 72 ky tu.
+- Neu can giai thich them, viet them vao body commit (dong 3 tro di).
+
+```bash
+# Vi du commit day du (co body):
+git commit -m "fix(auth): sua loi logout khong xoa token o tab thu hai
+
+Them 'storage' event listener trong AuthContext de dong bo trang thai
+logout giua nhieu tab. Token trong localStorage bi xoa o tab 1 se
+tu dong clear user state o tab 2."
+```
+
+### 8.2. Quy tac Branching (Nhanh)
+
+```
+main          -- Nhanh chinh, luon o trang thai deploy duoc. Chi merge qua Pull Request.
+└── dev       -- Nhanh phat trien, merge cac feature vao day truoc khi len main.
+    ├── feature/ten-tinh-nang   -- Tinh nang moi (vi du: feature/google-oauth)
+    ├── fix/ten-loi             -- Sua loi (vi du: fix/payment-duplicate)
+    └── refactor/ten-module     -- Cai to code (vi du: refactor/chat-domain)
+```
+
+**Quy tac lam viec:**
+1. Moi tinh nang moi -> tao nhanh `feature/` tu `dev`.
+2. Khi hoan thanh -> tao Pull Request vao `dev`, can review.
+3. Khi `dev` on dinh -> merge vao `main` de deploy.
+4. KHONG commit truc tiep vao `main`.
+
+### 8.3. Quy tac .gitignore Toan dien
+
+Xem chi tiet mau `.gitignore` day du trong `skill_env_configuration.md` (Muc 2A).
+
+**Nhung gi BAT BUOC phai ignore:**
+- `.env`, `.env.*` (tru `.env.example`)
+- `.venv/`, `node_modules/`
+- `__pycache__/`, `*.pyc`
+- `utils/logs/`, `utils/data_vector/`, `utils/upload_temp/`
+- `*.db`, `*.sqlite3`
+- `dist/`, `.next/`, `build/` (output frontend)
