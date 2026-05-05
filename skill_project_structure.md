@@ -122,3 +122,181 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
    - Thư mục `utils/` nằm ở ngoài cùng (Root level) được dùng làm không gian lưu trữ vật lý tập trung của dự án.
    - Nơi đây chứa các file do người dùng tải lên (`utils/upload_temp`), các file kết xuất/tải về (`utils/download`), cũng như hệ thống cơ sở dữ liệu Vector cục bộ (`utils/data_vector`).
    - Việc quy hoạch tập trung giúp code sạch hơn và cực kỳ thuận tiện khi cần Backup dữ liệu hoặc thiết lập Mount Volume khi deploy bằng Docker.
+
+---
+
+## 5. Quy tắc Thực thi Bắt buộc (Execution Rules)
+
+Phan nay la bo quy tac KHONG DUOC VI PHAM. Muc tieu la ngan chan viec tao file va thu muc sai vi tri, gay ra tinh trang code bi phan tan, kho bao tri va vi pham kien truc da quy dinh.
+
+---
+
+### Rule 1: Router KHONG chua Business Logic
+
+**Dinh nghia**: File trong `app/routers/` chi duoc phep lam dung 3 viec:
+1. Nhan va validate request (dung Pydantic schema)
+2. Goi ham xu ly tu `service` tuong ung
+3. Tra ve response theo chuan `ApiSuccess` / `ApiError`
+
+**Vi du DUNG**:
+
+```python
+# app/routers/chat_router.py
+from fastapi import APIRouter, Depends
+from app.models.chat_schema import ChatRequest
+from chatbot.services.chat_service import run_chat_flow
+from app.utils.response import ApiSuccess, ApiError
+
+router = APIRouter()
+
+@router.post("/chat")
+async def chat_endpoint(req: ChatRequest, user=Depends(get_current_user)):
+    # Chi goi service, khong xu ly gi them
+    result = await run_chat_flow(user_id=user.id, message=req.message)
+    return ApiSuccess(data=result)
+```
+
+**Vi du SAI - TUYET DOI CAM**:
+
+```python
+# app/routers/chat_router.py  <-- SAI: LangChain nam trong router
+from langchain_openai import ChatOpenAI
+from langgraph.graph import StateGraph
+
+@router.post("/chat")
+async def chat_endpoint(req: ChatRequest):
+    llm = ChatOpenAI(model="gpt-4o")   # CAM: khoi tao LLM trong router
+    chain = llm | StrOutputParser()     # CAM: dinh nghia chain trong router
+    result = chain.invoke(req.message)  # CAM: goi LangChain truc tiep
+    return {"result": result}
+```
+
+---
+
+### Rule 2: AI Logic Bat buoc Nam Trong `chatbot/services/`
+
+**Dinh nghia**: Moi logic lien quan den LangChain, LangGraph, Prompt, RAG, Agent deu phai dat trong thu muc `chatbot/services/`.
+
+**Quy tac dat ten file trong `chatbot/services/`**:
+- Dung snake_case, ten mo ta ro chuc nang cua workflow
+- Dinh dang khuyen nghi: `{chu_de}_{kieu_xu_ly}_service.py`
+- Vi du hop le: `rag_chat_service.py`, `document_qa_service.py`, `multi_agent_service.py`
+- **CAM** dat ten chung chung: `handler.py`, `logic.py`, `ai.py`, `process.py`
+
+**Quy tac dat ten file trong `chatbot/utils/`**:
+- Moi file la 1 Agent nho co chuc nang don le (Single Responsibility)
+- Dinh dang khuyen nghi: `{chuc_nang}_agent.py` hoac `{chuc_nang}_util.py`
+- Vi du hop le: `document_grader_agent.py`, `answer_generator_agent.py`, `query_validator_util.py`
+- **CAM** gop nhieu agent khac nhau vao 1 file
+
+---
+
+### Rule 3: Luong Xu ly API Chatbot Bat buoc Theo Thu Tu
+
+Moi API endpoint lien quan den AI PHAI tuan thu luong sau:
+
+```
+[Frontend Request]
+      |
+      v
+[app/routers/]          --> Chi validate & dispatch
+      |
+      v
+[chatbot/services/]     --> Chua toan bo business logic, goi cac agent
+      |
+      v
+[chatbot/utils/]        --> Cac agent don le: grade, generate, validate
+      |
+      v
+[Response tra ve router] --> Router dong goi ApiSuccess/ApiError
+```
+
+**CAM cac loi di tat sau**:
+
+| Loi vi pham | Dung thay the |
+|---|---|
+| Goi LangChain truc tiep trong `app/routers/` | Tao ham trong `chatbot/services/` va goi tu router |
+| Viet logic xu ly trong `app/models/` | `app/models/` chi chua Pydantic schema va DB model |
+| Dat file `*_agent.py` trong `app/utils/` | Agent AI phai o `chatbot/utils/`, khong phai `app/utils/` |
+| Import `chatbot/` trong `ingestion/` | `ingestion/` la pipeline doc lap, khong phu thuoc `chatbot/` |
+
+---
+
+### Rule 4: Bang Phan Cong File - Dat Code O Dau?
+
+Su dung bang nay moi khi can quyet dinh dat 1 doan code vao file nao:
+
+| Loai code can viet | Dat vao file nao |
+|---|---|
+| Endpoint API, route definition | `app/routers/{module}_router.py` |
+| Pydantic request/response schema | `app/models/{module}_schema.py` |
+| SQLAlchemy model, DB query | `app/models/{module}_model.py` hoac `app/models/base_db.py` |
+| JWT, password hash, permission check | `app/security/` |
+| Ham tien ich dung chung cho API (format date, parse string...) | `app/utils/` |
+| Toan bo workflow LangGraph/LangChain | `chatbot/services/{ten}_service.py` |
+| Agent nho: grader, generator, validator | `chatbot/utils/{ten}_agent.py` |
+| Ket noi va truy van FAISS | `ingestion/retriever.py` |
+| Xay dung / cap nhat Vector DB | `ingestion/vector_data_builder.py` |
+| Logic chia chunk dac thu theo domain | `ingestion/rag_multi_class_ingest.py` |
+| Global config, bien moi truong | `app/config.py` (load tu `.env`) |
+| File log output | `utils/logs/` (KHONG tao folder `logs/` noi khac) |
+| File upload tam thoi tu nguoi dung | `utils/upload_temp/` |
+| File export, bao cao, favicon | `utils/download/` |
+| FAISS index, embedding data | `utils/data_vector/` |
+| Unit test cho backend | `test/` (dung pytest) |
+| Unit test cho frontend | `frontend/src/__tests__/` (dung vitest) |
+
+---
+
+### Rule 5: Quy tac Khong Tao Thu Muc Ngoai Cau Truc Chuan
+
+**CAM** tao cac thu muc sau day o bat ky cap nao (tru khi co ly do dac biet va duoc trao doi truoc):
+
+- `helpers/` — thay bang `utils/` da co trong chuan
+- `controllers/` — FastAPI khong dung MVC kieu nay, dung `routers/` + `services/`
+- `middleware/` thanh thu muc rieng — middleware khai bao trong `app/main.py`
+- `constants/` — hang so dat trong `app/config.py` hoac file schema tuong ung
+- `lib/` — khong co y nghia ro rang, thay bang ten muc dich cu the
+- `src/` tai root level — `src/` chi ton tai ben trong `frontend/`
+- `api/` tai root level — thu muc API la `app/routers/`, khong tao them `api/`
+
+**Khi that su can them thu muc moi**:
+1. Xem lai Section 1 de kiem tra lieu thu muc da ton tai hay chua
+2. Neu khong co thu muc phu hop, dat code vao `app/utils/` (cho API helper) hoac `chatbot/utils/` (cho AI helper)
+3. Chi tao thu muc moi khi chuc nang thuc su doc lap va khong the gop vao dau hien co
+
+---
+
+### Rule 6: Quy tac Import - Huong Di Mot Chieu
+
+De tranh circular import va giu kien truc ro rang, cac module PHAI tuan thu huong import mot chieu:
+
+```
+app/routers/ --> chatbot/services/ --> chatbot/utils/
+     |                                      |
+     v                                      v
+app/models/                          ingestion/retriever.py
+     |
+     v
+app/security/
+```
+
+**CAM nguoc chieu**:
+- `chatbot/` KHONG duoc import tu `app/routers/`
+- `ingestion/` KHONG duoc import tu `chatbot/services/`
+- `app/models/` KHONG duoc import tu `app/routers/` theo kieu vong tron
+- `app/utils/` KHONG duoc import tu `chatbot/` (util API khac util AI)
+
+**Ham dung chung thuc su** (vi du: ham doc file, format date) co the dat vao `app/utils/` va duoc import tu ca `app/` lan `chatbot/` - day la truong hop ngoai le hop le duy nhat.
+
+---
+
+### Rule 7: Checklist Truoc Khi Tao File Moi
+
+Truoc khi tao bat ky file `.py` hoac `.ts` moi, bat buoc tra loi du 5 cau hoi sau:
+
+- [ ] **1. File nay chua loai code gi?** (endpoint / schema / service / agent / util / config)
+- [ ] **2. Theo bang Rule 4, no thuoc thu muc nao?** Dat vao dung thu muc do.
+- [ ] **3. Da co file tuong tu trong thu muc do chua?** Neu co, xem xet mo rong file cu thay vi tao file moi.
+- [ ] **4. Ten file co mo ta ro chuc nang khong?** Tuyet doi khong dat ten chung chung nhu `helper.py`, `misc.py`, `utils2.py`.
+- [ ] **5. File nay co vi pham Rule Import khong?** Kiem tra huong import truoc khi viet code.
