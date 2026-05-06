@@ -15,14 +15,23 @@ project_root/
 ├── app/                        # [BACKEND CORE] Mã nguồn API (FastAPI)
 │   ├── main.py                 # Điểm khởi đầu ứng dụng (Khởi tạo, CORS, Middleware)
 │   ├── config.py               # Quản lý cấu hình (Load từ .env)
-│   ├── models/                 # Chứa cấu trúc Database (SQLite/PostgreSQL) và Pydantic schemas
-│   │   └── base_db.py          # Kết nối và các Query cơ bản
+│   ├── database.py             # Kết nối Database (Engine, SessionLocal, Base)
+│   ├── models/                 # Chứa các bảng Database (SQLAlchemy Models)
+│   │   ├── user_model.py       # Tách riêng theo domain/module
+│   │   └── chat_model.py
+│   ├── schemas/                # Chứa Pydantic schemas (Data Validation)
+│   │   ├── user_schema.py      # Tách riêng theo domain/module
+│   │   └── chat_schema.py
 │   ├── routers/                # Các Endpoints API chia theo module (auth, payment, base)
 │   ├── security/               # Logic bảo mật (JWT, Hashing)
 │   └── utils/                  # Hàm tiện ích dùng chung cho API
-├── chatbot/                    # [AI ENGINE] Logic xử lý AI cốt lõi
-│   ├── services/               # Chứa các luồng workflow LangGraph (vd: files_rag_multiple_chat_agent.py)
-│   └── utils/                  # Các Agent nhỏ (Document Grader, Answer Generator, Validator)
+├── chatbot/                    # [AI ENGINE] Logic xử lý AI cốt lõi (Chỉ chứa code AI/LLM)
+│   ├── services/               # Chứa các luồng workflow LangGraph (Xử lý logic AI đa bước)
+│   └── utils/                  # Thành phần AI đơn lẻ (Agents, Prompt, LLM Factory)
+│       ├── llm.py              # Class khởi tạo LLM đa nền tảng
+│       ├── prompt.py           # Class quản lý Prompt Templates tập trung
+│       ├── graph_state.py      # Định nghĩa State cho LangGraph
+│       └── {name}_agent.py     # Các Agent đơn chức năng (grader, generator...)
 ├── ingestion/                  # [DATA PIPELINE] Logic nạp dữ liệu vào Vector Store
 │   ├── rag_multi_class_ingest.py # Xử lý tách chunk đặc thù (Domain-Specific Splitting)
 │   ├── retriever.py            # Logic tìm kiếm FAISS
@@ -68,6 +77,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 
 ### Nhóm AI & RAG (Trí tuệ Nhân tạo)
 *   [**Kỹ thuật AI RAG Workflow (Standard)**](./skill_ai_rag_workflow.md): Cấu trúc luồng đồ thị LangGraph, định tuyến câu hỏi, bộ lọc tài liệu và quản lý chi phí token.
+*   [**Kiến trúc Module Chatbot & LLM**](./skill_chatbot_architecture.md): Quy định chuẩn hóa thư mục, cách khởi tạo LLM, quản lý Prompt và xây dựng Agent.
 *   [**Kỹ thuật Parser (DOCX to MD)**](./skill_docx_to_md_parser.md): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
 
 ### Nhom Xac thuc, Moi truong & Bao mat
@@ -98,12 +108,13 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 ## 3. Nguyên tắc phát triển cốt lõi (Core Principles)
 
 1. **Tuan thu Cau truc Modular**: Tuyet doi khong code logic AI (LangChain/LangGraph) vao trong cac file `router` cua FastAPI. Backend API (`app/`) chi nhan request va goi cac ham xu ly ben trong module `chatbot/` hoac `ingestion/`.
-2. **Kho phuc trang thai (Resilience)**: Moi tac vu nang phai co co che Polling. Nguoi dung F5 (tai lai trang) khong duoc lam gian doan tien trinh. (Xem `skill_async_task_polling.md`).
-3. **An toan Bi mat (Secrets)**: Cac API Key (OpenAI, Gemini, SePay) va Secret Key (JWT) luon dat o `.env` Backend. Dung `.env.example` de commit mau len Git. KHONG bao gio commit file `.env` thuc. (Xem `skill_env_configuration.md`).
-4. **Phan hoi Ro rang**: Moi Endpoint giao tiep voi Frontend phai tra ve JSON dinh dang chuan `ApiSuccess` / `ApiError`. (Xem `skill_api_response_standard.md`).
-5. **Logging thay vi Print**: Moi file module phai khai bao `logger = get_logger(__name__)`. Cam tuyet doi dung `print()` trong code production. (Xem `skill_logging_monitoring.md`).
-6. **Comment giai thich**: Moi ham phuc tap phai co Docstring (Python) hoac JSDoc (TypeScript). Comment phai tra loi "Tai sao viet the nay?" chu khong phai "Code nay lam gi?". (Xem `skill_coding_conventions.md`).
-7. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md` Muc 7).
+2. **Chatbot Module Chuyên biệt**: Thư mục `chatbot/` chỉ được phép chứa code liên quan đến AI, LLM, Prompts và Agents. KHÔNG để code nạp dữ liệu (Ingestion), Database model, hay logic nghiệp vụ thông thường vào đây.
+3. **Kho phuc trang thai (Resilience)**: Moi tac vu nang phai co co che Polling. Nguoi dung F5 (tai lai trang) khong duoc lam gian doan tien trinh. (Xem `skill_async_task_polling.md`).
+4. **An toan Bi mat (Secrets)**: Cac API Key (OpenAI, Gemini, SePay) va Secret Key (JWT) luon dat o `.env` Backend. Dung `.env.example` de commit mau len Git. KHONG bao gio commit file `.env` thuc. (Xem `skill_env_configuration.md`).
+5. **Phan hoi Ro rang**: Moi Endpoint giao tiep voi Frontend phai tra ve JSON dinh dang chuan `ApiSuccess` / `ApiError`. (Xem `skill_api_response_standard.md`).
+6. **Logging thay vi Print**: Moi file module phai khai bao `logger = get_logger(__name__)`. Cam tuyet doi dung `print()` trong code production. (Xem `skill_logging_monitoring.md`).
+7. **Comment giai thich**: Moi ham phuc tap phai co Docstring (Python) hoac JSDoc (TypeScript). Comment phai tra loi "Tai sao viet the nay?" chu khong phai "Code nay lam gi?". (Xem `skill_coding_conventions.md`).
+8. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md` Muc 7).
 
 ---
 
@@ -186,7 +197,8 @@ async def chat_endpoint(req: ChatRequest):
 **Quy tac dat ten file trong `chatbot/utils/`**:
 - Moi file la 1 Agent nho co chuc nang don le (Single Responsibility)
 - Dinh dang khuyen nghi: `{chuc_nang}_agent.py` hoac `{chuc_nang}_util.py`
-- Vi du hop le: `document_grader_agent.py`, `answer_generator_agent.py`, `query_validator_util.py`
+- **prompt.py**: File dac biet chua Class tap trung quan ly tat ca Prompt (System Prompt, Templates).
+- Vi du hop le: `document_grader_agent.py`, `prompt.py`, `answer_generator_agent.py`
 - **CAM** gop nhieu agent khac nhau vao 1 file
 
 ---
@@ -216,7 +228,7 @@ Moi API endpoint lien quan den AI PHAI tuan thu luong sau:
 | Loi vi pham | Dung thay the |
 |---|---|
 | Goi LangChain truc tiep trong `app/routers/` | Tao ham trong `chatbot/services/` va goi tu router |
-| Viet logic xu ly trong `app/models/` | `app/models/` chi chua Pydantic schema va DB model |
+| Viet logic xu ly trong app/models/ | `app/models/` chi chua SQLAlchemy model, `app/schemas/` chua Pydantic schema |
 | Dat file `*_agent.py` trong `app/utils/` | Agent AI phai o `chatbot/utils/`, khong phai `app/utils/` |
 | Import `chatbot/` trong `ingestion/` | `ingestion/` la pipeline doc lap, khong phu thuoc `chatbot/` |
 
@@ -229,12 +241,16 @@ Su dung bang nay moi khi can quyet dinh dat 1 doan code vao file nao:
 | Loai code can viet | Dat vao file nao |
 |---|---|
 | Endpoint API, route definition | `app/routers/{module}_router.py` |
-| Pydantic request/response schema | `app/models/{module}_schema.py` |
-| SQLAlchemy model, DB query | `app/models/{module}_model.py` hoac `app/models/base_db.py` |
+| Pydantic request/response schema | `app/schemas/{module}_schema.py` |
+| SQLAlchemy model (DB Table) | `app/models/{module}_model.py` |
+| Database Connection (Session) | `app/database.py` |
 | JWT, password hash, permission check | `app/security/` |
 | Ham tien ich dung chung cho API (format date, parse string...) | `app/utils/` |
 | Toan bo workflow LangGraph/LangChain | `chatbot/services/{ten}_service.py` |
 | Agent nho: grader, generator, validator | `chatbot/utils/{ten}_agent.py` |
+| Prompt Templates (System, Tool) | `chatbot/utils/prompt.py` (Dung Class de quan ly) |
+| Khoi tao LLM (Factory) | `chatbot/utils/llm.py` |
+| LangGraph State Definition | `chatbot/utils/graph_state.py` |
 | Ket noi va truy van FAISS | `ingestion/retriever.py` |
 | Xay dung / cap nhat Vector DB | `ingestion/vector_data_builder.py` |
 | Logic chia chunk dac thu theo domain | `ingestion/rag_multi_class_ingest.py` |
@@ -273,12 +289,12 @@ De tranh circular import va giu kien truc ro rang, cac module PHAI tuan thu huon
 
 ```
 app/routers/ --> chatbot/services/ --> chatbot/utils/
-     |                                      |
-     v                                      v
-app/models/                          ingestion/retriever.py
-     |
-     v
-app/security/
+     |                |                     |
+     v                v                     v
+app/schemas/     app/models/         ingestion/retriever.py
+     |                |
+     v                v
+app/security/    app/database.py
 ```
 
 **CAM nguoc chieu**:
