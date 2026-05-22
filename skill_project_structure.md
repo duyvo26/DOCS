@@ -78,7 +78,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 ### Nhóm AI & RAG (Trí tuệ Nhân tạo)
 *   [**Kỹ thuật AI RAG Workflow (Standard)**](./skill_ai_rag_workflow.md): Cấu trúc luồng đồ thị LangGraph, định tuyến câu hỏi, bộ lọc tài liệu và quản lý chi phí token.
 *   [**Kiến trúc Module Chatbot & LLM**](./skill_chatbot_architecture.md): Quy định chuẩn hóa thư mục, cách khởi tạo LLM, quản lý Prompt và xây dựng Agent.
-*   [**Kết nối OpenRouter (Đa nền tảng AI)**](./openrouter.md): Hướng dẫn tích hợp OpenRouter để dùng nhiều model AI (GPT, Claude, Gemini, Llama...) qua 1 API key duy nhất, cấu hình toggle trong Settings.
+*   [**Kết nối OpenRouter (Đa nền tảng AI)**](./skill_openrouter_integration.md): Hướng dẫn tích hợp OpenRouter để dùng nhiều model AI (GPT, Claude, Gemini, Llama...) qua 1 API key duy nhất, cấu hình toggle trong Settings.
 *   [**Kỹ thuật Parser (DOCX to MD)**](./skill_docx_to_md_parser.md): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
 
 ### Nhom Xac thuc, Moi truong & Bao mat
@@ -138,7 +138,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
      OPENROUTER_API_KEY=sk-or-...
      OPENROUTER_MODEL=openai/gpt-oss-120b:free
      ```
-   - Xem chi tiết: [Kết nối OpenRouter](./openrouter.md)
+   - Xem chi tiết: [Kết nối OpenRouter](./skill_openrouter_integration.md)
 
 4. **Quy hoạch Thư mục Lưu trữ (`utils/`)**:
    - Thư mục `utils/` nằm ở ngoài cùng (Root level) được dùng làm không gian lưu trữ vật lý tập trung của dự án.
