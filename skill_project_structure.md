@@ -78,6 +78,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 ### Nhóm AI & RAG (Trí tuệ Nhân tạo)
 *   [**Kỹ thuật AI RAG Workflow (Standard)**](./skill_ai_rag_workflow.md): Cấu trúc luồng đồ thị LangGraph, định tuyến câu hỏi, bộ lọc tài liệu và quản lý chi phí token.
 *   [**Kiến trúc Module Chatbot & LLM**](./skill_chatbot_architecture.md): Quy định chuẩn hóa thư mục, cách khởi tạo LLM, quản lý Prompt và xây dựng Agent.
+*   [**Kết nối OpenRouter (Đa nền tảng AI)**](./openrouter.md): Hướng dẫn tích hợp OpenRouter để dùng nhiều model AI (GPT, Claude, Gemini, Llama...) qua 1 API key duy nhất, cấu hình toggle trong Settings.
 *   [**Kỹ thuật Parser (DOCX to MD)**](./skill_docx_to_md_parser.md): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
 
 ### Nhom Xac thuc, Moi truong & Bao mat
@@ -129,7 +130,17 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
    - Hệ thống không sử dụng đường dẫn tương đối (kiểu `../../`) vốn rất dễ gây lỗi khi đổi thư mục chạy script.
    - Thay vào đó, trong file `app/config.py`, hệ thống sẽ tự động tìm kiếm vị trí của file `.env`. Thư mục chứa file `.env` sẽ được định nghĩa là **`DIR_ROOT`** (Thư mục gốc tuyệt đối). Mọi thao tác đọc/ghi file trong dự án đều phải dựa trên `DIR_ROOT` này.
 
-3. **Quy hoạch Thư mục Lưu trữ (`utils/`)**:
+3. **OpenRouter — Đa nền tảng AI**:
+   - Hệ thống hỗ trợ chuyển đổi linh hoạt giữa **OpenAI** và **OpenRouter** qua toggle trong Settings.
+   - Khi bật OpenRouter, `LlmFactory.get_llm()` dùng `base_url="https://openrouter.ai/api/v1"` và model do người dùng chọn (ví dụ: `openai/gpt-oss-120b:free`).
+   - Có thể cấu hình qua Settings UI hoặc biến môi trường trong `.env`:
+     ```env
+     OPENROUTER_API_KEY=sk-or-...
+     OPENROUTER_MODEL=openai/gpt-oss-120b:free
+     ```
+   - Xem chi tiết: [Kết nối OpenRouter](./openrouter.md)
+
+4. **Quy hoạch Thư mục Lưu trữ (`utils/`)**:
    - Thư mục `utils/` nằm ở ngoài cùng (Root level) được dùng làm không gian lưu trữ vật lý tập trung của dự án.
    - Nơi đây chứa các file do người dùng tải lên (`utils/upload_temp`), các file kết xuất/tải về (`utils/download`), cũng như hệ thống cơ sở dữ liệu Vector cục bộ (`utils/data_vector`).
    - Việc quy hoạch tập trung giúp code sạch hơn và cực kỳ thuận tiện khi cần Backup dữ liệu hoặc thiết lập Mount Volume khi deploy bằng Docker.
@@ -249,7 +260,8 @@ Su dung bang nay moi khi can quyet dinh dat 1 doan code vao file nao:
 | Toan bo workflow LangGraph/LangChain | `chatbot/services/{ten}_service.py` |
 | Agent nho: grader, generator, validator | `chatbot/utils/{ten}_agent.py` |
 | Prompt Templates (System, Tool) | `chatbot/utils/prompt.py` (Dung Class de quan ly) |
-| Khoi tao LLM (Factory) | `chatbot/utils/llm.py` |
+| Khoi tao LLM (Factory) — ho tro OpenAI & OpenRouter | `chatbot/utils/llm.py` |
+| Cau hinh OpenRouter (toggle, key, model) | `app/routers/settings_router.py` + `frontend/components/Settings.tsx` |
 | LangGraph State Definition | `chatbot/utils/graph_state.py` |
 | Ket noi va truy van FAISS | `ingestion/retriever.py` |
 | Xay dung / cap nhat Vector DB | `ingestion/vector_data_builder.py` |
