@@ -135,18 +135,14 @@ Cấm tuyệt đối emoji trong code, markdown, config, comment.
 
 ## 8. Git Workflow & Commit Convention
 
-Format: `<type>(<scope>): <mo ta>`
-
-Branching:
-```
-main -> dev -> feature/..., fix/..., refactor/...
-```
+Xem chi tiết tại skill riêng: [**Git Workflow & Commit Convention**](./skill_git_workflow.md)
 
 ---
 
 ## File liên quan
 
 - [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Git Workflow & Commit Convention](./skill_git_workflow.md)
 - [Logging & Monitoring](./skill_logging_monitoring.md)
 - [Chuẩn API Response](./skill_api_response_standard.md)
 - [Codebase Mapper](./skill_codebase_mapper.md)
