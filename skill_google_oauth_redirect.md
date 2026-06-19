@@ -1,21 +1,21 @@
-# Skill: Dang nhap Google OAuth (Redirect Flow)
+# Skill: Đăng nhập Google OAuth (Redirect Flow)
 
-## Muc tieu
+## Mục tiêu
 
-Dang nhap Google muot ma qua Redirect Flow (Backend lam trung gian), tranh loi hien thi JSON tho tren trinh duyet.
+Đăng nhập Google mượt mà qua Redirect Flow (Backend làm trung gian), tránh lỗi hiển thị JSON thô trên trình duyệt.
 
 ---
 
-## 1. So do luong
+## 1. Sơ đồ luồng
 
 ```
 [Browser] - Click Login -> [Backend /google/login]
                               -> Redirect 302 -> [Google Auth Screen]
 [Backend /callback] <- Redirect w/ Code - Google
-    -> Doi Code lay User Info
-    -> Tao JWT Token
-    -> Redirect 302 kem Token -> [Frontend /?token=...]
-[Frontend App.tsx] -> Luu Token -> Vao trang chinh
+    -> Đổi Code lấy User Info
+    -> Tạo JWT Token
+    -> Redirect 302 kèm Token -> [Frontend /?token=...]
+[Frontend App.tsx] -> Lưu Token -> Vào trang chính
 ```
 
 ---
@@ -48,19 +48,19 @@ useEffect(() => {
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Luon dung `RedirectResponse`, khong tra JSON truc tiep cho OAuth callback.
-2. Redirect ve Frontend URL co kem token tren query param.
-3. Frontend phai xoa token khoi URL sau khi luu (`replaceState`).
-4. Scope bat buoc: `openid`, `email`, `profile`.
-5. Cau hinh `GOOGLE_REDIRECT_URI` trong `.env` trung khop voi Google Cloud Console.
+1. Luôn dùng `RedirectResponse`, không trả JSON trực tiếp cho OAuth callback.
+2. Redirect về Frontend URL có kèm token trên query param.
+3. Frontend phải xóa token khỏi URL sau khi lưu (`replaceState`).
+4. Scope bắt buộc: `openid`, `email`, `profile`.
+5. Cấu hình `GOOGLE_REDIRECT_URI` trong `.env` trùng khớp với Google Cloud Console.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
-- [Dang nhap Hybrid App (Mobile)](./skill_hybrid_app_login.md)
-- [Kien truc Frontend & API Setup](./skill_frontend_architecture.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Đăng nhập Hybrid App (Mobile)](./skill_hybrid_app_login.md)
+- [Kiến trúc Frontend & API Setup](./skill_frontend_architecture.md)

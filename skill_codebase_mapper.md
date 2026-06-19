@@ -1,92 +1,134 @@
-# Skill: Codebase Mapper — Phan tich Codebase va Tao map.md
+# Skill: Codebase Mapper — Phân tích Codebase và Tạo map.md
 
-## Muc tieu
+## Mục tiêu
 
-Tu dong phan tich codebase va tao tai lieu dieu huong giup AI va lap trinh vien hieu nhanh cau truc du an.
+Tự động phân tích codebase và tạo tài liệu điều hướng giúp AI và lập trình viên hiểu nhanh cấu trúc dự án.
 
 ---
 
-## Cac buoc thuc hien
+## Các bước thực hiện
 
-### Buoc 1: Phan tich codebase
+### Bước 1: Phân tích codebase
 
-- Doc cac file duoc cung cap.
-- Xac dinh chuc nang chinh cua tung file.
-- Xac dinh moi quan he giua cac file.
-- Xac dinh cac file quan trong doi voi luong hoat dong cua he thong.
+- Đọc các file được cung cấp.
+- Xác định chức năng chính của từng file.
+- Xác định mối quan hệ giữa các file.
+- Xác định các file quan trọng đối với luồng hoạt động của hệ thống.
 
-### Buoc 2: Tao Header Documentation cho file
+### Bước 2: Tạo Header Documentation cho file
 
-Neu file chua co phan mo ta dau file, tao header phu hop.
+Nếu file chưa có phần mô tả đầu file, tạo header phù hợp.
 
-Header can bao gom:
-- Ten file
-- Chuc nang chinh
-- Vai tro trong he thong
-- File lien quan (neu co)
+Header cần bao gồm:
+- Tên file
+- Chức năng chính
+- Vai trò trong hệ thống
+- File liên quan (nếu có)
 
-### Buoc 3: Cap nhat map.md
+### Bước 3: Tạo/Cập nhật map.md
 
-Tao hoac cap nhat file `map.md`.
+Tạo hoặc cập nhật file `map.md`.
 
-Muc dich cua `map.md`:
-- La ban do tong quan cua codebase.
-- Liet ke cac file quan trong.
-- Mo ta chuc nang tung file.
-- Giup AI hieu cau truc du an truoc khi chinh sua code.
+Mục đích của `map.md`:
+- Là bản đồ tổng quan của codebase.
+- Liệt kê các file quan trọng.
+- Mô tả chức năng từng file.
+- Có **cây thư mục (directory tree)** để xem cấu trúc code trực quan.
+- Giúp AI hiểu cấu trúc dự án trước khi chỉnh sửa code.
 
-### Buoc 4: Duy tri map.md
+### Bước 4: Duy trì map.md
 
 Khi:
-- Them file moi
-- Xoa file
-- Doi chuc nang file
-- Refactor cau truc du an
+- Thêm file mới
+- Xóa file
+- Đổi chức năng file
+- Refactor cấu trúc dự án
 
-AI phai cap nhat lai `map.md`.
-
----
-
-## Quy tac
-
-1. Khong mo ta cac file qua nho hoac file sinh tu dong.
-2. Uu tien cac file co logic nghiep vu.
-3. Mo ta ngan gon, ro rang.
-4. Khong suy doan chuc nang neu chua doc ma nguon.
-5. Luon cap nhat `map.md` khi phat hien thay doi kien truc.
-6. Header file phai phan anh dung chuc nang thuc te cua file.
+AI phải cập nhật lại `map.md`.
 
 ---
 
-## Ket qua mong muon
+## Quy tắc
 
-- Moi file quan trong co header mo ta.
-- Du an co file `map.md` day du.
-- AI moi tham gia du an co the doc `map.md` de hieu nhanh codebase.
-- Viec bao tri va refactor tro nen de dang hon.
-- Khi co nhieu du an, moi du an co folder rieng chua `map_{ten_du_an}.md` de tham khao.
+1. Không mô tả các file quá nhỏ hoặc file sinh tự động.
+2. Ưu tiên các file có logic nghiệp vụ.
+3. Mô tả ngắn gọn, rõ ràng.
+4. Không suy đoán chức năng nếu chưa đọc mã nguồn.
+5. Luôn cập nhật `map.md` khi phát hiện thay đổi kiến trúc.
+6. Header file phải phản ánh đúng chức năng thực tế của file.
+7. File `map_{tên_dự_án}.md` **PHẢI** có cây thư mục (directory tree) ở đầu file để view cấu trúc code trực quan.
 
 ---
 
-## Ghi chu khi nguoi dung yeu cau "chuan hoa code"
+## Định dạng map_{tên_dự_án}.md
 
-Khi nguoi dung yeu cau chuan hoa code cho mot du an cu the (VD: "chuan hoa code chatbot-luat"), BAT BUOC:
+```markdown
+# Map: {Tên Dự Án}
 
-1. Tao file `map.md` trong thu muc goc cua du an do (neu chua co).
-2. Folder `{ten_du_an}/` (do nguoi dung tao tay) trong thu muc DOCS chua file `map_{ten_du_an}.md` de tham khao cau truc.
+## Cây thư mục (Directory Tree)
+
+```
+project_root/
+├── app/
+│   ├── main.py
+│   ├── config.py
+│   ├── routers/
+│   │   ├── auth.py
+│   │   └── chat.py
+│   └── models/
+│       └── user_model.py
+├── chatbot/
+│   └── services/
+│       └── rag_chat_service.py
+└── frontend/
+    └── src/
+        ├── App.tsx
+        └── domains/
+            └── chat/
+                ├── pages/
+                │   └── ChatPage.tsx
+                └── components/
+                    ├── ChatInput.tsx
+                    └── MessageBubble.tsx
+```
+
+## Danh sách file quan trọng
+
+| File | Chức năng | Vai trò | File liên quan |
+|------|-----------|---------|----------------|
+| `app/main.py` | Entry point FastAPI | Cấu hình CORS, middleware | `app/config.py` |
+| `app/routers/chat.py` | Endpoint chat | Router - tiếp nhận request | `chatbot/services/rag_chat_service.py` |
+| ... | ... | ... | ... |
+
+## Luồng xử lý chính
+
+```
+[User] -> [Router] -> [Service] -> [Agent] -> [Response]
+```
+```
+
+---
+
+## Ghi chú khi người dùng yêu cầu "chuẩn hoá code"
+
+Khi người dùng yêu cầu chuẩn hoá code cho một dự án cụ thể (VD: "chuẩn hoá code chatbot-luat"), BẮT BUỘC:
+
+1. Tạo file `map.md` trong thư mục gốc của dự án đó (nếu chưa có).
+2. Folder `{tên_dự_án}/` (do người dùng tạo tay) trong thư mục DOCS chứa file `map_{tên_dự_án}.md` để tham khảo cấu trúc.
    - VD: `chatbot-luat/map_chatbot-luat.md`
-3. Noi dung `map_{ten_du_an}.md`:
-   - Ten du an
-   - Mo ta tong quan
-   - Danh sach file quan trong (duong dan, chuc nang, vai tro)
-   - So do luong xu ly chinh (neu co)
-   - File lien quan
-4. Cap nhat `map.md` tong the (neu co) de dan den folder du an moi.
+3. Nội dung `map_{tên_dự_án}.md`:
+   - Tên dự án
+   - Mô tả tổng quan
+   - **Cây thư mục (directory tree)** — bắt buộc
+   - Danh sách file quan trọng (đường dẫn, chức năng, vai trò, file liên quan)
+   - Sơ đồ luồng xử lý chính (nếu có)
+4. Cập nhật `map.md` tổng thể (nếu có) để dẫn đến folder dự án mới.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Quy tắc Thực thi (Execution Rules)](./skill_execution_rules.md)

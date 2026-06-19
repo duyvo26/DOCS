@@ -1,24 +1,24 @@
-# Skill: Chuan API Response (Standard API Response Format)
+# Skill: Chuẩn API Response (Standard API Response Format)
 
-## Muc tieu
+## Mục tiêu
 
-Quy dinh cau truc JSON bat buoc cho moi Endpoint trong he thong. Chuan hoa response giup Frontend xu ly du lieu nhat quan, de debug, va de mo rong.
-
----
-
-## 1. Nguyen tac Chung
-
-- Moi response — thanh cong hay loi — deu co cau truc JSON thong nhat.
-- Truong `success` (boolean) giup Frontend phan biet ngay ma khong can kiem tra HTTP status code.
-- Truong `data` chua ket qua thuc su khi thanh cong.
-- Truong `error` chua thong tin loi khi that bai.
-- KHONG tra ve ket qua thay doi: lan nay tra `{"user": ...}`, lan kia tra `{"data": {"user": ...}}`.
+Quy định cấu trúc JSON bắt buộc cho mọi Endpoint trong hệ thống. Chuẩn hóa response giúp Frontend xử lý dữ liệu nhất quán, dễ debug, và dễ mở rộng.
 
 ---
 
-## 2. Cac Pydantic Schema Chuan
+## 1. Nguyên tắc Chung
 
-Dinh nghia tap trung trong `app/models/schemas.py`:
+- Mọi response — thành công hay lỗi — đều có cấu trúc JSON thống nhất.
+- Trường `success` (boolean) giúp Frontend phân biệt ngay mà không cần kiểm tra HTTP status code.
+- Trường `data` chứa kết quả thực sự khi thành công.
+- Trường `error` chứa thông tin lỗi khi thất bại.
+- KHÔNG trả về kết quả thay đổi: lần này trả `{"user": ...}`, lần kia trả `{"data": {"user": ...}}`.
+
+---
+
+## 2. Các Pydantic Schema Chuẩn
+
+Định nghĩa tập trung trong `app/models/schemas.py`:
 
 ```python
 class ApiSuccess(BaseModel):
@@ -41,7 +41,7 @@ class PaginatedData(BaseModel):
 
 ---
 
-## 3. Su dung trong Router
+## 3. Sử dụng trong Router
 
 ```python
 @router.post("/login")
@@ -57,7 +57,7 @@ async def login(data: LoginPayload, db: UserDB = Depends(get_db)):
 
 ## 4. Global Exception Handler
 
-Them vao `app/main.py` de dam bao moi loi deu tra ve JSON chuan:
+Thêm vào `app/main.py` để đảm bảo mọi lỗi đều trả về JSON chuẩn:
 
 ```python
 @app.exception_handler(Exception)
@@ -68,18 +68,18 @@ async def global_exception_handler(request, exc):
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Moi Endpoint bat buoc tra ve `ApiSuccess` hoac `ApiError`.
-2. KHONG tra ve raw dict hoac list.
-3. Dung `HTTPException` cho loi nghiep vu, `global_exception_handler` cho loi bat ngo.
-4. Frontend luon kiem tra `success` truoc khi doc `data`.
-5. Status code chuan: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Error.
+1. Mọi Endpoint bắt buộc trả về `ApiSuccess` hoặc `ApiError`.
+2. KHÔNG trả về raw dict hoặc list.
+3. Dùng `HTTPException` cho lỗi nghiệp vụ, `global_exception_handler` cho lỗi bất ngờ.
+4. Frontend luôn kiểm tra `success` trước khi đọc `data`.
+5. Status code chuẩn: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Error.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)

@@ -1,25 +1,25 @@
-# Skill: Kien truc Frontend & API Setup (React/Vite/TypeScript)
+# Skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript)
 
-## Muc tieu
+## Mục tiêu
 
-Cau hinh du an Frontend tieu chuan, tap trung vao quan ly API tap trung (`api.ts`), bao mat JWT phia Frontend, quan ly trang thai nut bam, va dinh huong chia nho Components/Pages.
+Cấu hình dự án Frontend tiêu chuẩn, tập trung vào quản lý API tập trung (`api.ts`), bảo mật JWT phía Frontend, quản lý trạng thái nút bấm, và định hướng chia nhỏ Components/Pages.
 
 ---
 
-## 1. Stack Cong nghe
+## 1. Stack Công nghệ
 
 - Core: Vite + React (TypeScript)
 - Routing: `react-router-dom` v6+
 - Styling: Tailwind CSS
 - Icon: `lucide-react`
-- State: React Context hoac Zustand
+- State: React Context hoặc Zustand
 - HTTP: `axios`
 
 ---
 
-## 2. Quy hoach File API Tap trung
+## 2. Quy hoạch File API Tập trung
 
-Tat ca API call qua `frontend/src/services/api.ts`:
+Tất cả API call qua `frontend/src/services/api.ts`:
 
 ```typescript
 const apiClient = axios.create({
@@ -51,7 +51,7 @@ apiClient.interceptors.response.use(
 
 ## 3. Button Loading State
 
-Moi nut bam bat buoc co `isLoading` + `disabled` de chan double-submit:
+Mọi nút bấm bắt buộc có `isLoading` + `disabled` để chặn double-submit:
 
 ```typescript
 const [isLoading, setIsLoading] = useState(false);
@@ -66,28 +66,28 @@ const handleSend = async () => {
 
 ---
 
-## 4. Bao mat JWT Frontend
+## 4. Bảo mật JWT Frontend
 
-- Token xac minh khi app khoi dong qua `GET /auth/me`
-- Dung `storage` event de dong bo logout giua cac tab
+- Token xác minh khi app khởi động qua `GET /auth/me`
+- Dùng `storage` event để đồng bộ logout giữa các tab
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Moi API call qua `services/api.ts`, khong goi fetch/axios truc tiep tu component.
-2. Nut bam luon co `isLoading` + `disabled`.
-3. Token duoc gan tu dong qua Interceptor.
-4. Loi 401 redirect `/login` tap trung.
-5. Token xac minh voi server khi app load.
-6. Khong hardcode URL, dung `VITE_API_URL`.
+1. Mọi API call qua `services/api.ts`, không gọi fetch/axios trực tiếp từ component.
+2. Nút bấm luôn có `isLoading` + `disabled`.
+3. Token được gán tự động qua Interceptor.
+4. Lỗi 401 redirect `/login` tập trung.
+5. Token xác minh với server khi app load.
+6. Không hardcode URL, dùng `VITE_API_URL`.
 7. Protected + Admin routes guard.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Chia nho Components & Domain Routing](./skill_frontend_routing_components.md)
-- [Quan ly SEO Dong](./skill_dynamic_seo_manager.md)
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
-- [Chuan API Response](./skill_api_response_standard.md)
+- [Chia nhỏ Components & Domain Routing](./skill_frontend_routing_components.md)
+- [Quản lý SEO Động](./skill_dynamic_seo_manager.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)
+- [Chuẩn API Response](./skill_api_response_standard.md)

@@ -6,55 +6,55 @@ Cung cấp luồng xử lý nội bộ (Internal Logic) cho hệ thống tích h
 
 ---
 
-## 1. Kien truc LangGraph Workflow
+## 1. Kiến trúc LangGraph Workflow
 
-He thong su dung mo hinh May trang thai (State Machine) thong qua LangGraph thay vi goi LLM don le. Moi Node trong do thi la mot ham Python nhan vao `State` hien tai va tra ve `State` da duoc cap nhat.
+Hệ thống sử dụng mô hình Máy trạng thái (State Machine) thông qua LangGraph thay vì gọi LLM đơn lẻ. Mỗi Node trong đồ thị là một hàm Python nhận vào `State` hiện tại và trả về `State` đã được cập nhật.
 
-### So do xu ly tieu chuan:
+### Sơ đồ xử lý tiêu chuẩn:
 ```text
-[BAT DAU]
+[BẮT ĐẦU]
     |
 [Node: route_question] ----------|
-    | (Phan loai yeu cau)        |
-    |-- "web_search" ---|         | (Dung cho kien thuc tong quat)
+    | (Phân loại yêu cầu)        |
+    |-- "web_search" ---|         | (Dùng cho kiến thức tổng quát)
     |                  |         |
-    +-- "vectorstore" -+-> [Node: retrieve] (Truy xuat du lieu cuc bo)
+    +-- "vectorstore" -+-> [Node: retrieve] (Truy xuất dữ liệu cục bộ)
                                  |
-                           [Node: grade_documents] (Kiem tra do lien quan)
+                            [Node: grade_documents] (Kiểm tra độ liên quan)
                                  |
-                           [Node: generate] (Sinh cau tra loi tu du lieu)
+                            [Node: generate] (Sinh câu trả lời từ dữ liệu)
                                  |
-                           [KET THUC & CAP NHAT CHI PHI]
+                            [KẾT THÚC & CẬP NHẬT CHI PHÍ]
 ```
 
 ---
 
-## 2. Chi tiet cac thanh phan
+## 2. Chi tiết các thành phần
 
 ### A. Question Router
-Su dung LLM ket hop voi Pydantic de phan loai yeu cau nguoi dung.
+Sử dụng LLM kết hợp với Pydantic để phân loại yêu cầu người dùng.
 
 ### B. Document Grader
-Buoc chong ao giac (Hallucination). Cham diem do lien quan cua tung tai lieu truoc khi dua vao ngu canh sinh cau tra loi.
+Bước chống ảo giác (Hallucination). Chấm điểm độ liên quan của từng tài liệu trước khi đưa vào ngữ cảnh sinh câu trả lời.
 
-### C. Co che Quan ly Chi phi
-Dem token su dung (tiktoken) va khau tru so du nguoi dung trong Database.
-
----
-
-## Quy tac bat buoc
-
-1. Moi Node trong LangGraph la mot ham Python doc lap, nhan `State` va tra ve `State` da cap nhat.
-2. Su dung `GraphState` (TypedDict) thong nhat cho toan bo do thi.
-3. Luon kiem tra do lien quan tai lieu (Document Grader) truoc khi sinh cau tra loi.
-4. Chi phi token phai duoc tinh va khau tru sau moi yeu cau thanh cong.
-5. Tra ve response chuan: answer, credits_charged, remaining_balance, sources.
+### C. Cơ chế Quản lý Chi phí
+Đếm token sử dụng (tiktoken) và khấu trừ số dư người dùng trong Database.
 
 ---
 
-## File lien quan
+## Quy tắc bắt buộc
 
-- [Kien truc Chatbot & LLM](./skill_chatbot_architecture.md)
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Chuan API Response](./skill_api_response_standard.md)
-- [Ket noi OpenRouter](./skill_openrouter_integration.md)
+1. Mỗi Node trong LangGraph là một hàm Python độc lập, nhận `State` và trả về `State` đã cập nhật.
+2. Sử dụng `GraphState` (TypedDict) thống nhất cho toàn bộ đồ thị.
+3. Luôn kiểm tra độ liên quan tài liệu (Document Grader) trước khi sinh câu trả lời.
+4. Chi phí token phải được tính và khấu trừ sau mỗi yêu cầu thành công.
+5. Trả về response chuẩn: answer, credits_charged, remaining_balance, sources.
+
+---
+
+## File liên quan
+
+- [Kiến trúc Chatbot & LLM](./skill_chatbot_architecture.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Chuẩn API Response](./skill_api_response_standard.md)
+- [Kết nối OpenRouter](./skill_openrouter_integration.md)

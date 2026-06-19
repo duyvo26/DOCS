@@ -1,19 +1,19 @@
-# Skill: Chia nho Components, Pages & Domain Routing (React Router v6)
+# Skill: Chia nhỏ Components, Pages & Domain Routing (React Router v6)
 
-## Muc tieu
+## Mục tiêu
 
-To chuc du an Frontend lon thanh cac Domain nho doc lap, moi Domain co Router, Components va Pages rieng — de bao tri, de scale, tranh file qua lon.
+Tổ chức dự án Frontend lớn thành các Domain nhỏ độc lập, mỗi Domain có Router, Components và Pages riêng — dễ bảo trì, dễ scale, tránh file quá lớn.
 
 ---
 
-## 1. Cau truc Thu muc Domain
+## 1. Cấu trúc Thư mục Domain
 
 ```text
 frontend/src/
 ├── router/index.tsx        # Root Router: Gom domain routers
 ├── components/             # Shared UI (ProtectedRoute, AdminRoute, Layout)
 ├── domains/
-│   ├── auth/               # Domain xac thuc
+│   ├── auth/               # Domain xác thực
 │   │   ├── router.tsx
 │   │   ├── pages/          # LoginPage, RegisterPage
 │   │   └── components/     # LoginForm, SocialLoginButton
@@ -21,9 +21,9 @@ frontend/src/
 │   │   ├── router.tsx
 │   │   ├── pages/          # ChatPage
 │   │   └── components/     # MessageBubble, ChatInput
-│   ├── payment/            # Domain thanh toan
+│   ├── payment/            # Domain thanh toán
 │   │   └── ...
-│   └── admin/              # Domain quan tri
+│   └── admin/              # Domain quản trị
 │       └── ...
 ```
 
@@ -61,26 +61,26 @@ const ChatRouter = () => (
 
 ## 4. Route Guards
 
-- **ProtectedRoute**: Chan user chua dang nhap
-- **AdminRoute**: Chan user khong phai admin
-- Redirect ve trang cu sau khi login thanh cong
+- **ProtectedRoute**: Chặn user chưa đăng nhập
+- **AdminRoute**: Chặn user không phải admin
+- Redirect về trang cũ sau khi login thành công
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Moi domain doc lap trong `domains/{ten}/`, co router, pages, components rieng.
-2. Root Router trong `router/index.tsx`, dung `React.lazy` + `Suspense`.
-3. Dung `ProtectedRoute` cho route can xac thuc.
-4. Dung `AdminRoute` cho route admin.
-5. `App.tsx` chi boc Providers, khong chua UI.
-6. Qua 80 dong trong 1 component: can nhac tach nho.
+1. Mỗi domain độc lập trong `domains/{ten}/`, có router, pages, components riêng.
+2. Root Router trong `router/index.tsx`, dùng `React.lazy` + `Suspense`.
+3. Dùng `ProtectedRoute` cho route cần xác thực.
+4. Dùng `AdminRoute` cho route admin.
+5. `App.tsx` chỉ bọc Providers, không chứa UI.
+6. Quá 80 dòng trong 1 component: cân nhắc tách nhỏ.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Kien truc Frontend & API Setup](./skill_frontend_architecture.md)
-- [Quan ly SEO Dong](./skill_dynamic_seo_manager.md)
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
+- [Kiến trúc Frontend & API Setup](./skill_frontend_architecture.md)
+- [Quản lý SEO Động](./skill_dynamic_seo_manager.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)

@@ -1,12 +1,12 @@
-# Skill: Cau hinh Moi truong (.env & .gitignore)
+# Skill: Cấu hình Môi trường (.env & .gitignore)
 
-## Muc tieu
+## Mục tiêu
 
-Quy dinh chuan file `.env`, mau `.gitignore` day du, quy tac `.env.example`, va cach nap bien moi truong bang Pydantic Settings. Dam bao bao mat API Key va cau hinh nhat quan.
+Quy định chuẩn file `.env`, mẫu `.gitignore` đầy đủ, quy tắc `.env.example`, và cách nạp biến môi trường bằng Pydantic Settings. Đảm bảo bảo mật API Key và cấu hình nhất quán.
 
 ---
 
-## 1. Cac bien cau hinh tieu chuan
+## 1. Các biến cấu hình tiêu chuẩn
 
 ```env
 # === HE THONG ===
@@ -39,17 +39,17 @@ FRONTEND_URL=http://localhost:5173
 
 ---
 
-## 2. Quan ly An toan Ma nguon
+## 2. Quản lý An toàn Mã nguồn
 
 ### A. .gitignore
-Bat buoc ignore: `.env`, `.venv/`, `__pycache__/`, `utils/logs/`, `utils/data_vector/`, `node_modules/`, `frontend/dist/`, `*.db`
+Bắt buộc ignore: `.env`, `.venv/`, `__pycache__/`, `utils/logs/`, `utils/data_vector/`, `node_modules/`, `frontend/dist/`, `*.db`
 
 ### B. .env.example
-- Giu nguyen ten bien, xoa gia tri that
-- Gia tri placeholder mo ta (`your-...`)
-- Commit duoc len Git
+- Giữ nguyên tên biến, xóa giá trị thật
+- Giá trị placeholder mô tả (`your-...`)
+- Commit được lên Git
 
-### C. Nap bien bang Pydantic
+### C. Nạp biến bằng Pydantic
 ```python
 from pydantic_settings import BaseSettings
 
@@ -63,19 +63,19 @@ settings = Settings()
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. KHONG commit `.env` len Git (da ignore trong `.gitignore`).
-2. Luon co `.env.example` di kem.
-3. `.env.example` chi chua placeholder, khong chua gia tri that.
-4. Nap bien bang `pydantic-settings`, khong dung `python-dotenv` thuan.
-5. `ENV=development` bat DEBUG log, `ENV=production` tat DEBUG.
+1. KHÔNG commit `.env` lên Git (đã ignore trong `.gitignore`).
+2. Luôn có `.env.example` đi kèm.
+3. `.env.example` chỉ chứa placeholder, không chứa giá trị thật.
+4. Nạp biến bằng `pydantic-settings`, không dùng `python-dotenv` thuần.
+5. `ENV=development` bật DEBUG log, `ENV=production` tắt DEBUG.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
-- [Quan ly Thu vien (Dependencies)](./skill_dependencies_management.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)
+- [Quản lý Thư viện (Dependencies)](./skill_dependencies_management.md)

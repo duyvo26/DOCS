@@ -1,26 +1,26 @@
-# Skill: Tac vu Bat dong bo & Polling (Standard Async Workflow)
+# Skill: Tác vụ Bất đồng bộ & Polling (Standard Async Workflow)
 
-## Muc tieu
+## Mục tiêu
 
-Mo ta quy trinh chuan de xu ly cac tac vu nang (Long-running Tasks) nhu xu ly AI, ket xuat bao cao, phan tich du lieu lon. Dam bao trai nghiem nguoi dung khong bi gian doan, tranh loi timeout, cho phep khoi phuc trang thai khi F5.
+Mô tả quy trình chuẩn để xử lý các tác vụ nặng (Long-running Tasks) như xử lý AI, kết xuất báo cáo, phân tích dữ liệu lớn. Đảm bảo trải nghiệm người dùng không bị gián đoạn, tránh lỗi timeout, cho phép khôi phục trạng thái khi F5.
 
 ---
 
-## 1. Tong quan Kien truc
+## 1. Tổng quan Kiến trúc
 
-He thong su dung mo hinh **Polling** ket hop voi **Background Tasks** cua FastAPI.
+Hệ thống sử dụng mô hình **Polling** kết hợp với **Background Tasks** của FastAPI.
 
-**Luong xu ly:**
-1. Frontend gui yeu cau -> API tao `task_id` (UUID) -> Tra ve ngay `task_id`
-2. Frontend luu `task_id` vao `localStorage` -> Polling `GET /task/{id}` moi 2-3 giay
-3. Backend xu ly background -> Cap nhat trang thai (`done`/`failed`)
-4. Frontend nhan ket qua -> Xoa `task_id` khoi `localStorage`
+**Luồng xử lý:**
+1. Frontend gửi yêu cầu -> API tạo `task_id` (UUID) -> Trả về ngay `task_id`
+2. Frontend lưu `task_id` vào `localStorage` -> Polling `GET /task/{id}` mỗi 2-3 giây
+3. Backend xử lý background -> Cập nhật trạng thái (`done`/`failed`)
+4. Frontend nhận kết quả -> Xóa `task_id` khỏi `localStorage`
 
 ---
 
 ## 2. Backend Implementation
 
-### A. Endpoint Khoi tao Task
+### A. Endpoint Khởi tạo Task
 ```python
 @router.post("/run-task")
 async def start_task(input_data: TaskSchema, background_tasks: BackgroundTasks):
@@ -30,7 +30,7 @@ async def start_task(input_data: TaskSchema, background_tasks: BackgroundTasks):
     return {"task_id": task_id}
 ```
 
-### B. Endpoint Kiem tra Trang thai
+### B. Endpoint Kiểm tra Trạng thái
 ```python
 @router.get("/task/{task_id}")
 async def check_task(task_id: str):
@@ -48,12 +48,12 @@ const startPolling = (taskId: string) => {
         if (res.status === 'done' || res.status === 'failed') {
             clearInterval(interval);
             localStorage.removeItem('active_task_id');
-            // Xu ly ket qua
+            // Xử lý kết quả
         }
     }, 2000);
 };
 
-// Khoi phuc khi F5
+// Khôi phục khi F5
 useEffect(() => {
     const savedTaskId = localStorage.getItem('active_task_id');
     if (savedTaskId) startPolling(savedTaskId);
@@ -62,18 +62,18 @@ useEffect(() => {
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Moi task phai co `task_id` UUID duy nhat.
-2. Frontend phai luu `task_id` vao `localStorage` de khoi phuc khi F5.
-3. Polling interval: 2-3 giay (khong nho hon 1 giay).
-4. Khi task hoan thanh, xoa `task_id` khoi `localStorage`.
-5. Task het han (timeout) sau 10 phut.
+1. Mỗi task phải có `task_id` UUID duy nhất.
+2. Frontend phải lưu `task_id` vào `localStorage` để khôi phục khi F5.
+3. Polling interval: 2-3 giây (không nhỏ hơn 1 giây).
+4. Khi task hoàn thành, xóa `task_id` khỏi `localStorage`.
+5. Task hết hạn (timeout) sau 10 phút.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Kien truc Chatbot & LLM](./skill_chatbot_architecture.md)
-- [Thanh toan Polling & Sync](./skill_payment_polling_sync.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Kiến trúc Chatbot & LLM](./skill_chatbot_architecture.md)
+- [Thanh toán Polling & Sync](./skill_payment_polling_sync.md)

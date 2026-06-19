@@ -1,8 +1,8 @@
-# Skill: Quan ly Thu vien (Dependencies Management)
+# Skill: Quản lý Thư viện (Dependencies Management)
 
-## Muc tieu
+## Mục tiêu
 
-Tong hop cac nhom thu vien cot loi va lenh cai dat tuong ung cho moi loai du an (Backend Python, Frontend React). Dam bao moi Skill co the chay duoc sau khi cai dat dung package.
+Tổng hợp các nhóm thư viện cốt lõi và lệnh cài đặt tương ứng cho mỗi loại dự án (Backend Python, Frontend React). Đảm bảo mọi Skill có thể chạy được sau khi cài đúng package.
 
 ---
 
@@ -47,18 +47,18 @@ npm install -D tailwindcss postcss autoprefixer
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Kich hoat moi truong ao `.venv` truoc khi `pip install`.
-2. Gom thu vien Python vao `requirements.txt`.
-3. Frontend package gom vao `package.json` tu dong.
-4. KHONG cai dat package global.
-5. Khi them package moi, cap nhat `requirements.txt` ngay.
+1. Kích hoạt môi trường ảo `.venv` trước khi `pip install`.
+2. Gom thư viện Python vào `requirements.txt`.
+3. Frontend package gom vào `package.json` tự động.
+4. KHÔNG cài đặt package global.
+5. Khi thêm package mới, cập nhật `requirements.txt` ngay.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)

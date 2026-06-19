@@ -1,14 +1,14 @@
-# Skill: Viet Ma SQL Da nen tang (SQLite & MySQL)
+# Skill: Viết Mã SQL Đa nền tảng (SQLite & MySQL)
 
-## Muc tieu
+## Mục tiêu
 
-Viet SQL tuong thich ca SQLite va MySQL, chong SQL Injection bang Parameter Binding, xu ly su khac biet ve Parameter placeholder.
+Viết SQL tương thích cả SQLite và MySQL, chống SQL Injection bằng Parameter Binding, xử lý sự khác biệt về Parameter placeholder.
 
 ---
 
-## 1. Xu ly Parameter Binding
+## 1. Xử lý Parameter Binding
 
-Su dung `self.P` de tuong thich ca 2 loai DB:
+Sử dụng `self.P` để tương thích cả 2 loại DB:
 
 ```python
 class BaseDB:
@@ -24,17 +24,17 @@ class BaseDB:
 
 ---
 
-## 2. Tranh ham DB dac thu
+## 2. Tránh hàm DB đặc thù
 
-| Ham | SQLite | MySQL | Cach xu ly |
+| Hàm | SQLite | MySQL | Cách xử lý |
 |-----|--------|-------|------------|
-| Ngay thang | `DATE('now')` | `NOW()` | Dung `datetime.now()` trong Python |
-| Noi chuoi | `\|\|` | `CONCAT()` | Noi trong Python truoc |
-| Tu dong tang | `INTEGER PRIMARY KEY` | `INT AUTO_INCREMENT` | Dung `INTEGER PRIMARY KEY` (SQLite tu tang) |
+| Ngày tháng | `DATE('now')` | `NOW()` | Dùng `datetime.now()` trong Python |
+| Nối chuỗi | `\|\|` | `CONCAT()` | Nối trong Python trước |
+| Tự động tăng | `INTEGER PRIMARY KEY` | `INT AUTO_INCREMENT` | Dùng `INTEGER PRIMARY KEY` (SQLite tự tăng) |
 
 ---
 
-## 3. CREATE TABLE tuong thich
+## 3. CREATE TABLE tương thích
 
 ```sql
 CREATE TABLE IF NOT EXISTS users (
@@ -48,19 +48,19 @@ CREATE TABLE IF NOT EXISTS users (
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Luon dung Parameter Binding (`?` hoac `%s`), KHONG noi chuoi truc tiep vao SQL.
-2. Dung `self.P` de tuong thich ca SQLite va MySQL, khong hardcode `?` hay `%s`.
-3. Gia tri ngay thang tao tu Python, khong dung ham DB dac thu.
-4. `INTEGER PRIMARY KEY` tuong thich ca 2 (SQLite tu dong tang).
-5. Dong ket noi sau khi thao tac (`close()`).
+1. Luôn dùng Parameter Binding (`?` hoặc `%s`), KHÔNG nối chuỗi trực tiếp vào SQL.
+2. Dùng `self.P` để tương thích cả SQLite và MySQL, không hardcode `?` hay `%s`.
+3. Giá trị ngày tháng tạo từ Python, không dùng hàm DB đặc thù.
+4. `INTEGER PRIMARY KEY` tương thích cả 2 (SQLite tự động tăng).
+5. Đóng kết nối sau khi thao tác (`close()`).
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
-- [Bao mat & Xac thuc](./skill_security_authentication.md)
-- [Quan ly Thu vien (Dependencies)](./skill_dependencies_management.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Bảo mật & Xác thực](./skill_security_authentication.md)
+- [Quản lý Thư viện (Dependencies)](./skill_dependencies_management.md)

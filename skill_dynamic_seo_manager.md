@@ -1,17 +1,17 @@
-# Skill: Quan ly SEO Dong (Dynamic SEO Manager)
+# Skill: Quản lý SEO Động (Dynamic SEO Manager)
 
-## Muc tiet
+## Mục tiêu
 
-Thay the truc tiep Meta Tag trong file tinh `index.html` cua React giup chia se link hieu qua (Facebook, Zalo). Su dung co che Dynamic HTML Modification: ghi truc tiep vao file vat ly thay vi render bang Javascript.
+Thay thế trực tiếp Meta Tag trong file tĩnh `index.html` của React giúp chia sẻ link hiệu quả (Facebook, Zalo). Sử dụng cơ chế Dynamic HTML Modification: ghi trực tiếp vào file vật lý thay vì render bằng Javascript.
 
 ---
 
-## 1. Co che Dong bo Hai chieu
+## 1. Cơ chế Đồng bộ Hai chiều
 
-### A. Push: DB xuong File HTML
-Khi Admin luu, he thong:
-1. Luu vao bang `settings` trong DB
-2. Dung Regex de thay the gia tri trong `frontend/index.html`
+### A. Push: DB xuống File HTML
+Khi Admin lưu, hệ thống:
+1. Lưu vào bảng `settings` trong DB
+2. Dùng Regex để thay thế giá trị trong `frontend/index.html`
 
 ```python
 def update_index_html_seo(title, description, keywords, author):
@@ -21,31 +21,31 @@ def update_index_html_seo(title, description, keywords, author):
     write("frontend/index.html", content)
 ```
 
-### B. Pull: File HTML len UI
-Admin co the nhan "Sync tu HTML" de lay gia tri tu file vao DB.
+### B. Pull: File HTML lên UI
+Admin có thể nhấn "Sync từ HTML" để lấy giá trị từ file vào DB.
 
 ---
 
-## 2. Quan ly Tai Nguyen (Logo, Favicon)
+## 2. Quản lý Tài nguyên (Logo, Favicon)
 
-- Sanitize filename bang `uuid.uuid4()` + `os.path.basename()`
-- Luu vao `utils/download/`
-- Tra ve URL: `/api/v1/download/{filename}`
+- Sanitize filename bằng `uuid.uuid4()` + `os.path.basename()`
+- Lưu vào `utils/download/`
+- Trả về URL: `/api/v1/download/{filename}`
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Luon su dung Regex de thay the, khong dung string replace thuan.
-2. File `index.html` phai co cac placeholder meta tags mac dinh.
-3. Backup file truoc khi ghi de.
+1. Luôn sử dụng Regex để thay thế, không dùng string replace thuần.
+2. File `index.html` phải có các placeholder meta tags mặc định.
+3. Backup file trước khi ghi đè.
 4. Logo upload < 500KB.
-5. Kiem tra Canonical, Robot tags sau khi update.
+5. Kiểm tra Canonical, Robot tags sau khi update.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Kien truc Frontend & API Setup](./skill_frontend_architecture.md)
-- [Chia nho Components & Domain Routing](./skill_frontend_routing_components.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
+- [Kiến trúc Frontend & API Setup](./skill_frontend_architecture.md)
+- [Chia nhỏ Components & Domain Routing](./skill_frontend_routing_components.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)

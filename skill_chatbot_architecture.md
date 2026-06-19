@@ -1,61 +1,61 @@
-# Skill: Kien truc Chatbot & LLM (Chatbot Architecture Skill)
+# Skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill)
 
-## Muc tieu
+## Mục tiêu
 
-Quy dinh tieu chuan hoa module `chatbot/` nham dam bao tinh doc lap, chuyen sau ve logic AI/LLM va de bao tri.
+Quy định tiêu chuẩn hóa module `chatbot/` nhằm đảm bảo tính độc lập, chuyên sâu về logic AI/LLM và dễ bảo trì.
 
 ---
 
-## 1. Cau truc Thu muc Chuan
+## 1. Cấu trúc Thư mục Chuẩn
 
 ```text
 chatbot/
-├── services/               # Chua cac luong logic LangGraph
+├── services/               # Chứa các luồng logic LangGraph
 │   ├── rag_chat_service.py
 │   └── multi_agent_service.py
-└── utils/                  # Cac thanh phan don le
-    ├── llm.py              # LLM Factory: Khoi tao OpenAI, Gemini, Grok...
-    ├── prompt.py           # Class tap trung quan ly Prompt Templates
-    ├── graph_state.py      # Dinh nghia State (TypedDict) cho LangGraph
-    ├── {name}_agent.py     # Cac Agent don le
-    └── {name}_tool.py      # Cong cu ho tro Agent
+└── utils/                  # Các thành phần đơn lẻ
+    ├── llm.py              # LLM Factory: Khởi tạo OpenAI, Gemini, Grok...
+    ├── prompt.py           # Class tập trung quản lý Prompt Templates
+    ├── graph_state.py      # Định nghĩa State (TypedDict) cho LangGraph
+    ├── {name}_agent.py     # Các Agent đơn lẻ
+    └── {name}_tool.py      # Công cụ hỗ trợ Agent
 ```
 
 ---
 
-## 2. Quy tac Thiet ke Thanh phan
+## 2. Quy tắc Thiết kế Thành phần
 
-- **LLM Factory** (`utils/llm.py`): Tat ca thanh phan dung chung mot Class khoi tao LLM.
-- **Centralized Prompts** (`utils/prompt.py`): Mot Class duy nhat chua tat ca Prompt. Ten hang so viet HOA.
-- **Atomic Agents** (`utils/*_agent.py`): Moi Agent chi lam mot viec (Single Responsibility).
-- **LangGraph Workflows** (`services/`): Moi service la mot luong StateGraph hoan chinh.
-
----
-
-## 3. Luong Hoat dong Tieu chuan
-
-1. Entry Point: Router goi ham trong `chatbot/services/`
-2. Khoi tao `StateGraph` voi `GraphState`
-3. Thuc thi cac Nodes qua Agent trong `utils/`
-4. Kiem tra dieu kien, re nhanh hoac ket thuc
-5. Tra ve du lieu JSON sach cho Router
+- **LLM Factory** (`utils/llm.py`): Tất cả thành phần dùng chung một Class khởi tạo LLM.
+- **Centralized Prompts** (`utils/prompt.py`): Một Class duy nhất chứa tất cả Prompt. Tên hằng số viết HOA.
+- **Atomic Agents** (`utils/*_agent.py`): Mỗi Agent chỉ làm một việc (Single Responsibility).
+- **LangGraph Workflows** (`services/`): Mỗi service là một luồng StateGraph hoàn chỉnh.
 
 ---
 
-## Quy tac bat buoc
+## 3. Luồng Hoạt động Tiêu chuẩn
 
-1. KHONG de code Ingestion hoac DB Model trong `chatbot/`
-2. Moi Agent chi chua mot chuc nang duy nhat
-3. Su dung LLM Factory, khong khoi tao LLM rieng le
-4. Prompt tap trung trong `prompt.py`, khong rai rac
-5. Bat buoc clean_json truoc khi xu ly du lieu tu LLM
-6. Retry trong RAG neu khong tim thay tai lieu
+1. Entry Point: Router gọi hàm trong `chatbot/services/`
+2. Khởi tạo `StateGraph` với `GraphState`
+3. Thực thi các Nodes qua Agent trong `utils/`
+4. Kiểm tra điều kiện, rẽ nhánh hoặc kết thúc
+5. Trả về dữ liệu JSON sạch cho Router
 
 ---
 
-## File lien quan
+## Quy tắc bắt buộc
+
+1. KHÔNG để code Ingestion hoặc DB Model trong `chatbot/`
+2. Mỗi Agent chỉ chứa một chức năng duy nhất
+3. Sử dụng LLM Factory, không khởi tạo LLM riêng lẻ
+4. Prompt tập trung trong `prompt.py`, không rải rác
+5. Bắt buộc clean_json trước khi xử lý dữ liệu từ LLM
+6. Retry trong RAG nếu không tìm thấy tài liệu
+
+---
+
+## File liên quan
 
 - [AI RAG Workflow](./skill_ai_rag_workflow.md)
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Ket noi OpenRouter](./skill_openrouter_integration.md)
-- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Kết nối OpenRouter](./skill_openrouter_integration.md)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](./skill_coding_conventions.md)

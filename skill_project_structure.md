@@ -56,17 +56,17 @@ project_root/
 │       │   └── admin/          # Domain quản trị
 │       └── types/
 │           └── index.ts        # Shared TypeScript types
-├── utils/                      # [STORAGE] Thu muc luu tru tap trung
+├── utils/                      # [STORAGE] Thư mục lưu trữ tập trung
 │   ├── download/               # File export, logo, favicon...
-│   ├── upload_temp/            # File tai len dang cho xu ly
-│   ├── data_vector/            # Noi luu tru FAISS Index thuc te
-│   └── logs/                   # File log ung dung (xem skill_logging_monitoring.md)
+│   ├── upload_temp/            # File tải lên đang chờ xử lý
+│   ├── data_vector/            # Nơi lưu trữ FAISS Index thực tế
+│   └── logs/                   # File log ứng dụng (xem skill_logging_monitoring.md)
 ├── test/                       # Unit tests (pytest, vitest)
-├── deploy/                     # Cau hinh deploy (nginx.conf, systemd service)
-├── .env                        # Bien moi truong (KHONG push len Git)
-├── .env.example                # File mau bien moi truong (push len Git)
-├── .gitignore                  # Quy tac bo qua file nhay cam (xem skill_env_configuration.md)
-└── requirements.txt            # Danh sach thu vien Python
+├── deploy/                     # Cấu hình deploy (nginx.conf, systemd service)
+├── .env                        # Biến môi trường (KHÔNG push lên Git)
+├── .env.example                # File mẫu biến môi trường (push lên Git)
+├── .gitignore                  # Quy tắc bỏ qua file nhạy cảm (xem skill_env_configuration.md)
+└── requirements.txt            # Danh sách thư viện Python
 ```
 
 ---
@@ -81,48 +81,49 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 *   [**Kết nối OpenRouter (Đa nền tảng AI)**](./skill_openrouter_integration.md): Hướng dẫn tích hợp OpenRouter để dùng nhiều model AI (GPT, Claude, Gemini, Llama...) qua 1 API key duy nhất, cấu hình toggle trong Settings.
 *   [**Kỹ thuật Parser (DOCX to MD)**](./skill_docx_to_md_parser.md): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
 
-### Nhom Xac thuc, Moi truong & Bao mat
-*   [**Cau hinh Moi truong (.env & .gitignore)**](./skill_env_configuration.md): Chuan file `.env`, day du mau `.gitignore`, quy tac `.env.example` va Pydantic Settings.
-*   [**Viet Ma SQL Da nen tang (MySQL & SQLite)**](./skill_sql_compatibility.md): Ky thuat dung Raw SQL tuong thich da driver, chong SQL Injection bang Parameter Binding.
-*   [**Quan ly Thu vien (Dependencies)**](./skill_dependencies_management.md): Danh sach package (FastAPI, LangGraph, JWT, zustand, zod...) can cai dat de chay cac Skill.
-*   [**Xac thuc va Bao mat Toan dien**](./skill_security_authentication.md): JWT Stateless, bcrypt hash mat khau, RBAC Admin, chong Path Traversal, va Frontend Security checklist.
-*   [**Dang nhap Google OAuth (Redirect Flow)**](./skill_google_oauth_redirect.md): Luong dang nhap muot ma qua Backend Redirect, khong lam lo JSON tho.
-*   [**Dang nhap Hybrid App (Cloud-Sync Polling)**](./skill_hybrid_app_login.md): Giai phap dang nhap cho App Mobile (Flutter/React Native) su dung WebView ket hop Polling DB.
+### Nhóm Xác thực, Môi trường & Bảo mật
+*   [**Cấu hình Môi trường (.env & .gitignore)**](./skill_env_configuration.md): Chuẩn file `.env`, đầy đủ mẫu `.gitignore`, quy tắc `.env.example` và Pydantic Settings.
+*   [**Viết SQL Đa nền tảng (MySQL & SQLite)**](./skill_sql_compatibility.md): Kỹ thuật dùng Raw SQL tương thích đa driver, chống SQL Injection bằng Parameter Binding.
+*   [**Quản lý Thư viện (Dependencies)**](./skill_dependencies_management.md): Danh sách package (FastAPI, LangGraph, JWT, zustand, zod...) cần cài đặt để chạy các Skill.
+*   [**Xác thực và Bảo mật Toàn diện**](./skill_security_authentication.md): JWT Stateless, bcrypt hash mật khẩu, RBAC Admin, chống Path Traversal, và Frontend Security checklist.
+*   [**Đăng nhập Google OAuth (Redirect Flow)**](./skill_google_oauth_redirect.md): Luồng đăng nhập mượt mà qua Backend Redirect, không làm lộ JSON thô.
+*   [**Đăng nhập Hybrid App (Cloud-Sync Polling)**](./skill_hybrid_app_login.md): Giải pháp đăng nhập cho App Mobile (Flutter/React Native) sử dụng WebView kết hợp Polling DB.
 
-### Nhom Tac vu & Thanh toan
-*   [**Tac vu Bat dong bo & Polling**](./skill_async_task_polling.md): Co che Background Tasks cua FastAPI ket hop Polling phia Frontend de xu ly tac vu AI nang.
-*   [**He thong Thanh toan Tu dong (Polling & Sync)**](./skill_payment_polling_sync.md): Thuat toan doi soat giao dich ngan hang qua SePay tu dong khong can Webhook.
+### Nhóm Tác vụ & Thanh toán
+*   [**Tác vụ Bất đồng bộ & Polling**](./skill_async_task_polling.md): Cơ chế Background Tasks của FastAPI kết hợp Polling phía Frontend để xử lý tác vụ AI nặng.
+*   [**Hệ thống Thanh toán Tự động (Polling & Sync)**](./skill_payment_polling_sync.md): Thuật toán đối soát giao dịch ngân hàng qua SePay tự động không cần Webhook.
 
-### Nhom Toi uu Frontend & Giao dien
-*   [**Kien truc Frontend & API Setup**](./skill_frontend_architecture.md): Quan ly API tap trung (`api.ts`), JWT Interceptor, button loading state, va bao mat JWT phia Frontend.
-*   [**Chia nho Components, Pages & Domain Routing**](./skill_frontend_routing_components.md): Kien truc domain-based voi React Router v6, lazy loading, ProtectedRoute/AdminRoute, nguyen tac tach component.
-*   [**Quan ly SEO Dong (Dynamic SEO)**](./skill_dynamic_seo_manager.md): Ky thuat thay the truc tiep Meta Tag trong file tinh `index.html` cua React giup chia se link hieu qua.
+### Nhóm Tối ưu Frontend & Giao diện
+*   [**Kiến trúc Frontend & API Setup**](./skill_frontend_architecture.md): Quản lý API tập trung (`api.ts`), JWT Interceptor, button loading state, và bảo mật JWT phía Frontend.
+*   [**Chia nhỏ Components, Pages & Domain Routing**](./skill_frontend_routing_components.md): Kiến trúc domain-based với React Router v6, lazy loading, ProtectedRoute/AdminRoute, nguyên tắc tách component.
+*   [**Quản lý SEO Động (Dynamic SEO)**](./skill_dynamic_seo_manager.md): Kỹ thuật thay thế trực tiếp Meta Tag trong file tĩnh `index.html` của React giúp chia sẻ link hiệu quả.
 
-### Nhom Quy tac Viet Code & Tai lieu
-*   [**Tieu chuan Viet Code & Dat ten (Coding Conventions)**](./skill_coding_conventions.md): Dat ten, Type Hinting, Docstring, cam emoji, va Git Workflow (Conventional Commits, branching strategy).
-*   [**Huong dan Viet README.md Chuan**](./skill_readme_writing.md): Cau truc 7 phan bat buoc, mau README day du, quy tac `.env.example`, checklist truoc khi commit.
-*   [**Logging & Monitoring Chuan**](./skill_logging_monitoring.md): Cau hinh Python logging co cau truc, RotatingFileHandler, quy tac log level, cam dung `print()` trong production.
-*   [**Chuan API Response (Standard Response Format)**](./skill_api_response_standard.md): JSON thong nhat cho moi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
-*   [**Codebase Mapper (Map.md)**](./skill_codebase_mapper.md): Phan tich codebase, tao Header Documentation, duy tri file `map.md` de dieu huong AI.
+### Nhóm Quy tắc Viết Code & Tài liệu
+*   [**Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)**](./skill_coding_conventions.md): Đặt tên, Type Hinting, Docstring, cấm emoji, và Git Workflow (Conventional Commits, branching strategy).
+*   [**Quy tắc Thực thi Bắt buộc (Execution Rules)**](./skill_execution_rules.md): 8 quy tắc cứng về Router, Service, Import, File Splitting, OOP — không được vi phạm.
+*   [**Hướng dẫn Viết README.md Chuẩn**](./skill_readme_writing.md): Cấu trúc 7 phần bắt buộc, mẫu README đầy đủ, quy tắc `.env.example`, checklist trước khi commit.
+*   [**Logging & Monitoring Chuẩn**](./skill_logging_monitoring.md): Cấu hình Python logging có cấu trúc, RotatingFileHandler, quy tắc log level, cấm dùng `print()` trong production.
+*   [**Chuẩn API Response (Standard Response Format)**](./skill_api_response_standard.md): JSON thống nhất cho mọi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
+*   [**Codebase Mapper (Map.md)**](./skill_codebase_mapper.md): Phân tích codebase, tạo Header Documentation, duy trì file `map.md` để điều hướng AI.
 
 ---
 
 ## 3. Nguyên tắc phát triển cốt lõi (Core Principles)
 
-1. **Tuan thu Cau truc Modular**: Tuyet doi khong code logic AI (LangChain/LangGraph) vao trong cac file `router` cua FastAPI. Backend API (`app/`) chi nhan request va goi cac ham xu ly ben trong module `chatbot/` hoac `ingestion/`.
+1. **Tuân thủ Cấu trúc Modular**: Tuyệt đối không code logic AI (LangChain/LangGraph) vào trong các file `router` của FastAPI. Backend API (`app/`) chỉ nhận request và gọi các hàm xử lý bên trong module `chatbot/` hoặc `ingestion/`.
 2. **Chatbot Module Chuyên biệt**: Thư mục `chatbot/` chỉ được phép chứa code liên quan đến AI, LLM, Prompts và Agents. KHÔNG để code nạp dữ liệu (Ingestion), Database model, hay logic nghiệp vụ thông thường vào đây.
-3. **Kho phuc trang thai (Resilience)**: Moi tac vu nang phai co co che Polling. Nguoi dung F5 (tai lai trang) khong duoc lam gian doan tien trinh. (Xem `skill_async_task_polling.md`).
-4. **An toan Bi mat (Secrets)**: Cac API Key (OpenAI, Gemini, SePay) va Secret Key (JWT) luon dat o `.env` Backend. Dung `.env.example` de commit mau len Git. KHONG bao gio commit file `.env` thuc. (Xem `skill_env_configuration.md`).
-5. **Phan hoi Ro rang**: Moi Endpoint giao tiep voi Frontend phai tra ve JSON dinh dang chuan `ApiSuccess` / `ApiError`. (Xem `skill_api_response_standard.md`).
-6. **Logging thay vi Print**: Moi file module phai khai bao `logger = get_logger(__name__)`. Cam tuyet doi dung `print()` trong code production. (Xem `skill_logging_monitoring.md`).
-7. **Comment giai thich**: Moi ham phuc tap phai co Docstring (Python) hoac JSDoc (TypeScript). Comment phai tra loi "Tai sao viet the nay?" chu khong phai "Code nay lam gi?". (Xem `skill_coding_conventions.md`).
-8. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md`).
-9. **File Header & Docstring Bat buoc**: Moi file moi hoac sua phai co Header mo ta va Docstring cho tung ham. (Xem Muc 6).
-10. **Huong Doi tuong & Chia nho File**: Code phai viet theo OOP, moi class mot file rieng. File > 300 dong BAT BUOC tach. (Xem Rule 8).
+3. **Khôi phục trạng thái (Resilience)**: Mọi tác vụ nặng phải có cơ chế Polling. Người dùng F5 (tải lại trang) không được làm gián đoạn tiến trình. (Xem `skill_async_task_polling.md`).
+4. **An toàn Bí mật (Secrets)**: Các API Key (OpenAI, Gemini, SePay) và Secret Key (JWT) luôn đặt ở `.env` Backend. Dùng `.env.example` để commit mẫu lên Git. KHÔNG bao giờ commit file `.env` thật. (Xem `skill_env_configuration.md`).
+5. **Phản hồi Rõ ràng**: Mọi Endpoint giao tiếp với Frontend phải trả về JSON định dạng chuẩn `ApiSuccess` / `ApiError`. (Xem `skill_api_response_standard.md`).
+6. **Logging thay vì Print**: Mọi file module phải khai báo `logger = get_logger(__name__)`. Cấm tuyệt đối dùng `print()` trong code production. (Xem `skill_logging_monitoring.md`).
+7. **Comment giải thích**: Mọi hàm phức tạp phải có Docstring (Python) hoặc JSDoc (TypeScript). Comment phải trả lời "Tại sao viết thế này?" chứ không phải "Code này làm gì?". (Xem `skill_coding_conventions.md`).
+8. **Cấm Emoji**: Không dùng emoji trong bất kỳ file code, markdown, hay comment nào. (Xem `skill_coding_conventions.md`).
+9. **File Header & Docstring Bắt buộc**: Mọi file mới hoặc sửa phải có Header mô tả và Docstring cho từng hàm. (Xem Mục 6 bên dưới).
+10. **Hướng Đối tượng & Chia nhỏ File**: Code phải viết theo OOP, mỗi class một file riêng. File > 300 dòng BẮT BUỘC tách. (Xem `skill_execution_rules.md` Rule 8).
 
 ---
 
-## 4. Hướng dẫn Môi trường & Quản lý File (Environment & Storage)
+## 4. Hướng dẫn Môi trường & Quản lý File
 
 1. **Môi trường ảo (Virtual Environment)**:
    - Tất cả các dự án Python bắt buộc phải chạy trong môi trường ảo (Virtual Env) để tránh xung đột thư viện với hệ thống.
@@ -135,13 +136,12 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 
 3. **OpenRouter — Đa nền tảng AI**:
    - Hệ thống hỗ trợ chuyển đổi linh hoạt giữa **OpenAI** và **OpenRouter** qua toggle trong Settings.
-   - Khi bật OpenRouter, `LlmFactory.get_llm()` dùng `base_url="https://openrouter.ai/api/v1"` và model do người dùng chọn (ví dụ: `openai/gpt-oss-120b:free`).
+   - Khi bật OpenRouter, `LlmFactory.get_llm()` dùng `base_url="https://openrouter.ai/api/v1"` và model do người dùng chọn.
    - Có thể cấu hình qua Settings UI hoặc biến môi trường trong `.env`:
      ```env
      OPENROUTER_API_KEY=sk-or-...
      OPENROUTER_MODEL=openai/gpt-oss-120b:free
      ```
-   - Xem chi tiết: [Kết nối OpenRouter](./skill_openrouter_integration.md)
 
 4. **Quy hoạch Thư mục Lưu trữ (`utils/`)**:
    - Thư mục `utils/` nằm ở ngoài cùng (Root level) được dùng làm không gian lưu trữ vật lý tập trung của dự án.
@@ -150,573 +150,270 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 
 ---
 
-## 5. Quy tắc Thực thi Bắt buộc (Execution Rules)
+## 5. Docstring & File Header Bắt buộc
 
-Phan nay la bo quy tac KHONG DUOC VI PHAM. Muc tieu la ngan chan viec tao file va thu muc sai vi tri, gay ra tinh trang code bi phan tan, kho bao tri va vi pham kien truc da quy dinh.
+Quy tắc này áp dụng cho **cả Backend (Python) và Frontend (TypeScript/React)**.
 
----
+### 5.1. File Header — Mọi file phải có Header mô tả
 
-### Rule 1: Router KHONG chua Business Logic
+Mọi file `.py`, `.ts`, `.tsx` **mới tạo hoặc sửa** PHẢI có Header block ở đầu file.
 
-**Dinh nghia**: File trong `app/routers/` chi duoc phep lam dung 3 viec:
-1. Nhan va validate request (dung Pydantic schema)
-2. Goi ham xu ly tu `service` tuong ung
-3. Tra ve response theo chuan `ApiSuccess` / `ApiError`
-
-**Vi du DUNG**:
-
-```python
-# app/routers/chat_router.py
-from fastapi import APIRouter, Depends
-from app.models.chat_schema import ChatRequest
-from chatbot.services.chat_service import run_chat_flow
-from app.utils.response import ApiSuccess, ApiError
-
-router = APIRouter()
-
-@router.post("/chat")
-async def chat_endpoint(req: ChatRequest, user=Depends(get_current_user)):
-    # Chi goi service, khong xu ly gi them
-    result = await run_chat_flow(user_id=user.id, message=req.message)
-    return ApiSuccess(data=result)
+**Định dạng chung:**
+```
+File: tên_file.xxx
+Chức năng: Mô tả chức năng chính của file này
+Vai trò: Mô tả vai trò trong hệ thống (VD: router / service / agent / component / util / config)
+File liên quan: (nếu có) danh sách file khác tương tác với file này
 ```
 
-**Vi du SAI - TUYET DOI CAM**:
-
-```python
-# app/routers/chat_router.py  <-- SAI: LangChain nam trong router
-from langchain_openai import ChatOpenAI
-from langgraph.graph import StateGraph
-
-@router.post("/chat")
-async def chat_endpoint(req: ChatRequest):
-    llm = ChatOpenAI(model="gpt-4o")   # CAM: khoi tao LLM trong router
-    chain = llm | StrOutputParser()     # CAM: dinh nghia chain trong router
-    result = chain.invoke(req.message)  # CAM: goi LangChain truc tiep
-    return {"result": result}
-```
-
----
-
-### Rule 2: AI Logic Bat buoc Nam Trong `chatbot/services/`
-
-**Dinh nghia**: Moi logic lien quan den LangChain, LangGraph, Prompt, RAG, Agent deu phai dat trong thu muc `chatbot/services/`.
-
-**Quy tac dat ten file trong `chatbot/services/`**:
-- Dung snake_case, ten mo ta ro chuc nang cua workflow
-- Dinh dang khuyen nghi: `{chu_de}_{kieu_xu_ly}_service.py`
-- Vi du hop le: `rag_chat_service.py`, `document_qa_service.py`, `multi_agent_service.py`
-- **CAM** dat ten chung chung: `handler.py`, `logic.py`, `ai.py`, `process.py`
-
-**Quy tac dat ten file trong `chatbot/utils/`**:
-- Moi file la 1 Agent nho co chuc nang don le (Single Responsibility)
-- Dinh dang khuyen nghi: `{chuc_nang}_agent.py` hoac `{chuc_nang}_util.py`
-- **prompt.py**: File dac biet chua Class tap trung quan ly tat ca Prompt (System Prompt, Templates).
-- Vi du hop le: `document_grader_agent.py`, `prompt.py`, `answer_generator_agent.py`
-- **CAM** gop nhieu agent khac nhau vao 1 file
-
----
-
-### Rule 3: Luong Xu ly API Chatbot Bat buoc Theo Thu Tu
-
-Moi API endpoint lien quan den AI PHAI tuan thu luong sau:
-
-```
-[Frontend Request]
-      |
-      v
-[app/routers/]          --> Chi validate & dispatch
-      |
-      v
-[chatbot/services/]     --> Chua toan bo business logic, goi cac agent
-      |
-      v
-[chatbot/utils/]        --> Cac agent don le: grade, generate, validate
-      |
-      v
-[Response tra ve router] --> Router dong goi ApiSuccess/ApiError
-```
-
-**CAM cac loi di tat sau**:
-
-| Loi vi pham | Dung thay the |
-|---|---|
-| Goi LangChain truc tiep trong `app/routers/` | Tao ham trong `chatbot/services/` va goi tu router |
-| Viet logic xu ly trong app/models/ | `app/models/` chi chua SQLAlchemy model, `app/schemas/` chua Pydantic schema |
-| Dat file `*_agent.py` trong `app/utils/` | Agent AI phai o `chatbot/utils/`, khong phai `app/utils/` |
-| Import `chatbot/` trong `ingestion/` | `ingestion/` la pipeline doc lap, khong phu thuoc `chatbot/` |
-
----
-
-### Rule 4: Bang Phan Cong File - Dat Code O Dau?
-
-Su dung bang nay moi khi can quyet dinh dat 1 doan code vao file nao:
-
-| Loai code can viet | Dat vao file nao |
-|---|---|
-| Endpoint API, route definition | `app/routers/{module}_router.py` |
-| Pydantic request/response schema | `app/schemas/{module}_schema.py` |
-| SQLAlchemy model (DB Table) | `app/models/{module}_model.py` |
-| Database Connection (Session) | `app/database.py` |
-| JWT, password hash, permission check | `app/security/` |
-| Ham tien ich dung chung cho API (format date, parse string...) | `app/utils/` |
-| Toan bo workflow LangGraph/LangChain | `chatbot/services/{ten}_service.py` |
-| Agent nho: grader, generator, validator | `chatbot/utils/{ten}_agent.py` |
-| Prompt Templates (System, Tool) | `chatbot/utils/prompt.py` (Dung Class de quan ly) |
-| Khoi tao LLM (Factory) — ho tro OpenAI & OpenRouter | `chatbot/utils/llm.py` |
-| Cau hinh OpenRouter (toggle, key, model) | `app/routers/settings_router.py` + `frontend/components/Settings.tsx` |
-| LangGraph State Definition | `chatbot/utils/graph_state.py` |
-| Ket noi va truy van FAISS | `ingestion/retriever.py` |
-| Xay dung / cap nhat Vector DB | `ingestion/vector_data_builder.py` |
-| Logic chia chunk dac thu theo domain | `ingestion/rag_multi_class_ingest.py` |
-| Global config, bien moi truong | `app/config.py` (load tu `.env`) |
-| File log output | `utils/logs/` (KHONG tao folder `logs/` noi khac) |
-| File upload tam thoi tu nguoi dung | `utils/upload_temp/` |
-| File export, bao cao, favicon | `utils/download/` |
-| FAISS index, embedding data | `utils/data_vector/` |
-| Unit test cho backend | `test/` (dung pytest) |
-| Unit test cho frontend | `frontend/src/__tests__/` (dung vitest) |
-
----
-
-### Rule 5: Quy tac Khong Tao Thu Muc Ngoai Cau Truc Chuan
-
-**CAM** tao cac thu muc sau day o bat ky cap nao (tru khi co ly do dac biet va duoc trao doi truoc):
-
-- `helpers/` — thay bang `utils/` da co trong chuan
-- `controllers/` — FastAPI khong dung MVC kieu nay, dung `routers/` + `services/`
-- `middleware/` thanh thu muc rieng — middleware khai bao trong `app/main.py`
-- `constants/` — hang so dat trong `app/config.py` hoac file schema tuong ung
-- `lib/` — khong co y nghia ro rang, thay bang ten muc dich cu the
-- `src/` tai root level — `src/` chi ton tai ben trong `frontend/`
-- `api/` tai root level — thu muc API la `app/routers/`, khong tao them `api/`
-
-**Khi that su can them thu muc moi**:
-1. Xem lai Section 1 de kiem tra lieu thu muc da ton tai hay chua
-2. Neu khong co thu muc phu hop, dat code vao `app/utils/` (cho API helper) hoac `chatbot/utils/` (cho AI helper)
-3. Chi tao thu muc moi khi chuc nang thuc su doc lap va khong the gop vao dau hien co
-
----
-
-### Rule 6: Quy tac Import - Huong Di Mot Chieu
-
-De tranh circular import va giu kien truc ro rang, cac module PHAI tuan thu huong import mot chieu:
-
-```
-app/routers/ --> chatbot/services/ --> chatbot/utils/
-     |                |                     |
-     v                v                     v
-app/schemas/     app/models/         ingestion/retriever.py
-     |                |
-     v                v
-app/security/    app/database.py
-```
-
-**CAM nguoc chieu**:
-- `chatbot/` KHONG duoc import tu `app/routers/`
-- `ingestion/` KHONG duoc import tu `chatbot/services/`
-- `app/models/` KHONG duoc import tu `app/routers/` theo kieu vong tron
-- `app/utils/` KHONG duoc import tu `chatbot/` (util API khac util AI)
-
-**Ham dung chung thuc su** (vi du: ham doc file, format date) co the dat vao `app/utils/` va duoc import tu ca `app/` lan `chatbot/` - day la truong hop ngoai le hop le duy nhat.
-
----
-
-### Rule 7: Checklist Truoc Khi Tao File Moi
-
-Truoc khi tao bat ky file `.py` hoac `.ts` moi, bat buoc tra loi du 5 cau hoi sau:
-
-- [ ] **1. File nay chua loai code gi?** (endpoint / schema / service / agent / util / config)
-- [ ] **2. Theo bang Rule 4, no thuoc thu muc nao?** Dat vao dung thu muc do.
-- [ ] **3. Da co file tuong tu trong thu muc do chua?** Neu co, xem xet mo rong file cu thay vi tao file moi.
-- [ ] **4. Ten file co mo ta ro chuc nang khong?** Tuyet doi khong dat ten chung chung nhu `helper.py`, `misc.py`, `utils2.py`.
-- [ ] **5. File nay co vi pham Rule Import khong?** Kiem tra huong import truoc khi viet code.
-
----
-
-### Rule 8: Huong Doi tuong & Chia nho File (OOP & File Splitting)
-
-**Nguyen tac nay ap dung cho CA Backend (Python) va Frontend (TypeScript/React).**
-
-Code PHẢI duoc viet theo huong doi tuong (OOP). Moi class, module, file chi dam nhiem **mot trach nhiem duy nhat** (Single Responsibility). Nghiem cam gon code ca ngan dong trong 1 file.
-
-**Dung:**
-```
-# Backend - moi class 1 file rieng
-chatbot/utils/document_grader_agent.py   (~60 dong)
-chatbot/utils/answer_generator_agent.py  (~70 dong)
-chatbot/utils/query_transformer.py       (~50 dong)
-
-# Frontend - moi page/component 1 file rieng
-domains/chat/pages/ChatPage.tsx           (~80 dong)
-domains/chat/components/MessageBubble.tsx (~40 dong)
-domains/chat/components/ChatInput.tsx     (~60 dong)
-domains/chat/components/ChatHistory.tsx   (~50 dong)
-```
-
-**Sai (KHONG duoc phep):**
-```
-# Backend
-chatbot/utils/all_in_one.py              (~800 dong, nhieu class tron lan)
-
-# Frontend
-domains/chat/pages/ChatPage.tsx          (~500 dong, render + state + API + UI tat ca trong 1 file)
-domains/chat/ChatFeature.tsx             (~600 dong, page + component + logic khong tach)
-```
-
-**Gioi han file:**
-
-| Loai file | Toi da dong | Ap dung cho | Ghi chu |
-|-----------|-------------|-------------|---------|
-| Agent / Util nho | 100 dong | Backend | Mot class, mot chuc nang |
-| Service / Workflow | 200 dong | Backend | Mot luong LangGraph |
-| Router (API) | 150 dong | Backend | Chi validate + dispatch |
-| Page component | 150 dong | Frontend | Neu qua, tach component con |
-| Component thuong | 80 dong | Frontend | Mot component, mot vai tro |
-| Utility / Helper | 100 dong | Ca hai | Ham tien ich don le |
-
-**Khi nao can tach file:**
-- File > 150 dong: can nhac tach
-- File > 300 dong: BAT BUOC tach
-- Mot class > 200 dong: can nhac tach thanh nhieu class
-- Mot ham > 50 dong: can nhac tach thanh nhieu ham nho
-- Mot component > 80 dong: can nhac tach component con
-- Page > 150 dong: tach thanh nhieu components + pages nho hon
-
-**Vi du tach Backend (Python):**
-
-```python
-# SAI: 1 file lam het
-# chatbot/utils/ai_utils.py (~600 dong)
-class DocumentGrader: ...
-class AnswerGenerator: ...
-class QueryTransformer: ...
-class PromptManager: ...
-
-# DUNG: Moi class 1 file rieng
-# chatbot/utils/document_grader_agent.py (~60 dong)
-class DocumentGrader:
-    """Agent kiem tra do lien quan cua tai lieu voi cau hoi."""
-
-# chatbot/utils/answer_generator_agent.py (~70 dong)
-class AnswerGenerator:
-    """Agent sinh cau tra loi tu tai lieu da loc."""
-
-# chatbot/utils/query_transformer.py (~50 dong)
-class QueryTransformer:
-    """Bien doi cau hoi nguoi dung thanh nhieu cau truy van."""
-```
-
-**Vi du tach Frontend (TypeScript/React):**
-
-```tsx
-// SAI: Tat ca trong 1 Page file (~500 dong)
-// frontend/src/domains/chat/pages/ChatPage.tsx
-// Gom: state management + API call + render history + input form + header
-const ChatPage = () => {
-    // 50 dong state
-    // 80 dong API calls
-    // 120 dong render messages
-    // 60 dong render input
-    // 40 dong render header
-    // ... ~500 dong
-};
-
-// DUNG: Tach thanh nhieu components, moi file khoang 40-80 dong
-// frontend/src/domains/chat/pages/ChatPage.tsx (~80 dong)
-// Chi phoi hop cac component con, quan ly state tong the
-import ChatHeader from '../components/ChatHeader';
-import ChatHistory from '../components/ChatHistory';
-import ChatInput from '../components/ChatInput';
-
-const ChatPage = () => {
-    const [messages, setMessages] = useState<Message[]>([]);
-    return (
-        <div>
-            <ChatHeader />
-            <ChatHistory messages={messages} />
-            <ChatInput onMessageSent={(m) => setMessages(p => [...p, m])} />
-        </div>
-    );
-};
-
-// frontend/src/domains/chat/components/ChatHistory.tsx (~50 dong)
-// Chi hien thi danh sach tin nhan
-const ChatHistory = ({ messages }: { messages: Message[] }) => (
-    <div>{messages.map(m => <MessageBubble key={m.id} msg={m} />)}</div>
-);
-
-// frontend/src/domains/chat/components/MessageBubble.tsx (~40 dong)
-// Chi hien thi 1 tin nhan
-const MessageBubble = ({ msg }: { msg: Message }) => (
-    <div className={msg.role === 'user' ? 'text-right' : 'text-left'}>
-        {msg.content}
-    </div>
-);
-
-// frontend/src/domains/chat/components/ChatInput.tsx (~60 dong)
-// Chi xu ly input + nut gui
-const ChatInput = ({ onMessageSent }: { onMessageSent: (text: string) => void }) => {
-    const [text, setText] = useState('');
-    const handleSend = () => { if (text.trim()) { onMessageSent(text); setText(''); } };
-    return (
-        <div>
-            <input value={text} onChange={(e) => setText(e.target.value)} />
-            <button onClick={handleSend}>Gui</button>
-        </div>
-    );
-};
-```
-
-**Loi ich:**
-- De debug: biet chinh xac file nao bi loi
-- De bao tri: sua chuc nang A khong anh huong chuc nang B
-- De test: viet unit test cho tung class/component rieng biet
-- AI de doc: file ngan, AI khong bi "loat" context
-- Code Splitting: React.lazy load tung domain, giam bundle size
-
----
-
-## 6. Docstring & File Header Bat buoc (Required Documentation)
-
-Quy tac nay ap dung cho **ca Backend (Python) va Frontend (TypeScript/React)**.
-
-### 6.1. File Header — Moi file phai co Header mo ta
-
-Moi file `.py`, `.ts`, `.tsx` **moi tao hoac sua** PHẢI có Header block ở đầu file.
-
-**Dinh dang chung:**
-
-```
-File: ten_file.xxx
-Chuc nang: Mo ta chuc nang chinh cua file nay
-Vai tro: Mo ta vai tro trong he thong (VD: router / service / agent / component / util / config)
-File lien quan: (neu co) danh sach file khac tuong tac voi file nay
-```
-
-**Vi du cho Backend (Python):**
-
+**Ví dụ Backend (Python):**
 ```python
 """
 File: chat_router.py
-Chuc nang: Dinh nghia endpoint API cho module chat, tiep nhan request va goi service
-Vai tro: Router - tiep nhan request tu Frontend, validate, dispatch xuong chatbot service
-File lien quan: chatbot/services/chat_service.py, app/schemas/chat_schema.py
+Chức năng: Định nghĩa endpoint API cho module chat, tiếp nhận request và gọi service
+Vai trò: Router — tiếp nhận request từ Frontend, validate, dispatch xuống chatbot service
+File liên quan: chatbot/services/chat_service.py, app/schemas/chat_schema.py
 """
 ```
 
 ```python
 """
 File: rag_chat_service.py
-Chuc nang: Workflow LangGraph cho luong hoi dap RAG, dieu phoi cac agent
-Vai tro: Service - chua toan bo logic AI, goi cac agent trong chatbot/utils/
-File lien quan: chatbot/utils/document_grader_agent.py, chatbot/utils/llm.py, ingestion/retriever.py
+Chức năng: Workflow LangGraph cho luồng hỏi đáp RAG, điều phối các agent
+Vai trò: Service — chứa toàn bộ logic AI, gọi các agent trong chatbot/utils/
+File liên quan: chatbot/utils/document_grader_agent.py, chatbot/utils/llm.py, ingestion/retriever.py
 """
 ```
 
-**Vi du cho Frontend (TypeScript/React):**
-
+**Ví dụ Frontend (TypeScript/React):**
 ```typescript
 /**
  * File: ChatPage.tsx
- * Chuc nang: Trang chat chinh, hien thi lich su hoi dap va form nhap tin nhan
- * Vai tro: Page component - quan ly state tin nhan, phoi hop cac component con
- * File lien quan: components/ChatHistory.tsx, components/ChatInput.tsx, services/api.ts
+ * Chức năng: Trang chat chính, hiển thị lịch sử hỏi đáp và form nhập tin nhắn
+ * Vai trò: Page component — quản lý state tin nhắn, phối hợp các component con
+ * File liên quan: components/ChatHistory.tsx, components/ChatInput.tsx, services/api.ts
  */
 ```
 
 ```typescript
 /**
  * File: api.ts
- * Chuc nang: Axios instance, interceptor JWT, va tat ca ham goi API
- * Vai tro: Service - tap trung moi API call, xu ly loi 401 toan cuc
- * File lien quan: contexts/AuthContext.tsx, domains/*/router.tsx
+ * Chức năng: Axios instance, interceptor JWT, và tất cả hàm gọi API
+ * Vai trò: Service — tập trung mọi API call, xử lý lỗi 401 toàn cục
+ * File liên quan: contexts/AuthContext.tsx, domains/*/router.tsx
  */
 ```
 
-### 6.2. Docstring (Python) / JSDoc (TypeScript) — Moi ham bat buoc phai co
+### 5.2. Docstring (Python) / JSDoc (TypeScript) — Mọi hàm bắt buộc phải có
 
-**Quy tac:** Moi **ham moi** hoac **ham duoc sua** PHẢI co docstring. Day la quy tac **cung**, khong phai de xuat.
+**Quy tắc:** Mọi **hàm mới** hoặc **hàm được sửa** PHẢI có docstring. Đây là quy tắc **cứng**, không phải đề xuất.
 
 **Python — Google Style Docstring:**
-
 ```python
 def function_name(param1: type, param2: type) -> return_type:
     """
-    Mo ta 1-2 cau ve chuc nang chinh cua ham, tra loi "Tai sao" khong phai "Lam gi".
-    
+    Mô tả 1-2 câu về chức năng chính của hàm, trả lời "Tại sao" không phải "Làm gì".
+
     Args:
-        param1 (type): Mo ta tham so 1
-        param2 (type): Mo ta tham so 2
-    
+        param1 (type): Mô tả tham số 1
+        param2 (type): Mô tả tham số 2
+
     Returns:
-        return_type: Mo ta du lieu tra ve
-    
+        return_type: Mô tả dữ liệu trả về
+
     Raises:
-        SomeError: Khi nao loi nay xay ra (neu co)
+        SomeError: Khi nào lỗi này xảy ra (nếu có)
     """
     # code
 ```
 
 **TypeScript — JSDoc:**
-
 ```typescript
 /**
- * Mo ta 1-2 cau ve chuc nang chinh cua ham.
- * 
- * @param {type} paramName - Mo ta tham so
- * @returns {type} Mo ta du lieu tra ve
+ * Mô tả 1-2 câu về chức năng chính của hàm.
+ *
+ * @param {type} paramName - Mô tả tham số
+ * @returns {type} Mô tả dữ liệu trả về
  */
 function functionName(paramName: Type): ReturnType {
     // code
 }
 ```
 
-### 6.3. Checklist Docstring & File Header truoc khi Commit
+### 5.3. Checklist trước khi Commit
 
-Truoc khi commit, bat buoc kiem tra:
-
-- [ ] **File Header**: File moi co Header block o dong dau tien khong?
-- [ ] **Ham moi**: Moi ham moi co docstring/JSDoc khong?
-- [ ] **Ham sua**: Ham duoc sua co cap nhat lai docstring khong?
-- [ ] **Giai thich "Why"**: Docstring co giai thich "Tai sao lam the nay" thay vi "Code lam gi" khong?
+- [ ] **File Header**: File mới có Header block ở dòng đầu tiên không?
+- [ ] **Hàm mới**: Mọi hàm mới có docstring/JSDoc không?
+- [ ] **Hàm sửa**: Hàm được sửa có cập nhật lại docstring không?
+- [ ] **Giải thích "Why"**: Docstring có giải thích "Tại sao làm thế này" thay vì "Code làm gì" không?
 
 ---
 
-## 7. Huong dan Khoi chay theo Loai Du an (Run Guide)
+## 6. Hướng dẫn Khởi chạy theo Loại Dự án
 
-### 7.1. Du an Python (FastAPI + AI Engine)
+### 6.1. Backend — Python (FastAPI + AI Engine)
 
-**Khoi tao moi truong:**
+**Khởi tạo môi trường:**
 ```bash
 python -m venv .venv
-# Kich hoat:
+# Kích hoạt:
 # Windows:
 .venv\Scripts\activate
 # Linux/Mac:
 source .venv/bin/activate
 ```
 
-**Cai dat thu vien:**
+**Cài đặt thư viện:**
 ```bash
 pip install -r requirements.txt
 ```
 
-**Chay server:**
+**Chạy server:**
 ```bash
 uvicorn app.main:app --reload
 ```
 
-**Khi can them module AI:**
+**Khi cần thêm module AI:**
 
-| Module | Tao folder | Muc dich |
+| Module | Tạo folder | Mục đích |
 |--------|-----------|----------|
 | Chatbot AI | `chatbot/` | Logic AI, LLM, LangGraph, Agent |
-| Data Pipeline | `ingestion/` | Nap du lieu, chunking, FAISS index |
-| Danh gia AI | `scoring/` | (Tuy chon) Cham diem RAG, test AI |
+| Data Pipeline | `ingestion/` | Nạp dữ liệu, chunking, FAISS index |
+| Đánh giá AI | `scoring/` | (Tùy chọn) Chấm điểm RAG, test AI |
 
-Quy tac: Khong du code AI vao `app/`. Luon dat trong `chatbot/`.
+Quy tắc: Không để code AI vào `app/`. Luôn đặt trong `chatbot/`.
 
-**Chay test:**
+**Chạy test:**
 ```bash
 pytest test/
 ```
 
-### 7.2. Tao folder Frontend cho Du an
+---
 
-**Du an Python co Frontend:** Khoi tao `frontend/` bang Vite ngay trong project root:
+### 6.2. Frontend
+
+Phần này liệt kê các loại Frontend hiện có và sẽ có. Mỗi loại có cấu trúc thư mục và cách chạy riêng.
+
+#### 6.2.1. React / Vite / TypeScript
+
+**Khởi tạo (dự án Python + Frontend):**
 ```bash
 npm create vite@latest frontend -- --template react-ts
 cd frontend
 npm install
 ```
 
-Sau do cau truc se la:
+Cấu trúc sau khi tạo:
 ```
 project_root/
 ├── app/               # Backend FastAPI
 ├── chatbot/           # AI Engine
-├── frontend/          # Vite + React + TypeScript (vua tao)
+├── frontend/          # Vite + React + TypeScript
 └── ...
 ```
 
-**Du an thuan Frontend (React/Vite):** Khoi tao truc tiep:
+**Khởi tạo (dự án thuần Frontend):**
 ```bash
 npm create vite@latest . -- --template react-ts
 npm install
 ```
 
-### 7.3. Du an Frontend (React/Vite/TypeScript)
+**Các lệnh thường dùng:**
 
-**Cai dat:**
-```bash
-npm install
-```
+| Mục đích | Lệnh |
+|----------|------|
+| Cài đặt | `npm install` |
+| Chạy dev | `npm run dev` |
+| Build | `npm run build` |
+| Test | `npx vitest` |
+| Lint | `npm run lint` |
 
-**Chay dev:**
+**Thêm domain mới:**
 ```bash
-npm run dev
-```
-
-**Build production:**
-```bash
-npm run build
-```
-
-**Khi can them domain moi:**
-```bash
-# Tao folder domain trong:
-frontend/src/domains/{ten_domain}/
+# Tạo folder domain:
+frontend/src/domains/{tên_domain}/
 # VD:
-frontend/src/domains/payment/   # router, pages, components cho payment
-frontend/src/domains/admin/     # router, pages, components cho admin
+frontend/src/domains/payment/   # router, pages, components
+frontend/src/domains/admin/     # router, pages, components
 ```
 
-**Chay test:**
-```bash
-npx vitest
+**Cấu trúc thư mục:**
+```text
+frontend/src/
+├── router/index.tsx        # Root Router
+├── components/             # Shared UI
+├── domains/{tên}/          # Domain độc lập
+│   ├── router.tsx
+│   ├── pages/
+│   └── components/
+├── hooks/
+├── services/api.ts         # API calls
+├── contexts/               # AuthContext...
+└── types/
 ```
 
-**Kiem tra lint:**
-```bash
-npm run lint
+> Xem chi tiết: [Kiến trúc Frontend & API Setup](./skill_frontend_architecture.md), [Chia nhỏ Components & Domain Routing](./skill_frontend_routing_components.md)
+
+#### 6.2.2. Laravel Blade (tương lai)
+
+*Chưa có hướng dẫn chi tiết. Cấu trúc dự kiến:*
+
+```text
+project_root/
+├── app/               # Backend FastAPI
+├── frontend/          # Laravel + Blade
+│   ├── resources/
+│   │   ├── views/     # Blade templates
+│   │   ├── css/
+│   │   └── js/
+│   ├── routes/
+│   └── public/
+└── ...
 ```
 
-### 7.4. Quy tac Tao Folder Moi
+> *Khi có dự án Laravel thực tế, sẽ cập nhật hướng dẫn đầy đủ.*
 
-1. **Kiem tra truoc**: Tra bang Rule 4 xem folder da ton tai chua
-2. **Khong ten chung chung**: Khong dat `helpers/`, `misc/`, `utils2/`, `lib/`
-3. **Dat ten co y nghia**: Dung snake_case cho Python, kebab-case cho frontend folders
-4. **Chi tao khi that su can**: Neu 1-2 file thi dat vao `utils/` hien co
-5. **Cap nhat map.md**: Neu dung skill Codebase Mapper, cap nhat lai map.md
+#### 6.2.3. Các loại Frontend khác
+
+Mỗi loại Frontend mới sẽ được thêm mục riêng tại đây, kèm cấu trúc thư mục và lệnh chạy tương ứng.
 
 ---
 
-## 8. Quy tac AI Response (AI Communication Rules)
+### 6.3. Quy tắc Tạo Folder Mới
 
-AI (ChatGPT, Claude, etc.) khi lam viec voi du an nay PHAI tuan thu:
-
-1. **Khong giai thich dai dong**: Chi tra loi dung trong tam, khong them giai thich neu nguoi dung khong yeu cau.
-2. **Code = code**: Khi viet code, chi tra ve code + duong dan file. Khong kem giai thich "Code nay lam gi".
-3. **Bao ket qua toi thieu**: Khi hoan thanh task, bao "Done" + tom tat 1-2 dong. Khong liet ke tung buoc da lam.
-4. **Hoi lai neu can**: Neu thieu thong tin, hoi lai cau hoi can thiet thay vi tu y quyet dinh.
-5. **Khong viet README/doc neu khong duoc yeu cau**: Chi tao tai lieu khi nguoi dung yeu cau ro rang.
-6. **KHONG tu y run code**: Khong chay file `.py`, `npm install`, `npm run build`, `uvicorn`, hay bat ky lenh nao khac neu khong duoc yeu cau. Code la cua client, chi chay khi client noi "chay thu" hoac "test".
-7. **KHONG tu y cai dat package**: Khong tu y them package vao `requirements.txt` hay `package.json` neu khong duoc yeu cau.
-8. **Chi sua code, khong chay**: Nhiep vu chinh la viet/sua code day du. Client se tu chay va kiem tra.
-
-9. **Khi nguoi dung yeu cau "chuan hoa code"**: BAT BUOC phai:
-   - Tao file `map.md` trong thu muc goc du an neu chua co.
-   - Folder `{ten_du_an}/` (do nguoi dung tao tay) chua cac file `map_{ten_du_an}.md` de tham khao cau truc. Chi can ghi chu trong file map.md dan den folder nay.
-   - VD: folder `chatbot-luat/` chua `map_chatbot-luat.md`
-   - Noi dung file map: liet ke cac file quan trong, chuc nang, vai tro, file lien quan (xem `skill_codebase_mapper.md`).
+1. **Kiểm tra trước**: Tra bảng Rule 4 trong `skill_execution_rules.md` xem folder đã tồn tại chưa
+2. **Không tên chung chung**: Không đặt `helpers/`, `misc/`, `utils2/`, `lib/`
+3. **Đặt tên có ý nghĩa**: Dùng snake_case cho Python, kebab-case cho frontend folders
+4. **Chỉ tạo khi thật sự cần**: Nếu 1-2 file thì đặt vào `utils/` hiện có
+5. **Cập nhật map.md**: Nếu dùng skill Codebase Mapper, cập nhật lại map.md
 
 ---
 
-## File lien quan
+## 7. Quy tắc AI Response (AI Communication Rules)
 
-- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
-- [Kien truc Chatbot & LLM](./skill_chatbot_architecture.md)
+AI (ChatGPT, Claude, etc.) khi làm việc với dự án này PHẢI tuân thủ:
+
+1. **Không giải thích dài dòng**: Chỉ trả lời đúng trọng tâm, không thêm giải thích nếu người dùng không yêu cầu.
+2. **Code = code**: Khi viết code, chỉ trả về code + đường dẫn file. Không kèm giải thích "Code này làm gì".
+3. **Báo kết quả tối thiểu**: Khi hoàn thành task, báo "Done" + tóm tắt 1-2 dòng. Không liệt kê từng bước đã làm.
+4. **Hỏi lại nếu cần**: Nếu thiếu thông tin, hỏi lại câu hỏi cần thiết thay vì tự ý quyết định.
+5. **Không viết README/doc nếu không được yêu cầu**: Chỉ tạo tài liệu khi người dùng yêu cầu rõ ràng.
+6. **KHÔNG tự ý run code**: Không chạy file `.py`, `npm install`, `npm run build`, `uvicorn`, hay bất kỳ lệnh nào khác nếu không được yêu cầu. Code là của client, chỉ chạy khi client nói "chạy thử" hoặc "test".
+7. **KHÔNG tự ý cài đặt package**: Không tự ý thêm package vào `requirements.txt` hay `package.json` nếu không được yêu cầu.
+8. **Chỉ sửa code, không chạy**: Nhiệm vụ chính là viết/sửa code đầy đủ. Client sẽ tự chạy và kiểm tra.
+9. **Khi người dùng yêu cầu "chuẩn hoá code"**: BẮT BUỘC phải:
+   - Tạo file `map.md` trong thư mục gốc dự án nếu chưa có.
+   - Folder `{tên_dự_án}/` (do người dùng tạo tay) chứa các file `map_{tên_dự_án}.md` để tham khảo cấu trúc. Chỉ cần ghi chú trong file map.md dẫn đến folder này.
+   - VD: folder `chatbot-luat/` chứa `map_chatbot-luat.md`
+   - Nội dung file map: liệt kê các file quan trọng, chức năng, vai trò, file liên quan (xem `skill_codebase_mapper.md`).
+
+---
+
+## File liên quan
+
+- [Quy tắc Thực thi Bắt buộc (Execution Rules)](./skill_execution_rules.md)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Kiến trúc Chatbot & LLM](./skill_chatbot_architecture.md)
 - [Codebase Mapper](./skill_codebase_mapper.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
-- [Chuan API Response](./skill_api_response_standard.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Chuẩn API Response](./skill_api_response_standard.md)

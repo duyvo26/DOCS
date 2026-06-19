@@ -1,14 +1,14 @@
-# Skill: Bao mat & Xac thuc Toan dien (Security & Authentication)
+# Skill: Bảo mật & Xác thực Toàn diện (Security & Authentication)
 
-## Muc tieu
+## Mục tiêu
 
-Bao ve he thong bang nhieu lop bao mat: JWT Stateless, bcrypt hash, RBAC Admin, chong Path Traversal, va Frontend Security checklist.
+Bảo vệ hệ thống bằng nhiều lớp bảo mật: JWT Stateless, bcrypt hash, RBAC Admin, chống Path Traversal, và Frontend Security checklist.
 
 ---
 
 ## 1. JWT (JSON Web Token)
 
-Xac thuc khong luu trang thai (Stateless).
+Xác thực không lưu trạng thái (Stateless).
 
 ```python
 def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -21,7 +21,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 
 ---
 
-## 2. RBAC — Phan quyen Admin
+## 2. RBAC — Phân quyền Admin
 
 ```python
 def get_current_admin(current_user: dict = Depends(get_current_user)):
@@ -32,7 +32,7 @@ def get_current_admin(current_user: dict = Depends(get_current_user)):
 
 ---
 
-## 3. bcrypt — Hash Mat khau
+## 3. bcrypt — Hash Mật khẩu
 
 ```python
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -46,7 +46,7 @@ def verify_password(password: str, hashed: str) -> bool:
 
 ---
 
-## 4. Chong Path Traversal
+## 4. Chống Path Traversal
 
 ```python
 safe_filename = os.path.basename(filename)
@@ -59,33 +59,33 @@ if not os.path.exists(file_path):
 
 ## 5. Frontend Security Checklist
 
-| # | Hang muc | Bat buoc |
+| # | Hạng mục | Bắt buộc |
 |---|----------|----------|
-| 1 | JWT gan tu dong qua Interceptor | Co |
-| 2 | Loi 401 redirect /login | Co |
-| 3 | Token xac minh voi server khi app load | Co |
-| 4 | ProtectedRoute / AdminRoute | Co |
-| 5 | Nut bam isLoading + disabled | Co |
-| 6 | Khong hardcode token | Co |
-| 7 | Multi-tab logout sync | Khuyen nghi |
+| 1 | JWT gán tự động qua Interceptor | Có |
+| 2 | Lỗi 401 redirect /login | Có |
+| 3 | Token xác minh với server khi app load | Có |
+| 4 | ProtectedRoute / AdminRoute | Có |
+| 5 | Nút bấm isLoading + disabled | Có |
+| 6 | Không hardcode token | Có |
+| 7 | Multi-tab logout sync | Khuyến nghị |
 
 ---
 
-## Quy tac bat buoc
+## Quy tắc bắt buộc
 
-1. Mat khau luon hash bang bcrypt, khong luu plain text.
-2. JWT payload chua id, email, is_admin — khong chua mat khau.
-3. Tra loi giong nhau cho "email sai" vs "mat khau sai" (chong User Enumeration).
-4. `os.path.basename()` bat buoc khi xu ly filename tu user.
-5. CORS khong de `"*"` trong production.
+1. Mật khẩu luôn hash bằng bcrypt, không lưu plain text.
+2. JWT payload chứa id, email, is_admin — không chứa mật khẩu.
+3. Trả lời giống nhau cho "email sai" vs "mật khẩu sai" (chống User Enumeration).
+4. `os.path.basename()` bắt buộc khi xử lý filename từ user.
+5. CORS không để `"*"` trong production.
 6. Rate limiting cho AI API.
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
-- [Dang nhap Google OAuth](./skill_google_oauth_redirect.md)
-- [Kien truc Frontend & API Setup](./skill_frontend_architecture.md)
-- [Chuan API Response](./skill_api_response_standard.md)
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Đăng nhập Google OAuth](./skill_google_oauth_redirect.md)
+- [Kiến trúc Frontend & API Setup](./skill_frontend_architecture.md)
+- [Chuẩn API Response](./skill_api_response_standard.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)

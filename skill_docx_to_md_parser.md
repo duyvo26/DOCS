@@ -1,64 +1,64 @@
-# Skill: Parser DOCX to MD — Chuyen doi bao cao sang Markdown co cau truc
+# Skill: Parser DOCX to MD — Chuyển đổi báo cáo sang Markdown có cấu trúc
 
-## Muc tieu
+## Mục tiêu
 
-Chuyen doi file bao cao nghiep vu (DOCX/PDF) sang Markdown, trich xuat cau truc muc luc va phan manh noi dung de phuc vu AI, RAG, hoac cham diem tu dong.
+Chuyển đổi file báo cáo nghiệp vụ (DOCX/PDF) sang Markdown, trích xuất cấu trúc mục lục và phân mảnh nội dung để phục vụ AI, RAG, hoặc chấm điểm tự động.
 
 ---
 
-## 1. Cong nghe su dung
+## 1. Công nghệ sử dụng
 
-| Thu vien | Vai tro |
+| Thư viện | Vai trò |
 |----------|---------|
-| Microsoft MarkItDown | Chuyen DOCX -> MD |
-| Python Regex (re) | Trich xuat cau truc Heading |
-| Pathlib | Quan ly file (tuong thich Win/Linux) |
+| Microsoft MarkItDown | Chuyển DOCX -> MD |
+| Python Regex (re) | Trích xuất cấu trúc Heading |
+| Pathlib | Quản lý file (tương thích Win/Linux) |
 
 ---
 
-## 2. Quy trinh thuc hien
+## 2. Quy trình thực hiện
 
-**Buoc 1:** Chuyen sang Markdown
+**Bước 1:** Chuyển sang Markdown
 ```python
 from markitdown import MarkItDown
 md = MarkItDown()
 result = md.convert(docx_path).markdown
 ```
 
-**Buoc 2:** Quet cau truc (Structure Scanning)
+**Bước 2:** Quét cấu trúc (Structure Scanning)
 ```python
 def get_structure_map(content):
     md_pattern = r"(?m)^(#{1,3})\s+(.+)$"
     bold_pattern = r"(?m)^\s*\*\*(.*?)\*\*\s*$"
-    # ... regex matching + sap xep theo line
+    # ... regex matching + sắp xếp theo line
 ```
 
-**Buoc 3:** Phan manh noi dung (Mapping Sections)
-- Ghi nho dong bat dau va dong ket thuc cua moi muc
-- Ai Agent co the trich xuat chinh xac tung muc
+**Bước 3:** Phân mảnh nội dung (Mapping Sections)
+- Ghi nhớ dòng bắt đầu và dòng kết thúc của mỗi mục
+- AI Agent có thể trích xuất chính xác từng mục
 
 ---
 
-## 3. Ung dung
+## 3. Ứng dụng
 
-- AI Grader (Cham diem tu dong)
-- Smart RAG (Chia theo Chuong/Muc)
-- Auto Summary (Tom tat tung chuong)
-- Bao cao doi soat (Audit)
-
----
-
-## Quy tac bat buoc
-
-1. Luon dung MarkItDown, khong dung PyMuPDF hay docx thuan.
-2. Regex phai co comment giai thich pattern.
-3. Output phai co bang cau truc (Level, Title, Line reference).
-4. Luu file MD sach de xu ly RAG.
+- AI Grader (Chấm điểm tự động)
+- Smart RAG (Chia theo Chương/Mục)
+- Auto Summary (Tóm tắt từng chương)
+- Báo cáo đối soát (Audit)
 
 ---
 
-## File lien quan
+## Quy tắc bắt buộc
+
+1. Luôn dùng MarkItDown, không dùng PyMuPDF hay docx thuần.
+2. Regex phải có comment giải thích pattern.
+3. Output phải có bảng cấu trúc (Level, Title, Line reference).
+4. Lưu file MD sạch để xử lý RAG.
+
+---
+
+## File liên quan
 
 - [AI RAG Workflow](./skill_ai_rag_workflow.md)
-- [Kien truc Chatbot & LLM](./skill_chatbot_architecture.md)
-- [Quan ly Thu vien (Dependencies)](./skill_dependencies_management.md)
+- [Kiến trúc Chatbot & LLM](./skill_chatbot_architecture.md)
+- [Quản lý Thư viện (Dependencies)](./skill_dependencies_management.md)

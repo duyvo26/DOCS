@@ -1,39 +1,39 @@
-# Skill: Viet README.md Chuan (README Writing Guide)
+# Skill: Viết README.md Chuẩn (README Writing Guide)
 
-## Muc tieu
+## Mục tiêu
 
-Quy dinh cach viet file `README.md` chuan cho moi du an. README la cua ngo dau tien de Developer, AI Agent va doi tac hieu du an.
+Quy định cách viết file `README.md` chuẩn cho mọi dự án. README là cửa ngõ đầu tiên để Developer, AI Agent và đối tác hiểu dự án.
 
 ---
 
-## 1. Cau truc README Bat buoc (7 phan)
+## 1. Cấu trúc README Bắt buộc (7 phần)
 
 ```
-1. Tong quan du an (Project Overview)
-2. Yeu cau he thong (System Requirements)
-3. Cai dat & Chay thu cuc bo (Local Setup)
-4. Cau hinh bien moi truong (Environment Variables)
-5. Cau truc thu muc (Project Structure)
-6. Danh sach API Endpoint (API Reference)
-7. Huong dan Trien khai (Deployment)
+1. Tổng quan dự án (Project Overview)
+2. Yêu cầu hệ thống (System Requirements)
+3. Cài đặt & Chạy thử cục bộ (Local Setup)
+4. Cấu hình biến môi trường (Environment Variables)
+5. Cấu trúc thư mục (Project Structure)
+6. Danh sách API Endpoint (API Reference)
+7. Hướng dẫn Triển khai (Deployment)
 ```
 
-Xem mau README day du trong file source.
+Xem mẫu README đầy đủ trong file source.
 
 ---
 
-## 2. Quy tac Viet README
+## 2. Quy tắc Viết README
 
-- Viet bang tieng Viet thuan hoac thuan Anh, khong tron lan.
-- Khong dung emoji.
-- Code block phai co nhan ngon ngu (` ```bash `, ` ```python `).
-- Bang bien moi truong phai day du: ten, mo ta, vi du.
-- Buoc cai dat phai copy-paste chay duoc ngay.
-- Cap nhat README khi thay doi cau truc du an.
+- Viết bằng tiếng Việt thuần hoặc thuần Anh, không trộn lẫn.
+- Không dùng emoji.
+- Code block phải có nhãn ngôn ngữ (` ```bash `, ` ```python `).
+- Bảng biến môi trường phải đầy đủ: tên, mô tả, ví dụ.
+- Bước cài đặt phải copy-paste chạy được ngay.
+- Cập nhật README khi thay đổi cấu trúc dự án.
 
 ---
 
-## 3. Quy tac .env.example
+## 3. Quy tắc .env.example
 
 ```bash
 # .env.example — File nay DUOC commit len Git
@@ -44,19 +44,19 @@ API_KEY=your-api-key
 
 ---
 
-## Checklist truoc khi commit README
+## Checklist trước khi commit README
 
-- [ ] Co day du 7 phan chinh
-- [ ] Buoc cai dat da test chay thu
-- [ ] Bang bien moi truong dong bo voi `.env.example`
-- [ ] Cau truc thu muc khop voi thuc te
-- [ ] Khong co emoji
-- [ ] Code block co nhan ngon ngu
+- [ ] Có đầy đủ 7 phần chính
+- [ ] Bước cài đặt đã test chạy thử
+- [ ] Bảng biến môi trường đồng bộ với `.env.example`
+- [ ] Cấu trúc thư mục khớp với thực tế
+- [ ] Không có emoji
+- [ ] Code block có nhãn ngôn ngữ
 
 ---
 
-## File lien quan
+## File liên quan
 
-- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)
-- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
-- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](./skill_project_structure.md)
+- [Cấu hình Môi trường (.env)](./skill_env_configuration.md)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](./skill_coding_conventions.md)
