@@ -73,7 +73,7 @@ AI phai cap nhat lai `map.md`.
 Khi nguoi dung yeu cau chuan hoa code cho mot du an cu the (VD: "chuan hoa code chatbot-luat"), BAT BUOC:
 
 1. Tao file `map.md` trong thu muc goc cua du an do (neu chua co).
-2. Tao folder `{ten_du_an}/` trong thu muc DOCS chua file `map_{ten_du_an}.md`.
+2. Folder `{ten_du_an}/` (do nguoi dung tao tay) trong thu muc DOCS chua file `map_{ten_du_an}.md` de tham khao cau truc.
    - VD: `chatbot-luat/map_chatbot-luat.md`
 3. Noi dung `map_{ten_du_an}.md`:
    - Ten du an

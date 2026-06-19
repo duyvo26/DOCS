@@ -707,8 +707,8 @@ AI (ChatGPT, Claude, etc.) khi lam viec voi du an nay PHAI tuan thu:
 
 9. **Khi nguoi dung yeu cau "chuan hoa code"**: BAT BUOC phai:
    - Tao file `map.md` trong thu muc goc du an neu chua co.
-   - Tao folder `{ten_du_an}/` chua cac file `map_{ten_du_an}.md` de tham khao cau truc.
-   - VD: du an ten "chatbot-luat" -> tao `chatbot-luat/map_chatbot-luat.md`
+   - Folder `{ten_du_an}/` (do nguoi dung tao tay) chua cac file `map_{ten_du_an}.md` de tham khao cau truc. Chi can ghi chu trong file map.md dan den folder nay.
+   - VD: folder `chatbot-luat/` chua `map_chatbot-luat.md`
    - Noi dung file map: liet ke cac file quan trong, chuc nang, vai tro, file lien quan (xem `skill_codebase_mapper.md`).
 
 ---
