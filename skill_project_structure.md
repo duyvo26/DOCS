@@ -336,36 +336,54 @@ Truoc khi tao bat ky file `.py` hoac `.ts` moi, bat buoc tra loi du 5 cau hoi sa
 
 ### Rule 8: Huong Doi tuong & Chia nho File (OOP & File Splitting)
 
-**Nguyen tac:** Code PHẢI duoc viet theo huong doi tuong (OOP). Moi class, module, file chi dam nhiem **mot trach nhiem duy nhat** (Single Responsibility). Nghiem cam gon code ca ngan dong trong 1 file.
+**Nguyen tac nay ap dung cho CA Backend (Python) va Frontend (TypeScript/React).**
+
+Code PHẢI duoc viet theo huong doi tuong (OOP). Moi class, module, file chi dam nhiem **mot trach nhiem duy nhat** (Single Responsibility). Nghiem cam gon code ca ngan dong trong 1 file.
 
 **Dung:**
 ```
-file: chatbot/utils/document_grader_agent.py  (~50-100 dong)
-file: chatbot/utils/answer_generator_agent.py (~50-100 dong)
-file: chatbot/utils/query_transformer.py      (~50-100 dong)
+# Backend - moi class 1 file rieng
+chatbot/utils/document_grader_agent.py   (~60 dong)
+chatbot/utils/answer_generator_agent.py  (~70 dong)
+chatbot/utils/query_transformer.py       (~50 dong)
+
+# Frontend - moi page/component 1 file rieng
+domains/chat/pages/ChatPage.tsx           (~80 dong)
+domains/chat/components/MessageBubble.tsx (~40 dong)
+domains/chat/components/ChatInput.tsx     (~60 dong)
+domains/chat/components/ChatHistory.tsx   (~50 dong)
 ```
 
 **Sai (KHONG duoc phep):**
 ```
-file: chatbot/utils/all_in_one.py             (~800 dong, nhieu class tron lan)
+# Backend
+chatbot/utils/all_in_one.py              (~800 dong, nhieu class tron lan)
+
+# Frontend
+domains/chat/pages/ChatPage.tsx          (~500 dong, render + state + API + UI tat ca trong 1 file)
+domains/chat/ChatFeature.tsx             (~600 dong, page + component + logic khong tach)
 ```
 
 **Gioi han file:**
-| Loai file | Toi da dong | Ghi chu |
-|-----------|-------------|---------|
-| Agent / Util nho | 100 dong | Mot class, mot chuc nang |
-| Service / Workflow | 200 dong | Mot luong LangGraph |
-| Router | 150 dong | Chi validate + dispatch |
-| Page component | 150 dong | Neu qua, tach component con |
-| Utility / Helper | 100 dong | Ham tien ich don le |
+
+| Loai file | Toi da dong | Ap dung cho | Ghi chu |
+|-----------|-------------|-------------|---------|
+| Agent / Util nho | 100 dong | Backend | Mot class, mot chuc nang |
+| Service / Workflow | 200 dong | Backend | Mot luong LangGraph |
+| Router (API) | 150 dong | Backend | Chi validate + dispatch |
+| Page component | 150 dong | Frontend | Neu qua, tach component con |
+| Component thuong | 80 dong | Frontend | Mot component, mot vai tro |
+| Utility / Helper | 100 dong | Ca hai | Ham tien ich don le |
 
 **Khi nao can tach file:**
 - File > 150 dong: can nhac tach
 - File > 300 dong: BAT BUOC tach
 - Mot class > 200 dong: can nhac tach thanh nhieu class
 - Mot ham > 50 dong: can nhac tach thanh nhieu ham nho
+- Mot component > 80 dong: can nhac tach component con
+- Page > 150 dong: tach thanh nhieu components + pages nho hon
 
-**Vi du tach dung:**
+**Vi du tach Backend (Python):**
 
 ```python
 # SAI: 1 file lam het
@@ -389,11 +407,73 @@ class QueryTransformer:
     """Bien doi cau hoi nguoi dung thanh nhieu cau truy van."""
 ```
 
+**Vi du tach Frontend (TypeScript/React):**
+
+```tsx
+// SAI: Tat ca trong 1 Page file (~500 dong)
+// frontend/src/domains/chat/pages/ChatPage.tsx
+// Gom: state management + API call + render history + input form + header
+const ChatPage = () => {
+    // 50 dong state
+    // 80 dong API calls
+    // 120 dong render messages
+    // 60 dong render input
+    // 40 dong render header
+    // ... ~500 dong
+};
+
+// DUNG: Tach thanh nhieu components, moi file khoang 40-80 dong
+// frontend/src/domains/chat/pages/ChatPage.tsx (~80 dong)
+// Chi phoi hop cac component con, quan ly state tong the
+import ChatHeader from '../components/ChatHeader';
+import ChatHistory from '../components/ChatHistory';
+import ChatInput from '../components/ChatInput';
+
+const ChatPage = () => {
+    const [messages, setMessages] = useState<Message[]>([]);
+    return (
+        <div>
+            <ChatHeader />
+            <ChatHistory messages={messages} />
+            <ChatInput onMessageSent={(m) => setMessages(p => [...p, m])} />
+        </div>
+    );
+};
+
+// frontend/src/domains/chat/components/ChatHistory.tsx (~50 dong)
+// Chi hien thi danh sach tin nhan
+const ChatHistory = ({ messages }: { messages: Message[] }) => (
+    <div>{messages.map(m => <MessageBubble key={m.id} msg={m} />)}</div>
+);
+
+// frontend/src/domains/chat/components/MessageBubble.tsx (~40 dong)
+// Chi hien thi 1 tin nhan
+const MessageBubble = ({ msg }: { msg: Message }) => (
+    <div className={msg.role === 'user' ? 'text-right' : 'text-left'}>
+        {msg.content}
+    </div>
+);
+
+// frontend/src/domains/chat/components/ChatInput.tsx (~60 dong)
+// Chi xu ly input + nut gui
+const ChatInput = ({ onMessageSent }: { onMessageSent: (text: string) => void }) => {
+    const [text, setText] = useState('');
+    const handleSend = () => { if (text.trim()) { onMessageSent(text); setText(''); } };
+    return (
+        <div>
+            <input value={text} onChange={(e) => setText(e.target.value)} />
+            <button onClick={handleSend}>Gui</button>
+        </div>
+    );
+};
+```
+
 **Loi ich:**
 - De debug: biet chinh xac file nao bi loi
 - De bao tri: sua chuc nang A khong anh huong chuc nang B
-- De test: viet unit test cho tung class rieng biet
+- De test: viet unit test cho tung class/component rieng biet
 - AI de doc: file ngan, AI khong bi "loat" context
+- Code Splitting: React.lazy load tung domain, giam bundle size
 
 ---
 
