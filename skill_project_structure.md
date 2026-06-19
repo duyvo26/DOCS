@@ -701,6 +701,9 @@ AI (ChatGPT, Claude, etc.) khi lam viec voi du an nay PHAI tuan thu:
 3. **Bao ket qua toi thieu**: Khi hoan thanh task, bao "Done" + tom tat 1-2 dong. Khong liet ke tung buoc da lam.
 4. **Hoi lai neu can**: Neu thieu thong tin, hoi lai cau hoi can thiet thay vi tu y quyet dinh.
 5. **Khong viet README/doc neu khong duoc yeu cau**: Chi tao tai lieu khi nguoi dung yeu cau ro rang.
+6. **KHONG tu y run code**: Khong chay file `.py`, `npm install`, `npm run build`, `uvicorn`, hay bat ky lenh nao khac neu khong duoc yeu cau. Code la cua client, chi chay khi client noi "chay thu" hoac "test".
+7. **KHONG tu y cai dat package**: Khong tu y them package vao `requirements.txt` hay `package.json` neu khong duoc yeu cau.
+8. **Chi sua code, khong chay**: Nhiep vu chinh la viet/sua code day du. Client se tu chay va kiem tra.
 
 ---
 
