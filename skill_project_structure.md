@@ -705,6 +705,12 @@ AI (ChatGPT, Claude, etc.) khi lam viec voi du an nay PHAI tuan thu:
 7. **KHONG tu y cai dat package**: Khong tu y them package vao `requirements.txt` hay `package.json` neu khong duoc yeu cau.
 8. **Chi sua code, khong chay**: Nhiep vu chinh la viet/sua code day du. Client se tu chay va kiem tra.
 
+9. **Khi nguoi dung yeu cau "chuan hoa code"**: BAT BUOC phai:
+   - Tao file `map.md` trong thu muc goc du an neu chua co.
+   - Tao folder `{ten_du_an}/` chua cac file `map_{ten_du_an}.md` de tham khao cau truc.
+   - VD: du an ten "chatbot-luat" -> tao `chatbot-luat/map_chatbot-luat.md`
+   - Noi dung file map: liet ke cac file quan trong, chuc nang, vai tro, file lien quan (xem `skill_codebase_mapper.md`).
+
 ---
 
 ## File lien quan
