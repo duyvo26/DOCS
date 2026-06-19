@@ -1,3 +1,5 @@
+# Skill: DuyVo26
+
 # Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Lập trình (Standard Project Structure)
 
 Tài liệu này quy định cấu trúc thư mục chuẩn và các nguyên tắc phát triển bắt buộc áp dụng cho mọi dự án tích hợp AI (FastAPI + AI Engine + Frontend) của chúng ta. 
@@ -328,3 +330,76 @@ Truoc khi tao bat ky file `.py` hoac `.ts` moi, bat buoc tra loi du 5 cau hoi sa
 - [ ] **3. Da co file tuong tu trong thu muc do chua?** Neu co, xem xet mo rong file cu thay vi tao file moi.
 - [ ] **4. Ten file co mo ta ro chuc nang khong?** Tuyet doi khong dat ten chung chung nhu `helper.py`, `misc.py`, `utils2.py`.
 - [ ] **5. File nay co vi pham Rule Import khong?** Kiem tra huong import truoc khi viet code.
+
+
+
+# Skill: Codebase Mapper
+
+## Mục tiêu
+
+Tự động phân tích codebase và tạo tài liệu điều hướng giúp AI và lập trình viên hiểu nhanh cấu trúc dự án.
+
+---
+
+## Nhiệm vụ
+
+### Bước 1: Phân tích codebase
+
+- Đọc các file được cung cấp.
+- Xác định chức năng chính của từng file.
+- Xác định mối quan hệ giữa các file.
+- Xác định các file quan trọng đối với luồng hoạt động của hệ thống.
+
+### Bước 2: Tạo Header Documentation cho file
+
+Nếu file chưa có phần mô tả đầu file, tạo header phù hợp.
+
+Header cần bao gồm:
+
+- Tên file
+- Chức năng chính
+- Vai trò trong hệ thống
+- File liên quan (nếu có)
+
+### Bước 3: Cập nhật map.md
+
+Tạo hoặc cập nhật file `map.md`.
+
+Mục đích của `map.md`:
+
+- Là bản đồ tổng quan của codebase.
+- Liệt kê các file quan trọng.
+- Mô tả chức năng từng file.
+- Giúp AI hiểu cấu trúc dự án trước khi chỉnh sửa code.
+
+### Bước 4: Duy trì map.md
+
+Khi:
+
+- Thêm file mới
+- Xóa file
+- Đổi chức năng file
+- Refactor cấu trúc dự án
+
+AI phải cập nhật lại `map.md`.
+
+---
+
+## Quy tắc
+
+1. Không mô tả các file quá nhỏ hoặc file sinh tự động.
+2. Ưu tiên các file có logic nghiệp vụ.
+3. Mô tả ngắn gọn, rõ ràng.
+4. Không suy đoán chức năng nếu chưa đọc mã nguồn.
+5. Luôn cập nhật `map.md` khi phát hiện thay đổi kiến trúc.
+6. Header file phải phản ánh đúng chức năng thực tế của file.
+
+---
+
+## Kết quả mong muốn
+
+- Mỗi file quan trọng có header mô tả.
+- Dự án có file `map.md` đầy đủ.
+- AI mới tham gia dự án có thể đọc `map.md` để hiểu nhanh codebase.
+- Việc bảo trì và refactor trở nên dễ dàng hơn.
+
