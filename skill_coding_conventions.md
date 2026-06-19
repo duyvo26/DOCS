@@ -40,34 +40,67 @@ Dùng `import.meta.env.VITE_*`, không hardcode URL.
 
 ## 3. Docstring & JSDoc
 
-### 3.1. Python — Google Style Docstring
 Bắt buộc cho mọi class và function có logic phức tạp.
 
+**AI khi vào chỉnh/sửa code:** Nếu phát hiện hàm thiếu docstring, PHẢI tự động thêm. Docstring phải bao gồm cả giải thích logic các dòng code chính và các hàm con được gọi.
+
+### 3.1. Python — Google Style Docstring
+
 ```python
-def evaluate(self, context: str) -> dict:
+def process_message(user_id: int, text: str) -> dict:
     """
-    Mo ta chuc nang, giai thich "Tai sao".
+    Xu ly tin nhan chat qua luong RAG.
+
+    Logic:
+      - B1: Goi retrieve_node() de truy van FAISS => List[Document]
+      - B2: Goi grade_node() de loc tai lieu khong lien quan
+      - B3: Goi generate_node() de LLM sinh cau tra loi
+      - B4: Goi update_usage() de tru token user
 
     Args:
-        context (str): Mo ta tham so
+        user_id (int): ID nguoi dung, kiem tra balance
+        text (str): Cau hoi nguoi dung gui vao LLM
 
     Returns:
-        dict: Mo ta ket qua tra ve
-
+        dict: { "answer": str, "sources": list, "credits": float }
     Raises:
-        ValueError: Khi nao xay ra loi
+        ValueError: Neu text rong hoac user khong du balance
     """
-    pass
+    docs = retrieve_node(text, top_k=5)            # FAISS search
+    relevant = grade_node(text, documents=docs)    # Loc > 0.7
+    answer = generate_node(text, documents=relevant)  # LLM sinh
+    update_usage(user_id, tokens=count_tokens(text))  # Tru phi
+    return {"answer": answer, "sources": relevant, "credits": 12.5}
 ```
 
 ### 3.2. TypeScript — JSDoc
+
 ```typescript
 /**
- * Mo ta chuc nang chinh.
- * @param {string} id - Mo ta tham so
- * @returns {Promise<void>} Mo ta ket qua
+ * Gui tin nhan chat va cap nhat UI.
+ *
+ * Logic:
+ *   - Goi chatbotApi.sendMessage() gui cau hoi len backend
+ *   - API tra ve { answer, sources } -> tao message moi
+ *   - setMessages() append vao state -> UI tu render
+ *   - Loi 401 -> Interceptor tu redirect login
+ *   - Loi khac -> showToast() hien thi cho nguoi dung
+ *
+ * @param {string} question - Cau hoi nguoi dung
+ * @returns {Promise<void>}
  */
-const handleAction = async (id: string): Promise<void> => {}
+const handleSend = async (question: string): Promise<void> => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+        const res = await chatbotApi.sendMessage(question);
+        setMessages(p => [...p, { id: Date.now(), role: 'assistant', content: res.answer }]);
+    } catch (error) {
+        showToast(error?.response?.data?.message ?? 'Co loi xay ra', 'error');
+    } finally {
+        setIsLoading(false);
+    }
+};
 ```
 
 ---
