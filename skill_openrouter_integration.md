@@ -1,117 +1,78 @@
-# Hướng dẫn kết nối OpenRouter
+# Skill: Ket noi OpenRouter (Da nen tang AI)
 
-## OpenRouter là gì?
+## Muc tieu
 
-[OpenRouter](https://openrouter.ai) là cổng API cho phép truy cập nhiều mô hình AI khác nhau (GPT, Claude, Gemini, Llama, Mistral...) chỉ với **1 API key duy nhất**, không cần đăng ký từng nhà cung cấp.
-
----
-
-## Cách lấy OpenRouter API Key
-
-1. Truy cập [https://openrouter.ai/keys](https://openrouter.ai/keys)
-2. Đăng nhập / Đăng ký tài khoản
-3. Click **"Create Key"**
-4. Copy key (bắt đầu bằng `sk-or-...`)
-
-> 💡 Một số model miễn phí (free) không cần thẻ tín dụng, chỉ cần tài khoản.
+Tich hop OpenRouter de dung nhieu model AI (GPT, Claude, Gemini, Llama, Mistral...) qua 1 API key duy nhat, co cau hinh toggle trong Settings.
 
 ---
 
-## Cấu hình trong ứng dụng
+## 1. OpenRouter la gi?
 
-### Cách 1: Qua giao diện Settings (Khuyên dùng)
+[OpenRouter](https://openrouter.ai) la cong API cho phep truy cap nhieu mo hinh AI khac nhau chi voi 1 API key, khong can dang ky tung nha cung cap.
 
-1. Vào menu **Settings** → **Cấu hình AI**
-2. Bật toggle **OpenRouter** (góc phải header)
-3. Nhập **OpenRouter API Key** (sk-or-...)
-4. Chọn **Model** mong muốn
-5. Click **Test API** để kiểm tra kết nối
+Lay key tai: https://openrouter.ai/keys
 
-### Cách 2: Qua file `.env`
+---
 
-Mở file `.env` ở thư mục gốc và thêm:
+## 2. Cau hinh
 
+### Cach 1: Qua Settings UI
+Settings -> Cau hinh AI -> Bat toggle OpenRouter -> Nhap Key -> Chon Model
+
+### Cach 2: Qua file .env
 ```env
 OPENROUTER_API_KEY=sk-or-...
 OPENROUTER_MODEL=openai/gpt-oss-120b:free
 ```
 
-### Cách 3: Test nhanh bằng API
-
-```bash
-curl -X POST http://localhost:42683/api/settings/test-llm \
-  -H "Authorization: Bearer <your_token>" \
-  -d "use_openrouter=true&api_key=sk-or-...&model=openai/gpt-oss-120b:free"
-```
-
 ---
 
-## Danh sách model phổ biến
-
-| Model | Mô tả | Phí |
-|-------|-------|-----|
-| `openai/gpt-oss-120b:free` | OpenAI OSS 120B | Free |
-| `openrouter/free` | Tự động chọn model free tốt nhất | Free |
-| `openai/gpt-4o-mini` | GPT-4o Mini (nhanh, rẻ) | Trả phí |
-| `openai/gpt-4o` | GPT-4o (thông minh nhất) | Trả phí |
-| `anthropic/claude-3.5-sonnet` | Claude 3.5 Sonnet | Trả phí |
-| `google/gemini-2.0-flash-exp:free` | Gemini 2.0 Flash | Free |
-| `meta-llama/llama-3.3-70b-instruct:free` | Llama 3.3 70B | Free |
-| `mistralai/mistral-7b-instruct:free` | Mistral 7B | Free |
-
-> Xem danh sách đầy đủ: [https://openrouter.ai/models](https://openrouter.ai/models)
-
----
-
-## Cách hoạt động trong code
-
-### `chatbot/utils/llm.py` — LlmFactory
-
-Khi `use_openrouter=True`, `LlmFactory.get_llm()` tạo `ChatOpenAI` với:
+## 3. Cach hoat dong trong code
 
 ```python
+# chatbot/utils/llm.py
 ChatOpenAI(
     model=openrouter_model,
     api_key=openrouter_api_key,
     base_url="https://openrouter.ai/api/v1",
     default_headers={
-        "HTTP-Referer": "https://github.com/python_create_video",
-        "X-OpenRouter-Title": "Auto Video Creator",
+        "HTTP-Referer": "https://github.com/your-project",
+        "X-OpenRouter-Title": "Your App",
     },
 )
 ```
 
-### Luồng dữ liệu
-
+**Luong du lieu:**
 ```
-Settings UI (toggle + key + model)
-  → POST /api/settings (lưu DB: use_openrouter, openrouter_api_key, openrouter_model)
-  → Service layer (JobService, AutopostService, ScriptService...)
-    → LlmFactory.get_llm(use_openrouter=True, ...)
-      → ChatOpenAI(base_url="https://openrouter.ai/api/v1")
-        → OpenRouter API → response
+Settings UI -> POST /api/settings (luu DB) -> LlmFactory.get_llm() -> OpenRouter API -> response
 ```
-
-### Các file liên quan
-
-| File | Vai trò |
-|------|---------|
-| `chatbot/utils/llm.py` | Factory tạo LLM instance (quyết định OpenAI hay OpenRouter) |
-| `app/routers/settings_router.py` | API lưu/lấy cấu hình OpenRouter |
-| `chatbot/services/script_service.py` | Sinh script qua LLM |
-| `app/services/autopost_service.py` | Pipeline auto-post dùng LLM |
-| `app/services/job_service.py` | Job service dùng LLM |
-| `frontend/components/Settings.tsx` | Giao diện toggle + key + model |
-| `frontend/services/api.ts` | API calls từ frontend |
 
 ---
 
-## Xử lý lỗi thường gặp
+## 4. Danh sach Model pho bien
 
-| Lỗi | Nguyên nhân | Cách fix |
-|-----|-------------|----------|
-| `HTTP 400: API Key không hợp lệ` | Key sai hoặc hết hạn | Tạo key mới trên OpenRouter |
-| `HTTP 400: Rate limit bị vượt quá` | Model free bị giới hạn tần suất | Chờ 1-2 phút hoặc dùng model trả phí |
-| `HTTP 400: Model không tìm thấy` | Sai tên model | Kiểm tra lại tên model trên OpenRouter |
-| `HTTP 400: Connection failed: timeout` | Mạng chậm hoặc OpenRouter down | Kiểm tra internet, thử lại sau |
-| `HTTP 404: Not Found` | Endpoint chưa tồn tại | Restart backend server |
+| Model | Phi |
+|-------|-----|
+| `openai/gpt-oss-120b:free` | Free |
+| `openrouter/free` | Free (chon model free tot nhat) |
+| `openai/gpt-4o-mini` | Tra phi |
+| `google/gemini-2.0-flash-exp:free` | Free |
+| `meta-llama/llama-3.3-70b-instruct:free` | Free |
+
+---
+
+## Quy tac bat buoc
+
+1. Luon dung `LlmFactory.get_llm()` de khoi tao, khong khoi tao truc tiep `ChatOpenAI`.
+2. Cau hinh OpenRouter luu trong DB de nguoi dung tu toggle.
+3. Co the test API trong Settings truoc khi luu.
+4. Model free co the bi gioi han rate limit.
+
+---
+
+## File lien quan
+
+- [AI RAG Workflow](./skill_ai_rag_workflow.md)
+- [Kien truc Chatbot & LLM](./skill_chatbot_architecture.md)
+- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
+- [Cau truc Du an Tieu chuan (Skill DuyVo26)](./skill_project_structure.md)

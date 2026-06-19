@@ -1,10 +1,8 @@
-# Skill: DuyVo26
+# Skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển
 
-# Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Lập trình (Standard Project Structure)
+## Mục tiêu
 
-Tài liệu này quy định cấu trúc thư mục chuẩn và các nguyên tắc phát triển bắt buộc áp dụng cho mọi dự án tích hợp AI (FastAPI + AI Engine + Frontend) của chúng ta. 
-
-Mục tiêu của tài liệu là giúp các AI Agent và lập trình viên dễ dàng định vị mã nguồn, hiểu rõ kiến trúc, và tuân thủ các luồng xử lý kỹ thuật đã được đóng gói thành "Skill".
+Quy định cấu trúc thư mục chuẩn và các nguyên tắc phát triển bắt buộc áp dụng cho mọi dự án tích hợp AI (FastAPI + AI Engine + Frontend). Giúp AI Agent và lập trình viên dễ dàng định vị mã nguồn, hiểu rõ kiến trúc, và tuân thủ các luồng xử lý kỹ thuật đã được đóng gói thành "Skill".
 
 ---
 
@@ -105,6 +103,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 *   [**Huong dan Viet README.md Chuan**](./skill_readme_writing.md): Cau truc 7 phan bat buoc, mau README day du, quy tac `.env.example`, checklist truoc khi commit.
 *   [**Logging & Monitoring Chuan**](./skill_logging_monitoring.md): Cau hinh Python logging co cau truc, RotatingFileHandler, quy tac log level, cam dung `print()` trong production.
 *   [**Chuan API Response (Standard Response Format)**](./skill_api_response_standard.md): JSON thong nhat cho moi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
+*   [**Codebase Mapper (Map.md)**](./skill_codebase_mapper.md): Phan tich codebase, tao Header Documentation, duy tri file `map.md` de dieu huong AI.
 
 ---
 
@@ -117,7 +116,8 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 5. **Phan hoi Ro rang**: Moi Endpoint giao tiep voi Frontend phai tra ve JSON dinh dang chuan `ApiSuccess` / `ApiError`. (Xem `skill_api_response_standard.md`).
 6. **Logging thay vi Print**: Moi file module phai khai bao `logger = get_logger(__name__)`. Cam tuyet doi dung `print()` trong code production. (Xem `skill_logging_monitoring.md`).
 7. **Comment giai thich**: Moi ham phuc tap phai co Docstring (Python) hoac JSDoc (TypeScript). Comment phai tra loi "Tai sao viet the nay?" chu khong phai "Code nay lam gi?". (Xem `skill_coding_conventions.md`).
-8. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md` Muc 7).
+8. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md`).
+9. **File Header & Docstring Bat buoc**: Moi file moi hoac sua phai co Header mo ta va Docstring cho tung ham. (Xem Muc 6).
 
 ---
 
@@ -331,75 +331,195 @@ Truoc khi tao bat ky file `.py` hoac `.ts` moi, bat buoc tra loi du 5 cau hoi sa
 - [ ] **4. Ten file co mo ta ro chuc nang khong?** Tuyet doi khong dat ten chung chung nhu `helper.py`, `misc.py`, `utils2.py`.
 - [ ] **5. File nay co vi pham Rule Import khong?** Kiem tra huong import truoc khi viet code.
 
+---
 
+## 6. Docstring & File Header Bat buoc (Required Documentation)
 
-# Skill: Codebase Mapper
+### 6.1. File Header — Moi file phai co Header mo ta
 
-## Mục tiêu
+Moi file `.py`, `.ts`, `.tsx` **moi tao hoac sua** PHẢI có Header block ở đầu file gồm:
 
-Tự động phân tích codebase và tạo tài liệu điều hướng giúp AI và lập trình viên hiểu nhanh cấu trúc dự án.
+```python
+"""
+File: ten_file.py
+Chuc nang: Mo ta chuc nang chinh cua file nay
+Vai tro: Mo ta vai tro trong he thong (VD: router / service / agent / util / config)
+File lien quan: (neu co) danh sach file khac tuong tac voi file nay
+"""
+```
+
+Vi du cho file router:
+
+```python
+"""
+File: chat_router.py
+Chuc nang: Dinh nghia endpoint API cho module chat, tiep nhan request va goi service
+Vai tro: Router - tiep nhan request tu Frontend, validate, dispatch xuong chatbot service
+File lien quan: chatbot/services/chat_service.py, app/schemas/chat_schema.py
+"""
+```
+
+Vi du cho file service:
+
+```python
+"""
+File: rag_chat_service.py
+Chuc nang: Workflow LangGraph cho luong hoi dap RAG, dieu phoi cac agent
+Vai tro: Service - chua toan bo logic AI, goi cac agent trong chatbot/utils/
+File lien quan: chatbot/utils/document_grader_agent.py, chatbot/utils/llm.py, ingestion/retriever.py
+"""
+```
+
+### 6.2. Docstring (Python) / JSDoc (TypeScript) — Moi ham bat buoc phai co
+
+**Quy tac:** Moi **ham moi** hoac **ham duoc sua** PHẢI co docstring. Day la quy tac **cung**, khong phai de xuat.
+
+**Python — Google Style Docstring:**
+
+```python
+def function_name(param1: type, param2: type) -> return_type:
+    """
+    Mo ta 1-2 cau ve chuc nang chinh cua ham, tra loi "Tai sao" khong phai "Lam gi".
+    
+    Args:
+        param1 (type): Mo ta tham so 1
+        param2 (type): Mo ta tham so 2
+    
+    Returns:
+        return_type: Mo ta du lieu tra ve
+    
+    Raises:
+        SomeError: Khi nao loi nay xay ra (neu co)
+    """
+    # code
+```
+
+**TypeScript — JSDoc:**
+
+```typescript
+/**
+ * Mo ta 1-2 cau ve chuc nang chinh cua ham.
+ * 
+ * @param {type} paramName - Mo ta tham so
+ * @returns {type} Mo ta du lieu tra ve
+ */
+function functionName(paramName: Type): ReturnType {
+    // code
+}
+```
+
+### 6.3. Checklist Docstring & File Header truoc khi Commit
+
+Truoc khi commit, bat buoc kiem tra:
+
+- [ ] **File Header**: File moi co Header block o dong dau tien khong?
+- [ ] **Ham moi**: Moi ham moi co docstring/JSDoc khong?
+- [ ] **Ham sua**: Ham duoc sua co cap nhat lai docstring khong?
+- [ ] **Giai thich "Why"**: Docstring co giai thich "Tai sao lam the nay" thay vi "Code lam gi" khong?
 
 ---
 
-## Nhiệm vụ
+## 7. Huong dan Khoi chay theo Loai Du an (Run Guide)
 
-### Bước 1: Phân tích codebase
+### 7.1. Du an Python (FastAPI + AI Engine)
 
-- Đọc các file được cung cấp.
-- Xác định chức năng chính của từng file.
-- Xác định mối quan hệ giữa các file.
-- Xác định các file quan trọng đối với luồng hoạt động của hệ thống.
+**Khoi tao moi truong:**
+```bash
+python -m venv .venv
+# Kich hoat:
+# Windows:
+.venv\Scripts\activate
+# Linux/Mac:
+source .venv/bin/activate
+```
 
-### Bước 2: Tạo Header Documentation cho file
+**Cai dat thu vien:**
+```bash
+pip install -r requirements.txt
+```
 
-Nếu file chưa có phần mô tả đầu file, tạo header phù hợp.
+**Chay server:**
+```bash
+uvicorn app.main:app --reload
+```
 
-Header cần bao gồm:
+**Khi can them module AI:**
 
-- Tên file
-- Chức năng chính
-- Vai trò trong hệ thống
-- File liên quan (nếu có)
+| Module | Tao folder | Muc dich |
+|--------|-----------|----------|
+| Chatbot AI | `chatbot/` | Logic AI, LLM, LangGraph, Agent |
+| Data Pipeline | `ingestion/` | Nap du lieu, chunking, FAISS index |
+| Danh gia AI | `scoring/` | (Tuy chon) Cham diem RAG, test AI |
 
-### Bước 3: Cập nhật map.md
+Quy tac: Khong du code AI vao `app/`. Luon dat trong `chatbot/`.
 
-Tạo hoặc cập nhật file `map.md`.
+**Chay test:**
+```bash
+pytest test/
+```
 
-Mục đích của `map.md`:
+### 7.2. Du an Frontend (React/Vite/TypeScript)
 
-- Là bản đồ tổng quan của codebase.
-- Liệt kê các file quan trọng.
-- Mô tả chức năng từng file.
-- Giúp AI hiểu cấu trúc dự án trước khi chỉnh sửa code.
+**Cai dat:**
+```bash
+npm install
+```
 
-### Bước 4: Duy trì map.md
+**Chay dev:**
+```bash
+npm run dev
+```
 
-Khi:
+**Build production:**
+```bash
+npm run build
+```
 
-- Thêm file mới
-- Xóa file
-- Đổi chức năng file
-- Refactor cấu trúc dự án
+**Khi can them domain moi:**
+```bash
+# Tao folder domain trong:
+frontend/src/domains/{ten_domain}/
+# VD:
+frontend/src/domains/payment/   # router, pages, components cho payment
+frontend/src/domains/admin/     # router, pages, components cho admin
+```
 
-AI phải cập nhật lại `map.md`.
+**Chay test:**
+```bash
+npx vitest
+```
+
+**Kiem tra lint:**
+```bash
+npm run lint
+```
+
+### 7.3. Quy tac Tao Folder Moi
+
+1. **Kiem tra truoc**: Tra bang Rule 4 xem folder da ton tai chua
+2. **Khong ten chung chung**: Khong dat `helpers/`, `misc/`, `utils2/`, `lib/`
+3. **Dat ten co y nghia**: Dung snake_case cho Python, kebab-case cho frontend folders
+4. **Chi tao khi that su can**: Neu 1-2 file thi dat vao `utils/` hien co
+5. **Cap nhat map.md**: Neu dung skill Codebase Mapper, cap nhat lai map.md
 
 ---
 
-## Quy tắc
+## 8. Quy tac AI Response (AI Communication Rules)
 
-1. Không mô tả các file quá nhỏ hoặc file sinh tự động.
-2. Ưu tiên các file có logic nghiệp vụ.
-3. Mô tả ngắn gọn, rõ ràng.
-4. Không suy đoán chức năng nếu chưa đọc mã nguồn.
-5. Luôn cập nhật `map.md` khi phát hiện thay đổi kiến trúc.
-6. Header file phải phản ánh đúng chức năng thực tế của file.
+AI (ChatGPT, Claude, etc.) khi lam viec voi du an nay PHAI tuan thu:
+
+1. **Khong giai thich dai dong**: Chi tra loi dung trong tam, khong them giai thich neu nguoi dung khong yeu cau.
+2. **Code = code**: Khi viet code, chi tra ve code + duong dan file. Khong kem giai thich "Code nay lam gi".
+3. **Bao ket qua toi thieu**: Khi hoan thanh task, bao "Done" + tom tat 1-2 dong. Khong liet ke tung buoc da lam.
+4. **Hoi lai neu can**: Neu thieu thong tin, hoi lai cau hoi can thiet thay vi tu y quyet dinh.
+5. **Khong viet README/doc neu khong duoc yeu cau**: Chi tao tai lieu khi nguoi dung yeu cau ro rang.
 
 ---
 
-## Kết quả mong muốn
+## File lien quan
 
-- Mỗi file quan trọng có header mô tả.
-- Dự án có file `map.md` đầy đủ.
-- AI mới tham gia dự án có thể đọc `map.md` để hiểu nhanh codebase.
-- Việc bảo trì và refactor trở nên dễ dàng hơn.
-
+- [Tieu chuan Viet Code (Coding Conventions)](./skill_coding_conventions.md)
+- [Kien truc Chatbot & LLM](./skill_chatbot_architecture.md)
+- [Codebase Mapper](./skill_codebase_mapper.md)
+- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
+- [Chuan API Response](./skill_api_response_standard.md)

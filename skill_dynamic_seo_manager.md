@@ -1,90 +1,51 @@
-# Kỹ thuật chuyên sâu: Quản lý SEO & Website Sync
+# Skill: Quan ly SEO Dong (Dynamic SEO Manager)
 
-Dự án này sử dụng một cơ chế đặc biệt để quản lý SEO: **Dynamic HTML Modification**. Thay vì chỉ render meta tags bằng Javascript (vốn không tốt cho SEO Bot của Facebook/Zalo), hệ thống thực hiện ghi trực tiếp vào file vật lý `index.html`.
+## Muc tiet
 
-## 1. Cơ chế Đồng bộ Hai chiều (Two-way Synchronization)
-
-### A. Từ Database xuống File HTML (Push)
-Khi Admin nhấn lưu, hệ thống thực hiện 2 việc:
-1. Lưu vào bảng `settings` trong DB để lưu giữ cấu hình.
-2. Dùng Regex để "phẫu thuật" file `frontend/index.html` và thay thế các giá trị cũ bằng giá trị mới.
-
-**Mã nguồn xử lý (Backend):**
-```python
-# app/routers/admin.py
-import re
-
-def update_index_html_seo(site_title, description, keywords, author, favicon_url, logo_url):
-    path = "frontend/index.html"
-    with open(path, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    # 1. Thay đổi thẻ Title
-    content = re.sub(r'<title>.*?</title>', f'<title>{site_title}</title>', content)
-
-    # 2. Thay đổi các thẻ Meta (Name & Property)
-    meta_maps = {
-        "description": description,
-        "keywords": keywords,
-        "author": author,
-        "og:title": site_title,
-        "og:description": description,
-        "twitter:title": site_title,
-        "twitter:description": description
-    }
-
-    for key, value in meta_maps.items():
-        # Regex tìm kiếm thẻ meta có name hoặc property tương ứng
-        pattern = fr'<(meta\s+[^>]*?(?:name|property)=["\']{re.escape(key)}["\'][^>]*?content=)["\'].*?["\']([^>]*?)>'
-        replacement = fr'<\1"{value}"\2>'
-        content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
-
-    # 3. Thay đổi Favicon & Logo (Link tags)
-    content = re.sub(r'<link\s+rel=["\']icon["\'][^>]*?href=["\'].*?["\']', f'<link rel="icon" href="{favicon_url}"', content)
-
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
-```
-
-### B. Từ File HTML lên UI (Pull/Sync)
-Nếu lập trình viên sửa `index.html` thủ công, Admin có thể nhấn nút **"Sync từ HTML"** để đưa các giá trị đó vào Database.
-def extract_seo_from_index_html():
-    path = "frontend/index.html"
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            content = f.read()
-
-        # Regex trích xuất Title
-        title_match = re.search(r'<title>(.*?)</title>', content)
-        title = title_match.group(1) if title_match else ""
-
-        # Hàm helper lấy nội dung thẻ meta
-        def get_meta(key):
-            pattern = fr'<(?:meta\s+[^>]*?(?:name|property)=["\']{re.escape(key)}["\'][^>]*?content=["\']([^>]*?)["\'])'
-            match = re.search(pattern, content, flags=re.IGNORECASE)
-            return match.group(1) if match else ""
-
-        # Trích xuất dữ liệu trả về cho Frontend Form
-        return {
-            "site_title": title,
-            "description": get_meta("description"),
-            "keywords": get_meta("keywords"),
-            "author": get_meta("author")
-        }
-    except Exception as e:
-        return {"error": str(e)}
-```
-
-## 2. Quản lý Tài nguyên (Static Files)
-Khi tải lên Logo hoặc Favicon, hệ thống thực hiện:
-1. **Sanitize Filename**: Sử dụng `uuid.uuid4()` để tránh trùng tên và `os.path.basename()` để chống Path Traversal.
-2. **Storage**: Lưu vào thư mục `utils/download/`.
-3. **URL Mapping**: Trả về URL dạng `/api/v1/download/{filename}` để Frontend hiển thị.
-
-## 3. SEO Checklist cho Lập trình viên
-- **Thẻ Canonical**: Đảm bảo thẻ `<link rel="canonical" href="..." />` được cập nhật đúng domain production.
-- **Thẻ Robot**: Kiểm tra thẻ `<meta name="robots" content="index, follow" />` không bị vô tình config thành `noindex`.
-- **Dung lượng Logo**: Backend không nén ảnh, vì vậy hãy nhắc người dùng upload ảnh Logo < 500KB để tốc độ load trang và chia sẻ link nhanh nhất.
+Thay the truc tiep Meta Tag trong file tinh `index.html` cua React giup chia se link hieu qua (Facebook, Zalo). Su dung co che Dynamic HTML Modification: ghi truc tiep vao file vat ly thay vi render bang Javascript.
 
 ---
-*Ghi chú: Luồng xử lý này giúp Website đạt điểm SEO tối ưu vì thông tin meta đã nằm sẵn trong HTML khi Server trả về, không phụ thuộc vào việc thực thi Javascript của Bot.*
+
+## 1. Co che Dong bo Hai chieu
+
+### A. Push: DB xuong File HTML
+Khi Admin luu, he thong:
+1. Luu vao bang `settings` trong DB
+2. Dung Regex de thay the gia tri trong `frontend/index.html`
+
+```python
+def update_index_html_seo(title, description, keywords, author):
+    content = read("frontend/index.html")
+    content = re.sub(r'<title>.*?</title>', f'<title>{title}</title>', content)
+    # Thay meta tags...
+    write("frontend/index.html", content)
+```
+
+### B. Pull: File HTML len UI
+Admin co the nhan "Sync tu HTML" de lay gia tri tu file vao DB.
+
+---
+
+## 2. Quan ly Tai Nguyen (Logo, Favicon)
+
+- Sanitize filename bang `uuid.uuid4()` + `os.path.basename()`
+- Luu vao `utils/download/`
+- Tra ve URL: `/api/v1/download/{filename}`
+
+---
+
+## Quy tac bat buoc
+
+1. Luon su dung Regex de thay the, khong dung string replace thuan.
+2. File `index.html` phai co cac placeholder meta tags mac dinh.
+3. Backup file truoc khi ghi de.
+4. Logo upload < 500KB.
+5. Kiem tra Canonical, Robot tags sau khi update.
+
+---
+
+## File lien quan
+
+- [Kien truc Frontend & API Setup](./skill_frontend_architecture.md)
+- [Chia nho Components & Domain Routing](./skill_frontend_routing_components.md)
+- [Cau hinh Moi truong (.env)](./skill_env_configuration.md)
