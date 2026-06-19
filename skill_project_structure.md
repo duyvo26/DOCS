@@ -118,6 +118,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 7. **Comment giai thich**: Moi ham phuc tap phai co Docstring (Python) hoac JSDoc (TypeScript). Comment phai tra loi "Tai sao viet the nay?" chu khong phai "Code nay lam gi?". (Xem `skill_coding_conventions.md`).
 8. **Cam Emoji**: Khong dung emoji trong bat ky file code, markdown, hay comment nao. (Xem `skill_coding_conventions.md`).
 9. **File Header & Docstring Bat buoc**: Moi file moi hoac sua phai co Header mo ta va Docstring cho tung ham. (Xem Muc 6).
+10. **Huong Doi tuong & Chia nho File**: Code phai viet theo OOP, moi class mot file rieng. File > 300 dong BAT BUOC tach. (Xem Rule 8).
 
 ---
 
@@ -333,22 +334,87 @@ Truoc khi tao bat ky file `.py` hoac `.ts` moi, bat buoc tra loi du 5 cau hoi sa
 
 ---
 
+### Rule 8: Huong Doi tuong & Chia nho File (OOP & File Splitting)
+
+**Nguyen tac:** Code PHẢI duoc viet theo huong doi tuong (OOP). Moi class, module, file chi dam nhiem **mot trach nhiem duy nhat** (Single Responsibility). Nghiem cam gon code ca ngan dong trong 1 file.
+
+**Dung:**
+```
+file: chatbot/utils/document_grader_agent.py  (~50-100 dong)
+file: chatbot/utils/answer_generator_agent.py (~50-100 dong)
+file: chatbot/utils/query_transformer.py      (~50-100 dong)
+```
+
+**Sai (KHONG duoc phep):**
+```
+file: chatbot/utils/all_in_one.py             (~800 dong, nhieu class tron lan)
+```
+
+**Gioi han file:**
+| Loai file | Toi da dong | Ghi chu |
+|-----------|-------------|---------|
+| Agent / Util nho | 100 dong | Mot class, mot chuc nang |
+| Service / Workflow | 200 dong | Mot luong LangGraph |
+| Router | 150 dong | Chi validate + dispatch |
+| Page component | 150 dong | Neu qua, tach component con |
+| Utility / Helper | 100 dong | Ham tien ich don le |
+
+**Khi nao can tach file:**
+- File > 150 dong: can nhac tach
+- File > 300 dong: BAT BUOC tach
+- Mot class > 200 dong: can nhac tach thanh nhieu class
+- Mot ham > 50 dong: can nhac tach thanh nhieu ham nho
+
+**Vi du tach dung:**
+
+```python
+# SAI: 1 file lam het
+# chatbot/utils/ai_utils.py (~600 dong)
+class DocumentGrader: ...
+class AnswerGenerator: ...
+class QueryTransformer: ...
+class PromptManager: ...
+
+# DUNG: Moi class 1 file rieng
+# chatbot/utils/document_grader_agent.py (~60 dong)
+class DocumentGrader:
+    """Agent kiem tra do lien quan cua tai lieu voi cau hoi."""
+
+# chatbot/utils/answer_generator_agent.py (~70 dong)
+class AnswerGenerator:
+    """Agent sinh cau tra loi tu tai lieu da loc."""
+
+# chatbot/utils/query_transformer.py (~50 dong)
+class QueryTransformer:
+    """Bien doi cau hoi nguoi dung thanh nhieu cau truy van."""
+```
+
+**Loi ich:**
+- De debug: biet chinh xac file nao bi loi
+- De bao tri: sua chuc nang A khong anh huong chuc nang B
+- De test: viet unit test cho tung class rieng biet
+- AI de doc: file ngan, AI khong bi "loat" context
+
+---
+
 ## 6. Docstring & File Header Bat buoc (Required Documentation)
+
+Quy tac nay ap dung cho **ca Backend (Python) va Frontend (TypeScript/React)**.
 
 ### 6.1. File Header — Moi file phai co Header mo ta
 
-Moi file `.py`, `.ts`, `.tsx` **moi tao hoac sua** PHẢI có Header block ở đầu file gồm:
+Moi file `.py`, `.ts`, `.tsx` **moi tao hoac sua** PHẢI có Header block ở đầu file.
 
-```python
-"""
-File: ten_file.py
+**Dinh dang chung:**
+
+```
+File: ten_file.xxx
 Chuc nang: Mo ta chuc nang chinh cua file nay
-Vai tro: Mo ta vai tro trong he thong (VD: router / service / agent / util / config)
+Vai tro: Mo ta vai tro trong he thong (VD: router / service / agent / component / util / config)
 File lien quan: (neu co) danh sach file khac tuong tac voi file nay
-"""
 ```
 
-Vi du cho file router:
+**Vi du cho Backend (Python):**
 
 ```python
 """
@@ -359,8 +425,6 @@ File lien quan: chatbot/services/chat_service.py, app/schemas/chat_schema.py
 """
 ```
 
-Vi du cho file service:
-
 ```python
 """
 File: rag_chat_service.py
@@ -368,6 +432,26 @@ Chuc nang: Workflow LangGraph cho luong hoi dap RAG, dieu phoi cac agent
 Vai tro: Service - chua toan bo logic AI, goi cac agent trong chatbot/utils/
 File lien quan: chatbot/utils/document_grader_agent.py, chatbot/utils/llm.py, ingestion/retriever.py
 """
+```
+
+**Vi du cho Frontend (TypeScript/React):**
+
+```typescript
+/**
+ * File: ChatPage.tsx
+ * Chuc nang: Trang chat chinh, hien thi lich su hoi dap va form nhap tin nhan
+ * Vai tro: Page component - quan ly state tin nhan, phoi hop cac component con
+ * File lien quan: components/ChatHistory.tsx, components/ChatInput.tsx, services/api.ts
+ */
+```
+
+```typescript
+/**
+ * File: api.ts
+ * Chuc nang: Axios instance, interceptor JWT, va tat ca ham goi API
+ * Vai tro: Service - tap trung moi API call, xu ly loi 401 toan cuc
+ * File lien quan: contexts/AuthContext.tsx, domains/*/router.tsx
+ */
 ```
 
 ### 6.2. Docstring (Python) / JSDoc (TypeScript) — Moi ham bat buoc phai co
@@ -458,7 +542,31 @@ Quy tac: Khong du code AI vao `app/`. Luon dat trong `chatbot/`.
 pytest test/
 ```
 
-### 7.2. Du an Frontend (React/Vite/TypeScript)
+### 7.2. Tao folder Frontend cho Du an
+
+**Du an Python co Frontend:** Khoi tao `frontend/` bang Vite ngay trong project root:
+```bash
+npm create vite@latest frontend -- --template react-ts
+cd frontend
+npm install
+```
+
+Sau do cau truc se la:
+```
+project_root/
+├── app/               # Backend FastAPI
+├── chatbot/           # AI Engine
+├── frontend/          # Vite + React + TypeScript (vua tao)
+└── ...
+```
+
+**Du an thuan Frontend (React/Vite):** Khoi tao truc tiep:
+```bash
+npm create vite@latest . -- --template react-ts
+npm install
+```
+
+### 7.3. Du an Frontend (React/Vite/TypeScript)
 
 **Cai dat:**
 ```bash
@@ -494,7 +602,7 @@ npx vitest
 npm run lint
 ```
 
-### 7.3. Quy tac Tao Folder Moi
+### 7.4. Quy tac Tao Folder Moi
 
 1. **Kiem tra truoc**: Tra bang Rule 4 xem folder da ton tai chua
 2. **Khong ten chung chung**: Khong dat `helpers/`, `misc/`, `utils2/`, `lib/`
