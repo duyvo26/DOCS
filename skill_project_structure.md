@@ -390,6 +390,8 @@ npm install
 | Cài đặt | `npm install` |
 | Chạy dev | `npm run dev` |
 | Build | `npm run build` |
+| Preview (review build) | `npm run preview` |
+| Build + Preview (serve) | `npm run serve` |
 | Test | `npx vitest` |
 | Lint | `npm run lint` |
 

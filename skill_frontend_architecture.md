@@ -73,6 +73,37 @@ const handleSend = async () => {
 
 ---
 
+## 5. Vite Config — Preview & Serve (Run Review)
+
+Khi deploy lên server, cần build trước rồi preview để review kết quả:
+
+**`vite.config.ts`** — Cấu hình preview server (giống dev server):
+```typescript
+preview: {
+  port: 3000,
+  host: '0.0.0.0',
+  allowedHosts: ['3d-view.vit3d.com', '3d-view.adhightech.com'],
+},
+```
+
+**`package.json`** — Script `serve` (build + preview 1 lệnh):
+```json
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview",
+  "serve": "vite build && vite preview"
+}
+```
+
+**Cách dùng:**
+```bash
+npm run serve    # Build → Preview (port 3000)
+npm run preview  # Preview build có sẵn trong dist/
+```
+
+---
+
 ## Quy tắc bắt buộc
 
 1. Mọi API call qua `services/api.ts`, không gọi fetch/axios trực tiếp từ component.
