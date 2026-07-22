@@ -1,3 +1,12 @@
+---
+name: api-response-standard
+description: "Chuẩn API Response (Standard API Response Format). Actions: setup, configure, implement, review, fix, optimize. Keywords: ApiSuccess, ApiError, standard JSON response, global exception handler"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Chuẩn API Response (Standard API Response Format)
 
 ## Mục tiêu
@@ -80,6 +89,6 @@ async def global_exception_handler(request, exc):
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)
+- [Bảo mật & Xác thực](skill: security-authentication)

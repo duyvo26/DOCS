@@ -1,3 +1,12 @@
+---
+name: readme-writing
+description: "Viết README.md Chuẩn (README Writing Guide). Actions: setup, configure, implement, review, fix, optimize. Keywords: README.md, documentation, project readme, 7-section structure"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Viết README.md Chuẩn (README Writing Guide)
 
 ## Mục tiêu
@@ -57,6 +66,6 @@ API_KEY=your-api-key
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)

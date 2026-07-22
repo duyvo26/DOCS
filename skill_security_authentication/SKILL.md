@@ -1,3 +1,12 @@
+---
+name: security-authentication
+description: "Bảo mật & Xác thực Toàn diện (Security & Authentication). Actions: setup, configure, implement, review, fix, optimize. Keywords: JWT, bcrypt, RBAC, OAuth, security, authentication, path traversal"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Bảo mật & Xác thực Toàn diện (Security & Authentication)
 
 ## Mục tiêu
@@ -84,8 +93,8 @@ if not os.path.exists(file_path):
 
 ## File liên quan
 
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Đăng nhập Google OAuth](skill: Đăng nhập Google OAuth (Redirect Flow))
-- [Kiến trúc Frontend & API Setup](skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript))
-- [Chuẩn API Response](skill: Chuẩn API Response (Standard API Response Format))
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Đăng nhập Google OAuth](skill: google-oauth-redirect)
+- [Kiến trúc Frontend & API Setup](skill: frontend-architecture)
+- [Chuẩn API Response](skill: api-response-standard)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)

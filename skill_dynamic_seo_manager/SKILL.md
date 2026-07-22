@@ -1,3 +1,12 @@
+---
+name: dynamic-seo-manager
+description: "Quản lý SEO Động (Dynamic SEO Manager). Actions: setup, configure, implement, review, fix, optimize. Keywords: dynamic SEO, meta tags, index.html, React SEO, link sharing"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Quản lý SEO Động (Dynamic SEO Manager)
 
 ## Mục tiêu
@@ -46,6 +55,6 @@ Admin có thể nhấn "Sync từ HTML" để lấy giá trị từ file vào DB
 
 ## File liên quan
 
-- [Kiến trúc Frontend & API Setup](skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript))
-- [Chia nhỏ Components & Domain Routing](skill: Chia nhỏ Components, Pages & Domain Routing (React Router v6))
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
+- [Kiến trúc Frontend & API Setup](skill: frontend-architecture)
+- [Chia nhỏ Components & Domain Routing](skill: frontend-routing-components)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)

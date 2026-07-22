@@ -1,3 +1,12 @@
+---
+name: env-configuration
+description: "Cấu hình Môi trường (.env & .gitignore). Actions: setup, configure, implement, review, fix, optimize. Keywords: .env, .gitignore, Pydantic Settings, environment variables, secrets"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Cấu hình Môi trường (.env & .gitignore)
 
 ## Mục tiêu
@@ -75,7 +84,7 @@ settings = Settings()
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
-- [Quản lý Thư viện (Dependencies)](skill: Quản lý Thư viện (Dependencies Management))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)
+- [Bảo mật & Xác thực](skill: security-authentication)
+- [Quản lý Thư viện (Dependencies)](skill: dependencies-management)

@@ -1,3 +1,12 @@
+---
+name: dependencies-management
+description: "Quản lý Thư viện (Dependencies Management). Actions: setup, configure, implement, review, fix, optimize. Keywords: packages, requirements.txt, FastAPI, LangGraph, JWT, zustand, zod"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Quản lý Thư viện (Dependencies Management)
 
 ## Mục tiêu
@@ -59,6 +68,6 @@ npm install -D tailwindcss postcss autoprefixer
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Bảo mật & Xác thực](skill: security-authentication)

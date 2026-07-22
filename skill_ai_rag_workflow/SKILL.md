@@ -1,3 +1,12 @@
+---
+name: ai-rag-workflow
+description: "AI RAG Workflow — LangGraph & Retrieval-Augmented Generation. Actions: setup, configure, implement, review, fix, optimize. Keywords: RAG workflow, LangGraph, retrieval, grading document, token management"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: AI RAG Workflow — LangGraph & Retrieval-Augmented Generation
 
 ## Mục tiêu
@@ -54,7 +63,7 @@ Bước chống ảo giác (Hallucination). Chấm điểm độ liên quan củ
 
 ## File liên quan
 
-- [Kiến trúc Chatbot & LLM](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill))
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Chuẩn API Response](skill: Chuẩn API Response (Standard API Response Format))
-- [Kết nối OpenRouter](skill: Kết nối OpenRouter (Đa nền tảng AI))
+- [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Chuẩn API Response](skill: api-response-standard)
+- [Kết nối OpenRouter](skill: openrouter-integration)

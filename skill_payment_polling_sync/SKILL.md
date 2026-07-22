@@ -1,3 +1,12 @@
+---
+name: payment-polling-sync
+description: "Hệ thống Thanh toán Tự động (Polling & Sync). Actions: setup, configure, implement, review, fix, optimize. Keywords: payment system, SePay, bank transaction, polling, auto sync"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Hệ thống Thanh toán Tự động (Polling & Sync)
 
 ## Mục tiêu
@@ -63,7 +72,7 @@ def encode_payment_id(p_id: int) -> str:
 
 ## File liên quan
 
-- [Tác vụ Bất đồng bộ & Polling](skill: Tác vụ Bất đồng bộ & Polling (Standard Async Workflow))
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
+- [Tác vụ Bất đồng bộ & Polling](skill: async-task-polling)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Bảo mật & Xác thực](skill: security-authentication)

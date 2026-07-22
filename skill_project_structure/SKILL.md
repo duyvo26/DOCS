@@ -1,3 +1,12 @@
+---
+name: project-structure
+description: "DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển. Actions: setup, configure, implement, review, fix, optimize. Keywords: project structure, directory layout, FastAPI, AI Engine, frontend architecture"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển
 
 ## Mục tiêu
@@ -60,12 +69,12 @@ project_root/
 │   ├── download/               # File export, logo, favicon...
 │   ├── upload_temp/            # File tải lên đang chờ xử lý
 │   ├── data_vector/            # Nơi lưu trữ FAISS Index thực tế
-│   └── logs/                   # File log ứng dụng (xem skill: Logging & Monitoring Chuẩn (Structured Logging))
+│   └── logs/                   # File log ứng dụng (xem skill: logging-monitoring)
 ├── test/                       # Unit tests (pytest, vitest)
 ├── deploy/                     # Cấu hình deploy (nginx.conf, systemd service)
 ├── .env                        # Biến môi trường (KHÔNG push lên Git)
 ├── .env.example                # File mẫu biến môi trường (push lên Git)
-├── .gitignore                  # Quy tắc bỏ qua file nhạy cảm (xem skill: Cấu hình Môi trường (.env & .gitignore))
+├── .gitignore                  # Quy tắc bỏ qua file nhạy cảm (xem skill: env-configuration)
 └── requirements.txt            # Danh sách thư viện Python
 ```
 
@@ -76,36 +85,36 @@ project_root/
 Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thành các tài liệu "Skill". Lập trình viên và AI **PHẢI** tham chiếu các file này trước khi code tính năng tương ứng.
 
 ### Nhóm AI & RAG (Trí tuệ Nhân tạo)
-*   [**Kỹ thuật AI RAG Workflow (Standard)**](skill: AI RAG Workflow — LangGraph & Retrieval-Augmented Generation): Cấu trúc luồng đồ thị LangGraph, định tuyến câu hỏi, bộ lọc tài liệu và quản lý chi phí token.
-*   [**Kiến trúc Module Chatbot & LLM**](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill)): Quy định chuẩn hóa thư mục, cách khởi tạo LLM, quản lý Prompt và xây dựng Agent.
-*   [**Kết nối OpenRouter (Đa nền tảng AI)**](skill: Kết nối OpenRouter (Đa nền tảng AI)): Hướng dẫn tích hợp OpenRouter để dùng nhiều model AI (GPT, Claude, Gemini, Llama...) qua 1 API key duy nhất, cấu hình toggle trong Settings.
-*   [**Kỹ thuật Parser (DOCX to MD)**](skill: Parser DOCX to MD — Chuyển đổi báo cáo sang Markdown có cấu trúc): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
+*   [**Kỹ thuật AI RAG Workflow (Standard)**](skill: ai-rag-workflow): Cấu trúc luồng đồ thị LangGraph, định tuyến câu hỏi, bộ lọc tài liệu và quản lý chi phí token.
+*   [**Kiến trúc Module Chatbot & LLM**](skill: chatbot-architecture): Quy định chuẩn hóa thư mục, cách khởi tạo LLM, quản lý Prompt và xây dựng Agent.
+*   [**Kết nối OpenRouter (Đa nền tảng AI)**](skill: openrouter-integration): Hướng dẫn tích hợp OpenRouter để dùng nhiều model AI (GPT, Claude, Gemini, Llama...) qua 1 API key duy nhất, cấu hình toggle trong Settings.
+*   [**Kỹ thuật Parser (DOCX to MD)**](skill: docx-to-md-parser): Quy trình chuyển đổi báo cáo phức tạp thành cấu trúc Markdown theo Headings để nạp vào AI.
 
 ### Nhóm Xác thực, Môi trường & Bảo mật
-*   [**Cấu hình Môi trường (.env & .gitignore)**](skill: Cấu hình Môi trường (.env & .gitignore)): Chuẩn file `.env`, đầy đủ mẫu `.gitignore`, quy tắc `.env.example` và Pydantic Settings.
-*   [**Viết SQL Đa nền tảng (MySQL & SQLite)**](skill: Viết Mã SQL Đa nền tảng (SQLite & MySQL)): Kỹ thuật dùng Raw SQL tương thích đa driver, chống SQL Injection bằng Parameter Binding.
-*   [**Quản lý Thư viện (Dependencies)**](skill: Quản lý Thư viện (Dependencies Management)): Danh sách package (FastAPI, LangGraph, JWT, zustand, zod...) cần cài đặt để chạy các Skill.
-*   [**Xác thực và Bảo mật Toàn diện**](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication)): JWT Stateless, bcrypt hash mật khẩu, RBAC Admin, chống Path Traversal, và Frontend Security checklist.
-*   [**Đăng nhập Google OAuth (Redirect Flow)**](skill: Đăng nhập Google OAuth (Redirect Flow)): Luồng đăng nhập mượt mà qua Backend Redirect, không làm lộ JSON thô.
-*   [**Đăng nhập Hybrid App (Cloud-Sync Polling)**](skill: Đăng nhập Hybrid App (Cloud-Sync Polling)): Giải pháp đăng nhập cho App Mobile (Flutter/React Native) sử dụng WebView kết hợp Polling DB.
+*   [**Cấu hình Môi trường (.env & .gitignore)**](skill: env-configuration): Chuẩn file `.env`, đầy đủ mẫu `.gitignore`, quy tắc `.env.example` và Pydantic Settings.
+*   [**Viết SQL Đa nền tảng (MySQL & SQLite)**](skill: sql-compatibility): Kỹ thuật dùng Raw SQL tương thích đa driver, chống SQL Injection bằng Parameter Binding.
+*   [**Quản lý Thư viện (Dependencies)**](skill: dependencies-management): Danh sách package (FastAPI, LangGraph, JWT, zustand, zod...) cần cài đặt để chạy các Skill.
+*   [**Xác thực và Bảo mật Toàn diện**](skill: security-authentication): JWT Stateless, bcrypt hash mật khẩu, RBAC Admin, chống Path Traversal, và Frontend Security checklist.
+*   [**Đăng nhập Google OAuth (Redirect Flow)**](skill: google-oauth-redirect): Luồng đăng nhập mượt mà qua Backend Redirect, không làm lộ JSON thô.
+*   [**Đăng nhập Hybrid App (Cloud-Sync Polling)**](skill: hybrid-app-login): Giải pháp đăng nhập cho App Mobile (Flutter/React Native) sử dụng WebView kết hợp Polling DB.
 
 ### Nhóm Tác vụ & Thanh toán
-*   [**Tác vụ Bất đồng bộ & Polling**](skill: Tác vụ Bất đồng bộ & Polling (Standard Async Workflow)): Cơ chế Background Tasks của FastAPI kết hợp Polling phía Frontend để xử lý tác vụ AI nặng.
-*   [**Hệ thống Thanh toán Tự động (Polling & Sync)**](skill: Hệ thống Thanh toán Tự động (Polling & Sync)): Thuật toán đối soát giao dịch ngân hàng qua SePay tự động không cần Webhook.
+*   [**Tác vụ Bất đồng bộ & Polling**](skill: async-task-polling): Cơ chế Background Tasks của FastAPI kết hợp Polling phía Frontend để xử lý tác vụ AI nặng.
+*   [**Hệ thống Thanh toán Tự động (Polling & Sync)**](skill: payment-polling-sync): Thuật toán đối soát giao dịch ngân hàng qua SePay tự động không cần Webhook.
 
 ### Nhóm Tối ưu Frontend & Giao diện
-*   [**Kiến trúc Frontend & API Setup**](skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript)): Quản lý API tập trung (`api.ts`), JWT Interceptor, button loading state, và bảo mật JWT phía Frontend.
-*   [**Chia nhỏ Components, Pages & Domain Routing**](skill: Chia nhỏ Components, Pages & Domain Routing (React Router v6)): Kiến trúc domain-based với React Router v6, lazy loading, ProtectedRoute/AdminRoute, nguyên tắc tách component.
-*   [**Quản lý SEO Động (Dynamic SEO)**](skill: Quản lý SEO Động (Dynamic SEO Manager)): Kỹ thuật thay thế trực tiếp Meta Tag trong file tĩnh `index.html` của React giúp chia sẻ link hiệu quả.
+*   [**Kiến trúc Frontend & API Setup**](skill: frontend-architecture): Quản lý API tập trung (`api.ts`), JWT Interceptor, button loading state, và bảo mật JWT phía Frontend.
+*   [**Chia nhỏ Components, Pages & Domain Routing**](skill: frontend-routing-components): Kiến trúc domain-based với React Router v6, lazy loading, ProtectedRoute/AdminRoute, nguyên tắc tách component.
+*   [**Quản lý SEO Động (Dynamic SEO)**](skill: dynamic-seo-manager): Kỹ thuật thay thế trực tiếp Meta Tag trong file tĩnh `index.html` của React giúp chia sẻ link hiệu quả.
 
 ### Nhóm Quy tắc Viết Code & Tài liệu
-*   [**Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)**](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)): Đặt tên, Type Hinting, Docstring, cấm emoji.
-*   [**Git Workflow & Commit Convention**](skill: Git Workflow & Commit Convention): Branch strategy, Conventional Commits, quy trình làm việc hàng ngày, cheat sheet lệnh Git.
-*   [**Quy tắc Thực thi Bắt buộc (Execution Rules)**](skill: Quy tắc Thực thi Bắt buộc (Execution Rules)): 8 quy tắc cứng về Router, Service, Import, File Splitting, OOP — không được vi phạm.
-*   [**Hướng dẫn Viết README.md Chuẩn**](skill: Viết README.md Chuẩn (README Writing Guide)): Cấu trúc 7 phần bắt buộc, mẫu README đầy đủ, quy tắc `.env.example`, checklist trước khi commit.
-*   [**Logging & Monitoring Chuẩn**](skill: Logging & Monitoring Chuẩn (Structured Logging)): Cấu hình Python logging có cấu trúc, RotatingFileHandler, quy tắc log level, cấm dùng `print()` trong production.
-*   [**Chuẩn API Response (Standard Response Format)**](skill: Chuẩn API Response (Standard API Response Format)): JSON thống nhất cho mọi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
-*   [**Codebase Mapper (Map.md)**](skill: Codebase Mapper — Phân tích Codebase và Tạo map.md): Phân tích codebase, tạo Header Documentation, duy trì file `map.md` để điều hướng AI.
+*   [**Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)**](skill: coding-conventions): Đặt tên, Type Hinting, Docstring, cấm emoji.
+*   [**Git Workflow & Commit Convention**](skill: git-workflow): Branch strategy, Conventional Commits, quy trình làm việc hàng ngày, cheat sheet lệnh Git.
+*   [**Quy tắc Thực thi Bắt buộc (Execution Rules)**](skill: execution-rules): 8 quy tắc cứng về Router, Service, Import, File Splitting, OOP — không được vi phạm.
+*   [**Hướng dẫn Viết README.md Chuẩn**](skill: readme-writing): Cấu trúc 7 phần bắt buộc, mẫu README đầy đủ, quy tắc `.env.example`, checklist trước khi commit.
+*   [**Logging & Monitoring Chuẩn**](skill: logging-monitoring): Cấu hình Python logging có cấu trúc, RotatingFileHandler, quy tắc log level, cấm dùng `print()` trong production.
+*   [**Chuẩn API Response (Standard Response Format)**](skill: api-response-standard): JSON thống nhất cho mọi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
+*   [**Codebase Mapper (Map.md)**](skill: codebase-mapper): Phân tích codebase, tạo Header Documentation, duy trì file `map.md` để điều hướng AI.
 
 ---
 
@@ -113,14 +122,14 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 
 1. **Tuân thủ Cấu trúc Modular**: Tuyệt đối không code logic AI (LangChain/LangGraph) vào trong các file `router` của FastAPI. Backend API (`app/`) chỉ nhận request và gọi các hàm xử lý bên trong module `chatbot/` hoặc `ingestion/`.
 2. **Chatbot Module Chuyên biệt**: Thư mục `chatbot/` chỉ được phép chứa code liên quan đến AI, LLM, Prompts và Agents. KHÔNG để code nạp dữ liệu (Ingestion), Database model, hay logic nghiệp vụ thông thường vào đây.
-3. **Khôi phục trạng thái (Resilience)**: Mọi tác vụ nặng phải có cơ chế Polling. Người dùng F5 (tải lại trang) không được làm gián đoạn tiến trình. (Xem `skill: Tác vụ Bất đồng bộ & Polling (Standard Async Workflow)`).
-4. **An toàn Bí mật (Secrets)**: Các API Key (OpenAI, Gemini, SePay) và Secret Key (JWT) luôn đặt ở `.env` Backend. Dùng `.env.example` để commit mẫu lên Git. KHÔNG bao giờ commit file `.env` thật. (Xem `skill: Cấu hình Môi trường (.env & .gitignore)`).
-5. **Phản hồi Rõ ràng**: Mọi Endpoint giao tiếp với Frontend phải trả về JSON định dạng chuẩn `ApiSuccess` / `ApiError`. (Xem `skill: Chuẩn API Response (Standard API Response Format)`).
-6. **Logging thay vì Print**: Mọi file module phải khai báo `logger = get_logger(__name__)`. Cấm tuyệt đối dùng `print()` trong code production. (Xem `skill: Logging & Monitoring Chuẩn (Structured Logging)`).
-7. **Comment giải thích**: Mọi hàm phức tạp phải có Docstring (Python) hoặc JSDoc (TypeScript). Comment phải trả lời "Tại sao viết thế này?" chứ không phải "Code này làm gì?". (Xem `skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)`).
-8. **Cấm Emoji**: Không dùng emoji trong bất kỳ file code, markdown, hay comment nào. (Xem `skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)`).
+3. **Khôi phục trạng thái (Resilience)**: Mọi tác vụ nặng phải có cơ chế Polling. Người dùng F5 (tải lại trang) không được làm gián đoạn tiến trình. (Xem `skill: async-task-polling`).
+4. **An toàn Bí mật (Secrets)**: Các API Key (OpenAI, Gemini, SePay) và Secret Key (JWT) luôn đặt ở `.env` Backend. Dùng `.env.example` để commit mẫu lên Git. KHÔNG bao giờ commit file `.env` thật. (Xem `skill: env-configuration`).
+5. **Phản hồi Rõ ràng**: Mọi Endpoint giao tiếp với Frontend phải trả về JSON định dạng chuẩn `ApiSuccess` / `ApiError`. (Xem `skill: api-response-standard`).
+6. **Logging thay vì Print**: Mọi file module phải khai báo `logger = get_logger(__name__)`. Cấm tuyệt đối dùng `print()` trong code production. (Xem `skill: logging-monitoring`).
+7. **Comment giải thích**: Mọi hàm phức tạp phải có Docstring (Python) hoặc JSDoc (TypeScript). Comment phải trả lời "Tại sao viết thế này?" chứ không phải "Code này làm gì?". (Xem `skill: coding-conventions`).
+8. **Cấm Emoji**: Không dùng emoji trong bất kỳ file code, markdown, hay comment nào. (Xem `skill: coding-conventions`).
 9. **File Header & Docstring Bắt buộc**: Mọi file mới hoặc sửa phải có Header mô tả và Docstring cho từng hàm. (Xem Mục 6 bên dưới).
-10. **Hướng Đối tượng & Chia nhỏ File**: Code phải viết theo OOP, mỗi class một file riêng. File > 300 dòng BẮT BUỘC tách. (Xem `skill: Quy tắc Thực thi Bắt buộc (Execution Rules)` Rule 8).
+10. **Hướng Đối tượng & Chia nhỏ File**: Code phải viết theo OOP, mỗi class một file riêng. File > 300 dòng BẮT BUỘC tách. (Xem `skill: execution-rules` Rule 8).
 
 ---
 
@@ -419,7 +428,7 @@ frontend/src/
 └── types/
 ```
 
-> Xem chi tiết: [Kiến trúc Frontend & API Setup](skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript)), [Chia nhỏ Components & Domain Routing](skill: Chia nhỏ Components, Pages & Domain Routing (React Router v6))
+> Xem chi tiết: [Kiến trúc Frontend & API Setup](skill: frontend-architecture), [Chia nhỏ Components & Domain Routing](skill: frontend-routing-components)
 
 #### 6.2.2. Laravel Blade (tương lai)
 
@@ -448,7 +457,7 @@ Mỗi loại Frontend mới sẽ được thêm mục riêng tại đây, kèm c
 
 ### 6.3. Quy tắc Tạo Folder Mới
 
-1. **Kiểm tra trước**: Tra bảng Rule 4 trong `skill: Quy tắc Thực thi Bắt buộc (Execution Rules)` xem folder đã tồn tại chưa
+1. **Kiểm tra trước**: Tra bảng Rule 4 trong `skill: execution-rules` xem folder đã tồn tại chưa
 2. **Không tên chung chung**: Không đặt `helpers/`, `misc/`, `utils2/`, `lib/`
 3. **Đặt tên có ý nghĩa**: Dùng snake_case cho Python, kebab-case cho frontend folders
 4. **Chỉ tạo khi thật sự cần**: Nếu 1-2 file thì đặt vào `utils/` hiện có
@@ -476,16 +485,16 @@ AI (ChatGPT, Claude, etc.) khi làm việc với dự án này PHẢI tuân th�
    - Tạo file `map.md` trong thư mục gốc dự án nếu chưa có.
    - Folder `{tên_dự_án}/` (do người dùng tạo tay) chứa các file `map_{tên_dự_án}.md` để tham khảo cấu trúc. Chỉ cần ghi chú trong file map.md dẫn đến folder này.
    - VD: folder `chatbot-luat/` chứa `map_chatbot-luat.md`
-   - Nội dung file map: liệt kê các file quan trọng, chức năng, vai trò, file liên quan (xem `skill: Codebase Mapper — Phân tích Codebase và Tạo map.md`).
+   - Nội dung file map: liệt kê các file quan trọng, chức năng, vai trò, file liên quan (xem `skill: codebase-mapper`).
 
 ---
 
 ## File liên quan
 
-- [Quy tắc Thực thi Bắt buộc (Execution Rules)](skill: Quy tắc Thực thi Bắt buộc (Execution Rules))
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
-- [Git Workflow & Commit Convention](skill: Git Workflow & Commit Convention)
-- [Kiến trúc Chatbot & LLM](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill))
-- [Codebase Mapper](skill: Codebase Mapper — Phân tích Codebase và Tạo map.md)
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Chuẩn API Response](skill: Chuẩn API Response (Standard API Response Format))
+- [Quy tắc Thực thi Bắt buộc (Execution Rules)](skill: execution-rules)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)
+- [Git Workflow & Commit Convention](skill: git-workflow)
+- [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
+- [Codebase Mapper](skill: codebase-mapper)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Chuẩn API Response](skill: api-response-standard)

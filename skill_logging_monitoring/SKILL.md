@@ -1,3 +1,12 @@
+---
+name: logging-monitoring
+description: "Logging & Monitoring Chuẩn (Structured Logging). Actions: setup, configure, implement, review, fix, optimize. Keywords: structured logging, RotatingFileHandler, log levels, no print"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Logging & Monitoring Chuẩn (Structured Logging)
 
 ## Mục tiêu
@@ -74,6 +83,6 @@ logger.error(f"Loi ket noi AI: {e}", exc_info=True)
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)

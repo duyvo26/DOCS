@@ -1,3 +1,12 @@
+---
+name: codebase-mapper
+description: "Codebase Mapper — Phân tích Codebase và Tạo map.md. Actions: setup, configure, implement, review, fix, optimize. Keywords: codebase analysis, map.md, header documentation, file mapping"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Codebase Mapper — Phân tích Codebase và Tạo map.md
 
 ## Mục tiêu
@@ -128,7 +137,7 @@ Khi người dùng yêu cầu chuẩn hoá code cho một dự án cụ thể (V
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Quy tắc Thực thi (Execution Rules)](skill: Quy tắc Thực thi Bắt buộc (Execution Rules))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Quy tắc Thực thi (Execution Rules)](skill: execution-rules)

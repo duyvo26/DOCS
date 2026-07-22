@@ -1,3 +1,12 @@
+---
+name: frontend-architecture
+description: "Kiến trúc Frontend & API Setup (React/Vite/TypeScript). Actions: setup, configure, implement, review, fix, optimize. Keywords: frontend architecture, API setup, JWT interceptor, Axios, React"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript)
 
 ## Mục tiêu
@@ -118,7 +127,7 @@ npm run preview  # Preview build có sẵn trong dist/
 
 ## File liên quan
 
-- [Chia nhỏ Components & Domain Routing](skill: Chia nhỏ Components, Pages & Domain Routing (React Router v6))
-- [Quản lý SEO Động](skill: Quản lý SEO Động (Dynamic SEO Manager))
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
-- [Chuẩn API Response](skill: Chuẩn API Response (Standard API Response Format))
+- [Chia nhỏ Components & Domain Routing](skill: frontend-routing-components)
+- [Quản lý SEO Động](skill: dynamic-seo-manager)
+- [Bảo mật & Xác thực](skill: security-authentication)
+- [Chuẩn API Response](skill: api-response-standard)

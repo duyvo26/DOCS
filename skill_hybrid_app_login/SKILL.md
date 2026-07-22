@@ -1,3 +1,12 @@
+---
+name: hybrid-app-login
+description: "Đăng nhập Hybrid App (Cloud-Sync Polling). Actions: setup, configure, implement, review, fix, optimize. Keywords: hybrid app login, mobile login, WebView, polling, cloud sync"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Đăng nhập Hybrid App (Cloud-Sync Polling)
 
 ## Mục tiêu
@@ -72,6 +81,6 @@ const handleGoogleLogin = async () => {
 
 ## File liên quan
 
-- [Đăng nhập Google OAuth](skill: Đăng nhập Google OAuth (Redirect Flow))
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
-- [Tác vụ Bất đồng bộ & Polling](skill: Tác vụ Bất đồng bộ & Polling (Standard Async Workflow))
+- [Đăng nhập Google OAuth](skill: google-oauth-redirect)
+- [Bảo mật & Xác thực](skill: security-authentication)
+- [Tác vụ Bất đồng bộ & Polling](skill: async-task-polling)

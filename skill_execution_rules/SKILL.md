@@ -1,3 +1,12 @@
+---
+name: execution-rules
+description: "Quy tắc Thực thi Bắt buộc (Execution Rules). Actions: setup, configure, implement, review, fix, optimize. Keywords: execution rules, router no logic, service pattern, OOP, file splitting"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Quy tắc Thực thi Bắt buộc (Execution Rules)
 
 ## Mục tiêu
@@ -142,7 +151,7 @@ Sử dụng bảng này mỗi khi cần quyết định đặt 1 đoạn code v�
 - `api/` tại root level — thư mục API là `app/routers/`, không tạo thêm `api/`
 
 **Khi thật sự cần thêm thư mục mới:**
-1. Xem lại Section 1 của `skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển` để kiểm tra liệu thư mục đã tồn tại hay chưa
+1. Xem lại Section 1 của `skill: project-structure` để kiểm tra liệu thư mục đã tồn tại hay chưa
 2. Nếu không có thư mục phù hợp, đặt code vào `app/utils/` (cho API helper) hoặc `chatbot/utils/` (cho AI helper)
 3. Chỉ tạo thư mục mới khi chức năng thực sự độc lập và không thể gộp vào đâu hiện có
 
@@ -302,8 +311,8 @@ const ChatPage = () => {
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
-- [Kiến trúc Chatbot & LLM](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill))
-- [Chuẩn API Response](skill: Chuẩn API Response (Standard API Response Format))
-- [Codebase Mapper](skill: Codebase Mapper — Phân tích Codebase và Tạo map.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)
+- [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
+- [Chuẩn API Response](skill: api-response-standard)
+- [Codebase Mapper](skill: codebase-mapper)

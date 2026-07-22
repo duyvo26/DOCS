@@ -1,3 +1,12 @@
+---
+name: frontend-routing-components
+description: "Chia nhỏ Components, Pages & Domain Routing (React Router v6). Actions: setup, configure, implement, review, fix, optimize. Keywords: React Router v6, domain routing, lazy loading, ProtectedRoute"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Chia nhỏ Components, Pages & Domain Routing (React Router v6)
 
 ## Mục tiêu
@@ -80,7 +89,7 @@ const ChatRouter = () => (
 
 ## File liên quan
 
-- [Kiến trúc Frontend & API Setup](skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript))
-- [Quản lý SEO Động](skill: Quản lý SEO Động (Dynamic SEO Manager))
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
+- [Kiến trúc Frontend & API Setup](skill: frontend-architecture)
+- [Quản lý SEO Động](skill: dynamic-seo-manager)
+- [Bảo mật & Xác thực](skill: security-authentication)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)

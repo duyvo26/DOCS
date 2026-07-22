@@ -1,3 +1,12 @@
+---
+name: docx-to-md-parser
+description: "Parser DOCX to MD — Chuyển đổi báo cáo sang Markdown có cấu trúc. Actions: setup, configure, implement, review, fix, optimize. Keywords: DOCX to Markdown conversion, document parsing, heading extraction"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Parser DOCX to MD — Chuyển đổi báo cáo sang Markdown có cấu trúc
 
 ## Mục tiêu
@@ -59,6 +68,6 @@ def get_structure_map(content):
 
 ## File liên quan
 
-- [AI RAG Workflow](skill: AI RAG Workflow — LangGraph & Retrieval-Augmented Generation)
-- [Kiến trúc Chatbot & LLM](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill))
-- [Quản lý Thư viện (Dependencies)](skill: Quản lý Thư viện (Dependencies Management))
+- [AI RAG Workflow](skill: ai-rag-workflow)
+- [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
+- [Quản lý Thư viện (Dependencies)](skill: dependencies-management)

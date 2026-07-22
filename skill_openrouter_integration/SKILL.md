@@ -1,3 +1,12 @@
+---
+name: openrouter-integration
+description: "Kết nối OpenRouter (Đa nền tảng AI). Actions: setup, configure, implement, review, fix, optimize. Keywords: OpenRouter, multi-model AI, GPT, Claude, Gemini, Llama, API key"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Kết nối OpenRouter (Đa nền tảng AI)
 
 ## Mục tiêu
@@ -72,7 +81,7 @@ Settings UI -> POST /api/settings (luu DB) -> LlmFactory.get_llm() -> OpenRouter
 
 ## File liên quan
 
-- [AI RAG Workflow](skill: AI RAG Workflow — LangGraph & Retrieval-Augmented Generation)
-- [Kiến trúc Chatbot & LLM](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill))
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
+- [AI RAG Workflow](skill: ai-rag-workflow)
+- [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)

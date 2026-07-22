@@ -1,3 +1,12 @@
+---
+name: coding-conventions
+description: "Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions). Actions: setup, configure, implement, review, fix, optimize. Keywords: naming conventions, type hinting, docstring, no emoji, code standards"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions)
 
 ## Mục tiêu
@@ -135,14 +144,14 @@ Cấm tuyệt đối emoji trong code, markdown, config, comment.
 
 ## 8. Git Workflow & Commit Convention
 
-Xem chi tiết tại skill riêng: [**Git Workflow & Commit Convention**](skill: Git Workflow & Commit Convention)
+Xem chi tiết tại skill riêng: [**Git Workflow & Commit Convention**](skill: git-workflow)
 
 ---
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Git Workflow & Commit Convention](skill: Git Workflow & Commit Convention)
-- [Logging & Monitoring](skill: Logging & Monitoring Chuẩn (Structured Logging))
-- [Chuẩn API Response](skill: Chuẩn API Response (Standard API Response Format))
-- [Codebase Mapper](skill: Codebase Mapper — Phân tích Codebase và Tạo map.md)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Git Workflow & Commit Convention](skill: git-workflow)
+- [Logging & Monitoring](skill: logging-monitoring)
+- [Chuẩn API Response](skill: api-response-standard)
+- [Codebase Mapper](skill: codebase-mapper)

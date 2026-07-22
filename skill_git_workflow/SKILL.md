@@ -1,3 +1,12 @@
+---
+name: git-workflow
+description: "Git Workflow & Commit Convention. Actions: setup, configure, implement, review, fix, optimize. Keywords: git workflow, branch strategy, conventional commits, git commands, cheat sheet"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Git Workflow & Commit Convention
 
 ## Mục tiêu
@@ -193,5 +202,5 @@ git push origin feature/ten-tinh-nang
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)

@@ -1,3 +1,12 @@
+---
+name: chatbot-architecture
+description: "Kiến trúc Chatbot & LLM (Chatbot Architecture Skill). Actions: setup, configure, implement, review, fix, optimize. Keywords: chatbot module, LLM initialization, prompt management, agent architecture"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill)
 
 ## Mục tiêu
@@ -55,7 +64,7 @@ chatbot/
 
 ## File liên quan
 
-- [AI RAG Workflow](skill: AI RAG Workflow — LangGraph & Retrieval-Augmented Generation)
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Kết nối OpenRouter](skill: Kết nối OpenRouter (Đa nền tảng AI))
-- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions))
+- [AI RAG Workflow](skill: ai-rag-workflow)
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Kết nối OpenRouter](skill: openrouter-integration)
+- [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)

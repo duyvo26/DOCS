@@ -1,3 +1,12 @@
+---
+name: async-task-polling
+description: "Tác vụ Bất đồng bộ & Polling (Standard Async Workflow). Actions: setup, configure, implement, review, fix, optimize. Keywords: background tasks, polling, async workflow, FastAPI BackgroundTasks"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Tác vụ Bất đồng bộ & Polling (Standard Async Workflow)
 
 ## Mục tiêu
@@ -74,6 +83,6 @@ useEffect(() => {
 
 ## File liên quan
 
-- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển)
-- [Kiến trúc Chatbot & LLM](skill: Kiến trúc Chatbot & LLM (Chatbot Architecture Skill))
-- [Thanh toán Polling & Sync](skill: Hệ thống Thanh toán Tự động (Polling & Sync))
+- [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
+- [Thanh toán Polling & Sync](skill: payment-polling-sync)

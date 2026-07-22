@@ -1,3 +1,12 @@
+---
+name: google-oauth-redirect
+description: "Đăng nhập Google OAuth (Redirect Flow). Actions: setup, configure, implement, review, fix, optimize. Keywords: Google OAuth, redirect flow, OAuth login, social login"
+argument-hint: "[action] [component]"
+metadata:
+  author: duyvo26
+  version: "1.0.0"
+---
+
 # Skill: Đăng nhập Google OAuth (Redirect Flow)
 
 ## Mục tiêu
@@ -60,7 +69,7 @@ useEffect(() => {
 
 ## File liên quan
 
-- [Bảo mật & Xác thực](skill: Bảo mật & Xác thực Toàn diện (Security & Authentication))
-- [Cấu hình Môi trường (.env)](skill: Cấu hình Môi trường (.env & .gitignore))
-- [Đăng nhập Hybrid App (Mobile)](skill: Đăng nhập Hybrid App (Cloud-Sync Polling))
-- [Kiến trúc Frontend & API Setup](skill: Kiến trúc Frontend & API Setup (React/Vite/TypeScript))
+- [Bảo mật & Xác thực](skill: security-authentication)
+- [Cấu hình Môi trường (.env)](skill: env-configuration)
+- [Đăng nhập Hybrid App (Mobile)](skill: hybrid-app-login)
+- [Kiến trúc Frontend & API Setup](skill: frontend-architecture)
