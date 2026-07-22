@@ -1,6 +1,6 @@
 ---
 name: duyvo26
-description: "Bộ sưu tập 22 skill phát triển dự án AI (FastAPI + AI Engine + Frontend). Actions: setup project, init skill, load skill, use skill, deploy. Keywords: duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project"
+description: "Bộ sưu tập 22 skill phát triển dự án AI (FastAPI + AI Engine + Frontend). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project"
 argument-hint: "[setup|init|help] [skill-name]"
 metadata:
   author: duyvo26

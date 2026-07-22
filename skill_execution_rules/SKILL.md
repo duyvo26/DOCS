@@ -1,6 +1,6 @@
 ---
 name: execution-rules
-description: "Quy tắc Thực thi Bắt buộc (Execution Rules). Actions: setup, configure, implement, review, fix, optimize. Keywords: execution rules, router no logic, service pattern, OOP, file splitting"
+description: "Quy tắc Thực thi Bắt buộc (Execution Rules). Actions: setup, configure, implement, review, fix, optimize. Keywords: quy tắc code, code chuẩn, cấu trúc code, file splitting, execution rules, router no logic, service pattern, OOP"
 argument-hint: "[action] [component]"
 metadata:
   author: duyvo26

@@ -1,6 +1,6 @@
 ---
 name: coding-conventions
-description: "Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions). Actions: setup, configure, implement, review, fix, optimize. Keywords: naming conventions, type hinting, docstring, no emoji, code standards"
+description: "Tiêu chuẩn Viết Code & Đặt tên (Coding Conventions). Actions: setup, configure, implement, review, fix, optimize. Keywords: code theo chuẩn, chuẩn hoá code, comment code, viết docstring, naming conventions, type hinting, docstring, no emoji, code standards"
 argument-hint: "[action] [component]"
 metadata:
   author: duyvo26

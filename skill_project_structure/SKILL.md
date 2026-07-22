@@ -1,6 +1,6 @@
 ---
 name: project-structure
-description: "DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển. Actions: setup, configure, implement, review, fix, optimize. Keywords: project structure, directory layout, FastAPI, AI Engine, frontend architecture"
+description: "DuyVo26 — Cấu trúc Dự án Tiêu chuẩn & Hướng dẫn Phát triển. Actions: setup, configure, implement, review, fix, optimize. Keywords: code theo chuẩn, chuẩn hoá code, file header, quy tắc code, coding convention, project structure, directory layout, FastAPI, AI Engine, frontend architecture"
 argument-hint: "[action] [component]"
 metadata:
   author: duyvo26
