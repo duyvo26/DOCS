@@ -1,17 +1,17 @@
 ---
 name: duyvo26
-description: "Bộ sưu tập 25 skill phát triển dự án AI (FastAPI + AI Engine + Frontend). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project"
+description: "Bộ sưu tập 27 skill phát triển dự án AI (FastAPI + AI Engine + Frontend + Kiosk). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi"
 argument-hint: "[setup|init|help] [skill-name]"
 metadata:
   author: duyvo26
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
-# Skill: DuyVo26 — Bộ sưu tập 22 Skill Phát triển Dự án AI
+# Skill: DuyVo26 — Bộ sưu tập 27 Skill Phát triển Dự án AI & Kiosk
 
 ## Mô tả
 
-Tổng hợp 25 skill phát triển dự án AI (FastAPI + AI Engine + Frontend) — bao gồm kiến trúc, coding conventions, AI RAG workflow, bảo mật, thanh toán, frontend, git, và documentation.
+Tổng hợp 27 skill phát triển dự án AI và hệ thống Kiosk (FastAPI + AI Engine + Frontend + Kiosk System) — bao gồm kiến trúc, coding conventions, AI RAG workflow, bảo mật, thanh toán, frontend, kiosk chuyên dụng, quản lý Wi-Fi, git, và documentation.
 
 ## Kích hoạt (Triggers)
 
@@ -71,10 +71,16 @@ skill: <name>
 | 23 | skill: api-response-standard | ApiSuccess/ApiError, global exception handler |
 | 24 | skill: codebase-mapper | Codebase analysis, map.md, header documentation |
 
+#### Nhóm Kiosk & Hệ thống Thiết bị (Hardware & Kiosk System)
+| Stt | name | Khi nào dùng |
+|-----|------|--------------|
+| 25 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
+| 26 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
+
 #### Skill Nền tảng
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 25 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
+| 27 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
 
 ## Quy tắc
 
