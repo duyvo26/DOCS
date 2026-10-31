@@ -1,10 +1,10 @@
 ---
 name: kiosk-system
-description: "Kiến trúc Kiosk Chuyên dụng (Debian/Ubuntu, GNOME Kiosk, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog). Actions: setup, configure, implement, review, fix, optimize. Keywords: kiosk, kiosk mode, gnome-kiosk, wayland kiosk, chromium kiosk, virtual keyboard, auto-login, embedded linux, touchscreen kiosk"
+description: "Kiến trúc Kiosk Chuyên dụng (Debian/Ubuntu, GNOME Kiosk, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog, Plymouth Boot Logo). Actions: setup, configure, implement, review, fix, optimize. Keywords: kiosk, kiosk mode, gnome-kiosk, wayland kiosk, chromium kiosk, virtual keyboard, auto-login, embedded linux, touchscreen kiosk, plymouth boot splash, silent boot, logo boot"
 argument-hint: "[setup|configure|fix] [kiosk-system]"
 metadata:
   author: duyvo26
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Skill: Kiến trúc Kiosk Chuyên dụng (Dedicated Kiosk System)
@@ -229,6 +229,168 @@ sudo chmod 0440 /etc/sudoers.d/pc-kiosk
 | Bấm vào ô input không hiện bàn phím ảo | Thiếu cờ virtual keyboard | Thêm `--enable-virtual-keyboard` vào lệnh chạy Chromium |
 | Tắt máy hoặc cúp điện đột ngột xong mở lên báo "Restore pages" | Cờ `exit_type` bị ghi là `Crashed` | Thêm lệnh `sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/'` trong script khởi chạy |
 | Camera không mở được (`Permission Denied`) | User chưa thuộc nhóm `video` | Chạy `sudo usermod -aG video <user>` |
+
+---
+
+---
+
+## 7. Plymouth Boot Splash — Hiển thị Logo Khi Khởi Động
+
+Thay thế hoàn toàn màn hình dòng lệnh (boot text) bằng logo công ty trong suốt quá trình khởi động.
+
+### 7.1 Điều kiện tiên quyết
+
+```bash
+# Kiểm tra Plymouth đã cài chưa
+plymouth --version
+
+# Kiểm tra module script.so (bắt buộc để dùng theme tùy chỉnh)
+ls /usr/lib/x86_64-linux-gnu/plymouth/script.so
+
+# Cài nếu thiếu
+apt install -y plymouth plymouth-themes
+```
+
+### 7.2 Chuẩn bị file Logo
+
+| File | Kích thước | Mục đích |
+|------|-----------|---------|
+| `logo.png` | Gốc (bất kỳ) | Nguồn gốc |
+| `logo-plymouth.png` | 900×600px | Dùng cho Plymouth theme |
+| `logo-icon.png` | 600×600px (crop) | Favicon + Topbar web app |
+| `boot-wallpaper.png` | 1920×1080px | GNOME Desktop wallpaper |
+
+Tạo các biến thể bằng ImageMagick:
+```bash
+# Scale logo cho Plymouth (giữ tỷ lệ, nền đen)
+convert logo.png -resize 900x600 -background black -gravity center -extent 900x600 logo-plymouth.png
+
+# Crop icon vuông từ logo (điều chỉnh vùng crop tùy logo)
+convert logo.png -crop 600x600+<x>+<y> logo-icon.png
+
+# Tạo boot wallpaper 1920×1080 nền đen với logo căn giữa
+convert -size 1920x1080 xc:black \
+  \( logo-plymouth.png -resize 900x600 \) \
+  -gravity center -composite boot-wallpaper.png
+```
+
+### 7.3 Tạo Plymouth Theme tùy chỉnh
+
+```bash
+mkdir -p /usr/share/plymouth/themes/kiosk-brand
+cp logo-plymouth.png /usr/share/plymouth/themes/kiosk-brand/logo.png
+```
+
+Tạo file `/usr/share/plymouth/themes/kiosk-brand/kiosk-brand.plymouth`:
+```ini
+[Plymouth Theme]
+Name=Color Energy Analyzer Boot Splash
+Description=Boot Splash Theme for Color Energy Analyzer
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/kiosk-brand
+ScriptFile=/usr/share/plymouth/themes/kiosk-brand/kiosk-brand.script
+```
+
+Tạo file `/usr/share/plymouth/themes/kiosk-brand/kiosk-brand.script`:
+```javascript
+# Nền đen tuyền
+Window.SetBackgroundTopColor(0.0, 0.0, 0.0);
+Window.SetBackgroundBottomColor(0.0, 0.0, 0.0);
+
+# Nạp và scale logo vừa màn hình (tối đa 55% chiều rộng, tối đa 900px)
+logo.raw = Image("logo.png");
+
+screen_w = Window.GetWidth();
+screen_h = Window.GetHeight();
+
+target_w = screen_w * 0.55;
+if (target_w > 900) target_w = 900;
+if (target_w < 320) target_w = 320;
+
+scale    = target_w / logo.raw.GetWidth();
+target_h = logo.raw.GetHeight() * scale;
+
+logo.image  = logo.raw.Scale(target_w, target_h);
+logo.sprite = Sprite(logo.image);
+
+# Căn giữa màn hình
+logo.x = Window.GetX() + (screen_w - target_w) / 2;
+logo.y = Window.GetY() + (screen_h - target_h) / 2;
+
+logo.sprite.SetPosition(logo.x, logo.y, 10);
+logo.sprite.SetOpacity(1.0);
+
+fun refresh_callback() { }
+Plymouth.SetRefreshFunction(refresh_callback);
+```
+
+### 7.4 Kích hoạt Theme và Rebuild Initramfs
+
+```bash
+# Đặt theme mặc định VÀ tự động rebuild initramfs (cần ~30–60 giây)
+plymouth-set-default-theme -R kiosk-brand
+
+# Xác nhận theme đang active
+plymouth-set-default-theme
+# → kiosk-brand
+
+# Xác nhận theme + logo đã vào initramfs
+lsinitramfs /boot/initrd.img-$(uname -r) | grep -i kiosk
+# → usr/share/plymouth/themes/kiosk-brand/...
+```
+
+### 7.5 Cấu hình GRUB — Silent Boot (ẩn hoàn toàn dòng lệnh)
+
+Sửa `/etc/default/grub`:
+```bash
+GRUB_TIMEOUT=0
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash loglevel=0 vt.global_cursor_default=0 rd.systemd.show_status=false udev.log_priority=3"
+```
+
+> [!IMPORTANT]
+> **Bắt buộc phải có từ khóa `splash`** trong `GRUB_CMDLINE_LINUX_DEFAULT`.  
+> Nếu chỉ có `quiet` mà thiếu `splash`, Plymouth **không được kích hoạt** — máy vẫn hiện dòng lệnh.
+
+Áp dụng:
+```bash
+update-grub
+```
+
+### 7.6 Đặt GNOME Wallpaper (Desktop sau khi boot)
+
+```bash
+# Chạy dưới user kiosk (cần XDG_RUNTIME_DIR)
+XDG_RUNTIME_DIR=/run/user/$(id -u pc) \
+  su - pc -c "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u pc)/bus \
+  gsettings set org.gnome.desktop.background picture-uri \
+  'file:///opt/may-phan-tich/app/static/img/boot-wallpaper.png'"
+```
+
+### 7.7 Kiểm tra
+
+```bash
+# Kiểm tra GRUB đã ghi splash chưa
+grep 'splash' /boot/grub/grub.cfg | head -3
+
+# Kiểm tra theme active
+cat /etc/plymouth/plymouthd.conf
+
+# Test nhanh Plymouth (không cần reboot) - chạy từ TTY, không phải SSH
+plymouthd --no-daemon & sleep 1 && plymouth show-splash && sleep 5 && plymouth quit
+```
+
+### 7.8 Troubleshooting Plymouth
+
+| Triệu chứng | Nguyên nhân | Cách xử lý |
+|------------|------------|-----------|
+| Vẫn thấy dòng lệnh, không thấy logo | Thiếu `splash` trong GRUB | Thêm `splash` vào `GRUB_CMDLINE_LINUX_DEFAULT` rồi `update-grub` |
+| Plymouth chạy nhưng màn hình đen (không hiện logo) | `script.so` không có trong initramfs | Chạy lại `plymouth-set-default-theme -R kiosk-brand` |
+| Logo bị vỡ/méo | Kích thước `logo.png` trong theme không đúng | Kiểm tra `logo.raw.GetWidth()` ≠ 0; scale lại ảnh |
+| Plymouth hiện nhưng tắt sớm, sau đó lại hiện text | `systemd` override Plymouth | Thêm `rd.systemd.show_status=false` vào GRUB |
+| Màn hình nháy khi chuyển sang Wayland | KMS chưa khởi động kịp | Thêm `i915.modeset=1` (Intel) hoặc `amdgpu.modeset=1` (AMD) vào GRUB |
 
 ---
 
