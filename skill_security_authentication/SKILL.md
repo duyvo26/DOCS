@@ -88,11 +88,15 @@ if not os.path.exists(file_path):
 4. `os.path.basename()` bắt buộc khi xử lý filename từ user.
 5. CORS không để `"*"` trong production.
 6. Rate limiting cho AI API.
+7. `SECRET_KEY` production phải sinh ngẫu nhiên 256-bit (`openssl rand -hex 32`), tuyệt đối không dùng chuỗi mặc định từ git repo.
+8. Phân quyền `.env` là `chmod 600` (`chown www-data:www-data`), file DB SQLite là `chmod 660`.
+9. Nginx bắt buộc có regex chặn tải file nhạy cảm (`.db`, `.log`, `.env`, `.sql`, `.sh`, `.py`).
 
 ---
 
 ## File liên quan
 
+- [Củng cố & Kiểm tra Bảo mật Máy chủ](skill: server-security-hardening)
 - [Cấu hình Môi trường (.env)](skill: env-configuration)
 - [Đăng nhập Google OAuth](skill: google-oauth-redirect)
 - [Kiến trúc Frontend & API Setup](skill: frontend-architecture)

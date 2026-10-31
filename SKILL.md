@@ -1,17 +1,17 @@
 ---
 name: duyvo26
-description: "Bộ sưu tập 27 skill phát triển dự án AI (FastAPI + AI Engine + Frontend + Kiosk). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi"
+description: "Bộ sưu tập 28 skill phát triển dự án AI, Kiosk & Bảo mật Máy chủ (FastAPI + AI Engine + Frontend + Kiosk + Server Hardening). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi, server security, hardening"
 argument-hint: "[setup|init|help] [skill-name]"
 metadata:
   author: duyvo26
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
-# Skill: DuyVo26 — Bộ sưu tập 27 Skill Phát triển Dự án AI & Kiosk
+# Skill: DuyVo26 — Bộ sưu tập 28 Skill Phát triển Dự án AI, Kiosk & Bảo mật Máy chủ
 
 ## Mô tả
 
-Tổng hợp 27 skill phát triển dự án AI và hệ thống Kiosk (FastAPI + AI Engine + Frontend + Kiosk System) — bao gồm kiến trúc, coding conventions, AI RAG workflow, bảo mật, thanh toán, frontend, kiosk chuyên dụng, quản lý Wi-Fi, git, và documentation.
+Tổng hợp 28 skill phát triển dự án AI, hệ thống Kiosk và Bảo mật Máy chủ Production (FastAPI + AI Engine + Frontend + Kiosk System + Server Hardening) — bao gồm kiến trúc, coding conventions, AI RAG workflow, củng cố an ninh máy chủ, bảo mật, thanh toán, frontend, kiosk chuyên dụng, quản lý Wi-Fi, git, và documentation.
 
 ## Kích hoạt (Triggers)
 
@@ -23,7 +23,7 @@ Mỗi skill con được gọi bằng:
 ```
 skill: <name>
 ```
-(Ví dụ: `skill: ai-rag-workflow`)
+(Ví dụ: `skill: ai-rag-workflow`, `skill: server-security-hardening`)
 
 ### Danh mục Skill
 
@@ -37,50 +37,51 @@ skill: <name>
 | 5 | skill: zalo-bot | Zalo Bot config & ops: webhook, Zalo ID, RBAC, chat history |
 | 6 | skill: docx-to-md-parser | DOCX → Markdown, heading extraction, document ingestion |
 
-#### Nhóm Xác thực, Môi trường & Bảo mật
+#### Nhóm Xác thực, Môi trường & Bảo mật Máy chủ
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
 | 7 | skill: env-configuration | .env, .gitignore, Pydantic Settings, secrets |
 | 8 | skill: sql-compatibility | Raw SQL, MySQL, SQLite, parameter binding, SQL injection |
 | 9 | skill: dependencies-management | Packages: FastAPI, LangGraph, JWT, zustand, zod |
 | 10 | skill: security-authentication | JWT, bcrypt, RBAC, OAuth, security checklist |
-| 11 | skill: google-oauth-redirect | Google OAuth login via Backend Redirect |
-| 12 | skill: hybrid-app-login | Mobile app login (Flutter/React Native) via WebView + Polling |
+| 11 | skill: server-security-hardening | Củng cố an ninh máy chủ, Nginx chặn .db/.env, UFW, Fail2ban, JWT secret rotation, PHP hardening |
+| 12 | skill: google-oauth-redirect | Google OAuth login via Backend Redirect |
+| 13 | skill: hybrid-app-login | Mobile app login (Flutter/React Native) via WebView + Polling |
 
 #### Nhóm Tác vụ & Thanh toán
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 13 | skill: async-task-polling | Background Tasks + Polling cho tác vụ AI nặng |
-| 14 | skill: payment-polling-sync | SePay, bank transaction auto sync, polling |
+| 14 | skill: async-task-polling | Background Tasks + Polling cho tác vụ AI nặng |
+| 15 | skill: payment-polling-sync | SePay, bank transaction auto sync, polling |
 
 #### Nhóm Frontend
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 15 | skill: frontend-architecture | API setup, JWT Interceptor, Axios, frontend structure |
-| 16 | skill: frontend-routing-components | React Router v6, domain routing, lazy loading, ProtectedRoute |
-| 17 | skill: dynamic-seo-manager | Dynamic SEO, meta tags, index.html, link sharing |
+| 16 | skill: frontend-architecture | API setup, JWT Interceptor, Axios, frontend structure |
+| 17 | skill: frontend-routing-components | React Router v6, domain routing, lazy loading, ProtectedRoute |
+| 18 | skill: dynamic-seo-manager | Dynamic SEO, meta tags, index.html, link sharing |
 
 #### Nhóm Code Standards & Documentation
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 18 | skill: coding-conventions | Naming, type hinting, docstring, no emoji |
-| 19 | skill: git-workflow | Branch strategy, conventional commits, git commands |
-| 20 | skill: execution-rules | 8 rules: Router, Service, Import, File Splitting, OOP |
-| 21 | skill: readme-writing | README.md 7-section structure |
-| 22 | skill: logging-monitoring | Structured logging, RotatingFileHandler, no print |
-| 23 | skill: api-response-standard | ApiSuccess/ApiError, global exception handler |
-| 24 | skill: codebase-mapper | Codebase analysis, map.md, header documentation |
+| 19 | skill: coding-conventions | Naming, type hinting, docstring, no emoji |
+| 20 | skill: git-workflow | Branch strategy, conventional commits, git commands |
+| 21 | skill: execution-rules | 11 rules: Router, Service, File Splitting, UI Contrast, Unified Auth, Cache Busting |
+| 22 | skill: readme-writing | README.md 7-section structure |
+| 23 | skill: logging-monitoring | Structured logging, RotatingFileHandler, no print |
+| 24 | skill: api-response-standard | ApiSuccess/ApiError, global exception handler |
+| 25 | skill: codebase-mapper | Codebase analysis, map.md, header documentation |
 
 #### Nhóm Kiosk & Hệ thống Thiết bị (Hardware & Kiosk System)
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 25 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
-| 26 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
+| 26 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
+| 27 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
 
 #### Skill Nền tảng
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 27 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
+| 28 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
 
 ## Quy tắc
 

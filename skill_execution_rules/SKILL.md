@@ -309,6 +309,36 @@ const ChatPage = () => {
 
 ---
 
+---
+
+## Rule 9: Độ Tương Phản Giao Diện Bắt Buộc (UI/UX Contrast & Light Theme Standard)
+
+**Định nghĩa:** Khi thiết kế hoặc chuẩn hóa giao diện sang giao diện sáng (Single Light Theme) hoặc một theme duy nhất:
+1. **TUYỆT ĐỐI CẤM** để chữ màu trắng (`#ffffff`, `#f8fafc`, `#e2e8f0`) trên nền sáng. Tỷ lệ tương phản chữ/nền bắt buộc >= 10:1 (dùng text màu `#0f172a` hoặc `#1e293b` trên nền `#ffffff`/`#f8fafc`).
+2. Rà soát toàn bộ thẻ tiêu đề (`h1, h2, h3`, `.hero h1`, `.section-title`, `.article-header h1`), input form, nút phân trang, card title. Không được để sót mã CSS kế thừa từ Dark Mode.
+3. Dọn dẹp sạch `localStorage` theme keys (`theme`, `theme_mode`, ...) để client không bị ghi đè theme cũ.
+
+---
+
+## Rule 10: Gộp Điểm Chạm Xác Thực Trên Header (Unified Auth Entry)
+
+**Định nghĩa:** Trên thanh điều hướng (Navbar / Header) của Landing Page và trang công khai:
+1. **TUYỆT ĐỐI KHÔNG** đặt đồng thời 2 nút rời rạc "Đăng nhập" và "Đăng ký" cạnh nhau gây rối mắt và vỡ khung hình trên màn hình di động (mobile).
+2. **Gom thành 1 nút hành động duy nhất:**
+   - Khi chưa đăng nhập: Nút bấm `Đăng nhập / Đăng ký` (Sign In / Sign Up) trỏ về `/login`.
+   - Khi đã đăng nhập: Nút bấm `Vào Dashboard →` trỏ về `/dashboard`.
+3. Việc chuyển đổi giữa Đăng nhập và Đăng ký được tích hợp sẵn bằng bộ Tab `[ Đăng nhập ] [ Đăng ký ]` ngay đầu thẻ card tại trang `/login`.
+
+---
+
+## Rule 11: Cache Invalidation & Asset Versioning
+
+**Định nghĩa:** Khi sửa đổi file CSS, JS hoặc giao diện template:
+1. **Bắt buộc tăng Version Asset**: Cập nhật query parameter (`?v=v1.x.x`) tại toàn bộ các điểm biên dịch HTML và nhúng tài nguyên.
+2. **Header Cache Phù hợp**: Cấu hình `Cache-Control: public, max-age=120, must-revalidate` cho file CSS/JS tĩnh thay vì dùng `immutable 1 năm`, tránh để Cloudflare Edge Cache lưu giữ CSS lỗi của phiên bản cũ.
+
+---
+
 ## File liên quan
 
 - [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
