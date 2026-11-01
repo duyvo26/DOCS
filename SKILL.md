@@ -1,17 +1,17 @@
 ---
 name: duyvo26
-description: "Bộ sưu tập 28 skill phát triển dự án AI, Kiosk & Bảo mật Máy chủ (FastAPI + AI Engine + Frontend + Kiosk + Server Hardening). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi, server security, hardening"
+description: "Bộ sưu tập 30 skill phát triển dự án AI, Kiosk & Bảo mật Máy chủ (FastAPI + AI Engine + Frontend + Kiosk + Server Hardening + Nginx WAF). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi, server security, hardening, nginx waf, reverse proxy"
 argument-hint: "[setup|init|help] [skill-name]"
 metadata:
   author: duyvo26
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
-# Skill: DuyVo26 — Bộ sưu tập 28 Skill Phát triển Dự án AI, Kiosk & Bảo mật Máy chủ
+# Skill: DuyVo26 — Bộ sưu tập 30 Skill Phát triển Dự án AI, Kiosk & Bảo mật Máy chủ
 
 ## Mô tả
 
-Tổng hợp 28 skill phát triển dự án AI, hệ thống Kiosk và Bảo mật Máy chủ Production (FastAPI + AI Engine + Frontend + Kiosk System + Server Hardening) — bao gồm kiến trúc, coding conventions, AI RAG workflow, củng cố an ninh máy chủ, bảo mật, thanh toán, frontend, kiosk chuyên dụng, quản lý Wi-Fi, git, và documentation.
+Tổng hợp 30 skill phát triển dự án AI, hệ thống Kiosk, Tường lửa Nginx WAF và Bảo mật Máy chủ Production (FastAPI + AI Engine + Frontend + Kiosk System + Server Hardening + Nginx Proxy Manager WAF) — bao gồm kiến trúc, coding conventions, AI RAG workflow, củng cố an ninh máy chủ, bảo mật, thanh toán, frontend, kiosk chuyên dụng, quản lý Wi-Fi, Nginx reverse proxy, git, và documentation.
 
 ## Kích hoạt (Triggers)
 
@@ -72,16 +72,22 @@ skill: <name>
 | 24 | skill: api-response-standard | ApiSuccess/ApiError, global exception handler |
 | 25 | skill: codebase-mapper | Codebase analysis, map.md, header documentation |
 
+#### Nhóm Hạ tầng, Mạng & Bảo mật Máy chủ (Infrastructure & Server Security)
+| Stt | name | Khi nào dùng |
+|-----|------|--------------|
+| 26 | skill: server-security-hardening | Củng cố & kiểm tra bảo mật VPS/Production, UFW, Fail2ban, chống lộ .env, app.db, secret rotation |
+| 27 | skill: nginx-waf-reverse-proxy | Quản trị Nginx Reverse Proxy, Tường lửa WAF, SOC Live World Map, Stream Proxy IP Grouping, Giám sát phần cứng Proxmox LXC & Docker |
+
 #### Nhóm Kiosk & Hệ thống Thiết bị (Hardware & Kiosk System)
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 26 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
-| 27 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
+| 28 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
+| 29 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
 
 #### Skill Nền tảng
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 28 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
+| 30 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
 
 ## Quy tắc
 
