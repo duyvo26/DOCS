@@ -1,17 +1,19 @@
 ---
 name: duyvo26
-description: "Bộ sưu tập 31 skill phát triển dự án AI, Kiosk & Bảo mật Máy chủ (FastAPI + AI Engine + Frontend + Kiosk + Server Hardening + Nginx WAF + aaPanel). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi, server security, hardening, nginx waf, reverse proxy, aapanel"
-argument-hint: "[setup|init|help] [skill-name]"
+description: "Bộ sưu tập 31 skill cốt lõi & Hệ sinh thái 500+ AI Skills toàn diện (FastAPI + AI Engine + Frontend + Kiosk + Server Hardening + Nginx WAF + aaPanel + Impeccable + TasteSkill). Actions: setup project, init skill, load skill, use skill, deploy, chuan hoa code, install all skills. Keywords: code theo chuẩn, chuẩn hoá code, standards, comment, docstring, duyvo26, DuyVo26, skill collection, skill hub, project architecture, AI project, kiosk, wifi, server security, hardening, nginx waf, reverse proxy, aapanel, impeccable, tasteskill, install_all_skills"
+argument-hint: "[setup|init|help|install-all] [skill-name]"
 metadata:
   author: duyvo26
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
-# Skill: DuyVo26 — Bộ sưu tập 31 Skill Phát triển Dự án AI, Kiosk & Bảo mật Máy chủ
+# Skill: DuyVo26 — Bộ sưu tập 31 Skill Cốt Lõi & Hệ Sinh Thái 500+ AI Skills
 
 ## Mô tả
 
-Tổng hợp 31 skill phát triển dự án AI, hệ thống Kiosk, Tường lửa Nginx WAF, aaPanel Management và Bảo mật Máy chủ Production (FastAPI + AI Engine + Frontend + Kiosk System + Server Hardening + Nginx Proxy Manager WAF + aaPanel) — bao gồm kiến trúc, coding conventions, AI RAG workflow, củng cố an ninh máy chủ, bảo mật, thanh toán, frontend, kiosk chuyên dụng, quản lý Wi-Fi, Nginx reverse proxy, aaPanel project deployment, git, và documentation.
+Tổng hợp 31 skill cốt lõi phát triển dự án AI, hệ thống Kiosk, Tường lửa Nginx WAF, aaPanel Management và Bảo mật Máy chủ Production (FastAPI + AI Engine + Frontend + Kiosk System + Server Hardening + Nginx Proxy Manager WAF + aaPanel) cùng hệ sinh thái 500+ AI Skills toàn diện (Impeccable, TasteSkill Anti-Slop, PPT Master, Graphify, Cloud, DevOps, Web3, Trading, v.v.).
+
+Hỗ trợ tự động thiết lập và cài đặt trọn bộ sang bất kỳ máy tính mới nào qua 1 dòng lệnh duy nhất.
 
 ## Kích hoạt (Triggers)
 
@@ -89,6 +91,23 @@ skill: <name>
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
 | 31 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
+
+## Hệ sinh thái Kỹ năng Toàn Diện (500+ Skills) & Cài đặt Máy Mới
+
+Bên cạnh 31 skill cốt lõi của DuyVo26, máy trạm hiện đang vận hành đầy đủ hệ sinh thái **503+ Unique Skills**:
+- **aaPanel / Baota Suite (8 skills)**: Quản trị và triển khai ứng dụng server aaPanel.
+- **Frontend Design & Anti-Slop (2 skills)**: `impeccable` (v4.8.0) và `taste-skill` (v2 - Awwwards Art Direction).
+- **Thuyết trình Slide AI (1 skill)**: `ppt-master`.
+- **Đồ thị Codebase (1 skill)**: `graphify` (v0.9.97).
+- **Thư viện Kỹ năng Mở rộng (460+ skills)**: AWS, GCP, Docker, K8s, Web3, DeFi, Quant, Game Dev, Robotics.
+
+👉 Chi tiết toàn bộ danh mục được lưu tại: [`FULL_SKILLS_MANIFEST.md`](FULL_SKILLS_MANIFEST.md)
+
+### 🚀 Lệnh Cài Đặt 1 Chạm Cho Máy Mới (1-Line Installer)
+Để nhân bản và cài đủ 100% bộ skill này sang máy tính khác (macOS / Linux):
+```bash
+curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skills.sh | bash
+```
 
 ## Quy tắc
 
