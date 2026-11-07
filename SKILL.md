@@ -79,18 +79,19 @@ skill: <name>
 |-----|------|--------------|
 | 26 | skill: server-security-hardening | Củng cố & kiểm tra bảo mật VPS/Production, UFW, Fail2ban, chống lộ .env, app.db, secret rotation |
 | 27 | skill: nginx-waf-reverse-proxy | Quản trị Nginx Reverse Proxy, Tường lửa WAF, SOC Live World Map, Stream Proxy IP Grouping, Giám sát phần cứng Proxmox LXC & Docker |
-| 28 | skill: aapanel-management | Quản trị aaPanel / Baota Panel, triển khai Python/Node/Go/Java, di chuyển Supervisor sang Python Project, sửa lỗi 502, fix bug core aaPanel |
+| 28 | skill: ssh-no-hang | Tránh treo SSH khi chạy tác vụ dài: detach (nohup+setsid+disown), kill theo PID, poll bounded, readiness HTTP |
+| 29 | skill: aapanel-management | Quản trị aaPanel / Baota Panel, triển khai Python/Node/Go/Java, di chuyển Supervisor sang Python Project, sửa lỗi 502, fix bug core aaPanel |
 
 #### Nhóm Kiosk & Hệ thống Thiết bị (Hardware & Kiosk System)
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 29 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
-| 30 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
+| 30 | skill: kiosk-system | Kiosk chuyên dụng, Wayland, Chromium Kiosk, Auto-login, Virtual Keyboard, Watchdog |
+| 31 | skill: wifi-management | Quản lý kết nối Wi-Fi qua NetworkManager (nmcli), scan, status, connect, disconnect, touch UI |
 
 #### Skill Nền tảng
 | Stt | name | Khi nào dùng |
 |-----|------|--------------|
-| 31 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
+| 32 | skill: project-structure | Cấu trúc thư mục chuẩn, sơ đồ tổng thể, hướng dẫn khởi chạy. Luôn load skill này đầu tiên trên mọi dự án mới. |
 
 ## Hệ sinh thái Kỹ năng Toàn Diện (500+ Skills) & Cài đặt Máy Mới
 

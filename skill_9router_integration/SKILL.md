@@ -29,7 +29,7 @@ Tích hợp 9Router để dùng nhiều model AI (GPT, Claude, Gemini, Llama, c�
 
 ### Cách 1: Qua file .env
 ```env
-LLM_BASE_URL=http://172.16.10.21:20128/v1
+LLM_BASE_URL=http://0.0.0.0:20128/v1
 LLM_API_KEY=sk-9router-key-here
 LLM_MODEL=combo
 ```

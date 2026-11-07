@@ -131,7 +131,7 @@ def get_wifi_status() -> WifiStatus:
             "enabled": True,
             "connected": True,
             "ssid": "Mô phỏng Wi-Fi",
-            "ip": "192.168.1.100",
+            "ip": "0.0.0.0",
             "signal": 85,
             "interface": "wlan0",
         }

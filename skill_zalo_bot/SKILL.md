@@ -39,7 +39,7 @@ Zalo Cloud ──POST──▶ n8n Webhook (public URL)
 | `ZALO_API_BASE` | `https://bot-api.zapps.me/bot` | Base URL Zalo Bot API |
 | `N8N_WEBHOOK_URL` | `https://n8n.../webhook/zalo/...` | Chỉ để tài liệu; forward thật cấu hình trong n8n |
 | `PRINT_API_URL` / `PRINT_API_KEY` | `http://duyvo26.com:5326` | `app/services/print_service.py` |
-| `LLM_BASE_URL` / `LLM_API_KEY` / `LLM_MODEL` | `http://172.16.10.21:20128/v1` / `combo` | `app/services/llm_service.py` (ưu tiên DB `llm_settings`) |
+| `LLM_BASE_URL` / `LLM_API_KEY` / `LLM_MODEL` | `http://0.0.0.0:20128/v1` / `combo` | `app/services/llm_service.py` (ưu tiên DB `llm_settings`) |
 | `OPENAI_API_KEY` | `sk-proj-...` | Fallback provider `gpt-5-nano` |
 | `UPLOAD_BASE_URL` | tunnel URL / rỗng | `app/config.py`; startup nạp đè từ DB |
 
