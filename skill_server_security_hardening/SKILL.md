@@ -151,7 +151,7 @@ ufw default deny incoming
 ufw default allow outgoing
 
 # 2. Cho phép dải mạng nội bộ (LAN Subnet)
-ufw allow from 192.168.2.0/24 comment 'Local LAN Subnet'
+ufw allow from 0.0.0.0/24 comment 'Local LAN Subnet'
 
 # 3. Cho phép cổng dịch vụ thiết yếu
 ufw allow 22/tcp comment 'SSH'
