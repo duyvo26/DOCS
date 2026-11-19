@@ -9,7 +9,7 @@
 #   curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skills.sh | bash
 #
 # Tuỳ chọn:
-#   bash install_all_skills.sh --core-only    # Chỉ cài bộ cốt lõi DuyVo26 (31 skills)
+#   bash install_all_skills.sh --core-only    # Chỉ cài bộ cốt lõi DuyVo26 (32 skills)
 #   bash install_all_skills.sh --full         # Cài trọn bộ 500+ skills (Mặc định)
 # ==============================================================================
 
@@ -56,9 +56,9 @@ mkdir -p "$GLOBAL_SKILLS_DIR"
 mkdir -p "$AGENTS_SKILLS_DIR"
 
 # ------------------------------------------------------------------------------
-# 1. CÀI ĐẶT / ĐỒNG BỘ BỘ KỸ NĂNG CỐT LÕI DUYVO26 (31 SKILLS)
+# 1. CÀI ĐẶT / ĐỒNG BỘ BỘ KỸ NĂNG CỐT LÕI DUYVO26 (32 SKILLS)
 # ------------------------------------------------------------------------------
-echo -e "\n${CYAN}📦 [1/6] Đang đồng bộ bộ kỹ năng DuyVo26 Suite (31 skills)...${NC}"
+echo -e "\n${CYAN}📦 [1/6] Đang đồng bộ bộ kỹ năng DuyVo26 Suite (32 skills)...${NC}"
 if [ -d "$DOCS_REPO_DIR/.git" ]; then
     echo "  - Cập nhật kho duyvo26/DOCS hiện tại..."
     cd "$DOCS_REPO_DIR" && git pull origin main --quiet || true
@@ -71,7 +71,7 @@ fi
 mkdir -p "$GLOBAL_SKILLS_DIR/duyvo26"
 cp "$DOCS_REPO_DIR/SKILL.md" "$GLOBAL_SKILLS_DIR/duyvo26/SKILL.md" 2>/dev/null || true
 
-# Tạo symlinks cho tất cả 30 skill con của duyvo26
+# Tạo symlinks cho tất cả 32 skill con của duyvo26
 for skill_path in "$DOCS_REPO_DIR"/skill_*; do
     if [ -d "$skill_path" ]; then
         skill_dirname=$(basename "$skill_path")
@@ -87,7 +87,7 @@ for skill_path in "$DOCS_REPO_DIR"/skill_*; do
         ln -sfn "$skill_path" "$AGENTS_SKILLS_DIR/$skill_dirname"
     fi
 done
-echo -e "${GREEN}  ✅ Hoàn tất cài đặt 31 skills cốt lõi DuyVo26.${NC}"
+echo -e "${GREEN}  ✅ Hoàn tất cài đặt 32 skills cốt lõi DuyVo26.${NC}"
 
 # ------------------------------------------------------------------------------
 # 2. CÀI ĐẶT BỘ KỸ NĂNG QUẢN TRỊ AAPANEL / BAOTA (8 SKILLS)

@@ -112,6 +112,7 @@ Các luồng xử lý nghiệp vụ phức tạp đã được đúc kết thàn
 *   [**Git Workflow & Commit Convention**](skill: git-workflow): Branch strategy, Conventional Commits, quy trình làm việc hàng ngày, cheat sheet lệnh Git.
 *   [**Quy tắc Thực thi Bắt buộc (Execution Rules)**](skill: execution-rules): 8 quy tắc cứng về Router, Service, Import, File Splitting, OOP — không được vi phạm.
 *   [**Hướng dẫn Viết README.md Chuẩn**](skill: readme-writing): Cấu trúc 7 phần bắt buộc, mẫu README đầy đủ, quy tắc `.env.example`, checklist trước khi commit.
+*   [**Develop Docs (Hệ thống Tài liệu Phát triển)**](skill: develop-docs): Bộ tài liệu chuẩn `AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `ROADMAP.md`, `CHANGELOG.md`, `KNOWN_ISSUES.md` và `docs/`; quy trình phân tích codebase, quản lý trạng thái và cập nhật tài liệu sau mỗi task.
 *   [**Logging & Monitoring Chuẩn**](skill: logging-monitoring): Cấu hình Python logging có cấu trúc, RotatingFileHandler, quy tắc log level, cấm dùng `print()` trong production.
 *   [**Chuẩn API Response (Standard Response Format)**](skill: api-response-standard): JSON thống nhất cho mọi Endpoint: ApiSuccess, ApiError, PaginatedData, Global Exception Handler.
 *   [**Codebase Mapper (Map.md)**](skill: codebase-mapper): Phân tích codebase, tạo Header Documentation, duy trì file `map.md` để điều hướng AI.
@@ -496,5 +497,7 @@ AI (ChatGPT, Claude, etc.) khi làm việc với dự án này PHẢI tuân th�
 - [Git Workflow & Commit Convention](skill: git-workflow)
 - [Kiến trúc Chatbot & LLM](skill: chatbot-architecture)
 - [Codebase Mapper](skill: codebase-mapper)
+- [Develop Docs (Hệ thống Tài liệu Phát triển)](skill: develop-docs)
+- [Hướng dẫn Viết README.md Chuẩn](skill: readme-writing)
 - [Cấu hình Môi trường (.env)](skill: env-configuration)
 - [Chuẩn API Response](skill: api-response-standard)

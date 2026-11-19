@@ -67,5 +67,6 @@ API_KEY=your-api-key
 ## File liên quan
 
 - [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [Develop Docs (Hệ thống Tài liệu Phát triển)](skill: develop-docs)
 - [Cấu hình Môi trường (.env)](skill: env-configuration)
 - [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)

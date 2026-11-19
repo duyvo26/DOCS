@@ -17,7 +17,7 @@ curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skill
 
 | STT | Phân Nhóm Kỹ Năng | Số lượng | Nguồn Gốc / Kho Mã Nguồn |
 |---|---|---|---|
-| 1 | 1. Cốt lõi & Chuẩn hoá Dự án — DuyVo26 Suite (31 Skills) | **31** | https://github.com/duyvo26/DOCS.git |
+| 1 | 1. Cốt lõi & Chuẩn hoá Dự án — DuyVo26 Suite (32 Skills) | **32** | https://github.com/duyvo26/DOCS.git |
 | 2 | 2. Quản trị Máy chủ & Triển khai aaPanel / Baota (8 Skills) | **8** | https://github.com/aaPanel/btpanel-skills (Việt hoá) |
 | 3 | 3. Thiết kế Giao diện & Anti-Slop Frontend (2 Skills) | **2** | pbakaus/impeccable + Leonxlnx/taste-skill |
 | 4 | 4. Tự động hoá Trình chiếu Slide (1 Skill) | **1** | https://github.com/hugohe3/ppt-master.git |
@@ -31,11 +31,11 @@ curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skill
 | 12 | 12. Phát triển Game & Đồ họa (6 Skills) | **6** | vibeforge1111/vibeship-spawner-skills |
 | 13 | 13. Quản trị Sản phẩm, Kinh doanh & Tăng trưởng (7 Skills) | **7** | vibeforge1111/vibeship-spawner-skills |
 | 14 | 14. Công cụ & Kỹ năng Mở rộng Khác (26 Skills) | **51** | vibeforge1111/vibeship-spawner-skills |
-| | **TỔNG CỘNG** | **528 Skills** | **100% Kích hoạt & Sẵn sàng** |
+| | **TỔNG CỘNG** | **529 Skills** | **100% Kích hoạt & Sẵn sàng** |
 
 ---
 
-### 1. Cốt lõi & Chuẩn hoá Dự án — DuyVo26 Suite (31 Skills)
+### 1. Cốt lõi & Chuẩn hoá Dự án — DuyVo26 Suite (32 Skills)
 
 | STT | Tên Kỹ Năng (`name`) | Mã Kích Hoạt (`alias`) | Mô Tả Tóm Tắt |
 |---|---|---|---|
@@ -70,6 +70,7 @@ curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skill
 | 29 | `wifi-management` | `skill_wifi_management` | Quản lý Kết nối Wi-Fi trên Thiết bị Nhúng & Kiosk Linux (NetworkManager nmcli, Scan, Status, Connect, Disconnect, Touchscreen UI). Action... |
 | 30 | `sql-compatibility` | `sql-compatibility` | Viết Mã SQL Đa nền tảng (SQLite & MySQL). Actions: setup, configure, implement, review, fix, optimize. Keywords: SQL, MySQL, SQLite, para... |
 | 31 | `zalo-bot` | `zalo-bot` | Cấu hình & vận hành Zalo Bot (webhook, lấy Zalo ID, phân quyền, lưu lịch sử chat). Actions: setup, configure, implement, review, fix, opt... |
+| 32 | `develop-docs` | `skill_develop_docs` | Bộ tài liệu phát triển chuẩn cho mọi dự án: AGENTS.md, PROJECT_STATUS.md, TASKS.md, ROADMAP.md, CHANGELOG.md, KNOWN_ISSUES.md và docs/ (ARCHITECTURE, TECHNICAL_SPECIFICATION, DATABASE, API_DOCUMENTATION, DEVELOPMENT_GUIDE, DEPLOYMENT). |
 
 ### 2. Quản trị Máy chủ & Triển khai aaPanel / Baota (8 Skills)
 
