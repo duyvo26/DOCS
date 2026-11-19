@@ -12,7 +12,7 @@ Bộ sưu tập và hệ sinh thái kỹ năng tiêu chuẩn (**500+ AI Skills**
 curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skills.sh | bash
 ```
 
-Hoặc chỉ cài bộ cốt lõi DuyVo26 (32 skills):
+Hoặc chỉ cài bộ cốt lõi DuyVo26 (33 skills):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/duyvo26/DOCS/main/install_all_skills.sh | bash -s -- --core-only
@@ -26,7 +26,7 @@ Hệ thống được chia thành các khối chuyên biệt, đảm bảo agent
 
 | Khối Chức Năng | Số Lượng | Mô Tả & Nhiệm Vụ |
 |---|---|---|
-| **1. Cốt lõi DuyVo26 Suite** | **32 Skills** | Bộ chuẩn hoá quy trình phát triển: RAG, Chatbot, 9Router, Bảo mật, Kiosk, Nginx WAF, aaPanel, Coding Conventions, Git, v.v. |
+| **1. Cốt lõi DuyVo26 Suite** | **33 Skills** | Bộ chuẩn hoá quy trình phát triển: RAG, Chatbot, 9Router, Bảo mật, Kiosk, Nginx WAF, aaPanel, Coding Conventions, Git, v.v. |
 | **2. Vận hành Máy chủ aaPanel / Baota** | **8 Skills** | Tự động hoá triển khai Python, Node.js, Go, Java, Web tĩnh, Reverse Proxy, Fix 502 error, di chuyển Supervisor. |
 | **3. Thiết kế & Anti-Slop Frontend** | **2 Skills** | `impeccable` (v4.8.0) và `taste-skill` (v2): Ngăn chặn giao diện AI rập khuôn, art direction chuyên nghiệp chuẩn Awwwards. |
 | **4. Thuyết trình PPT Master** | **1 Skill** | Tự động tạo bài thuyết trình, slide PowerPoint và visual deck bằng AI. |
@@ -38,7 +38,7 @@ Hệ thống được chia thành các khối chuyên biệt, đảm bảo agent
 
 ---
 
-## 🛠️ Danh mục 32 Kỹ Năng Cốt Lõi (DuyVo26 Core)
+## 🛠️ Danh mục 33 Kỹ Năng Cốt Lõi (DuyVo26 Core)
 
 1. **`skill: ai-rag-workflow`**: Quy trình RAG chuẩn (LangGraph, grading document, token context management).
 2. **`skill: chatbot-architecture`**: Kiến trúc module Chatbot, prompt management, agent lifecycle.
@@ -72,6 +72,7 @@ Hệ thống được chia thành các khối chuyên biệt, đảm bảo agent
 30. **`skill: wifi-management`**: Quản lý mạng Wi-Fi thiết bị nhúng qua NetworkManager (`nmcli`).
 31. **`skill: project-structure`**: Cấu trúc dự án tổng thể. Luôn tải đầu tiên khi bắt đầu dự án mới.
 32. **`skill: develop-docs`**: Bộ tài liệu phát triển chuẩn (`AGENTS.md`, `PROJECT_STATUS.md`, `TASKS.md`, `ROADMAP.md`, `CHANGELOG.md`, `KNOWN_ISSUES.md` và `docs/`), quy trình phân tích codebase và cập nhật tài liệu sau mỗi task.
+33. **`skill: no-bot-attribution`**: Cấm mọi dấu vết bot/AI trong commit, author, committer, PR description và lịch sử Git.
 
 ---
 

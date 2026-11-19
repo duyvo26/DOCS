@@ -74,6 +74,7 @@ main                     -- Nhánh chính, luôn ở trạng thái deploy đư�
 - Tối đa **72 ký tự** cho dòng đầu
 - Scope là tên module/domain: `auth`, `payment`, `chat`, `frontend`, `docs`
 - Nếu cần giải thích thêm, viết vào body (dòng 3 trở đi)
+- Không thêm `Co-authored-by` hoặc bất kỳ attribution bot/AI nào (xem `skill: no-bot-attribution`)
 
 ### Ví dụ ĐÚNG
 
@@ -203,4 +204,5 @@ git push origin feature/ten-tinh-nang
 ## File liên quan
 
 - [Cấu trúc Dự án Tiêu chuẩn (Skill DuyVo26)](skill: project-structure)
+- [No Bot Attribution (Không dấu vết bot/AI)](skill: no-bot-attribution)
 - [Tiêu chuẩn Viết Code (Coding Conventions)](skill: coding-conventions)
